@@ -8,13 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
-      <profile name="Annotation profile for movie" enabled="true">
-        <sourceOutputDir name="../../../GitHub-Repo/cinema-project-ver.5.0/Cinema/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../../../GitHub-Repo/cinema-project-ver.5.0/Cinema/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="movie" />
-      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="movie" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
