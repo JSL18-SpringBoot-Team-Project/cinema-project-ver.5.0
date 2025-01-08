@@ -1,4 +1,41 @@
 <section th:fragment="content">
+	<style>
+		.st_bcc_tecket_bottom_left_wrapper {
+            float: left;
+            width: 100%;
+            position: relative;
+        }
+        .st_bcc_tecket_bottom_left_price_wrapper {
+            float: left;
+            width: 100%;
+        }
+        .st_purchase_img {
+            position: absolute;
+            top: 50px;
+            right: 400px;
+        }
+		.st_bcc_tecket_bottom_left_wrapper:after {
+			content: '';
+			background: none;
+			height: 1px;
+			width: 100%;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: -15px;
+		}
+		.st_bcc_tecket_bottom_left_price_wrapper {
+			float: left;
+			width: 100%;
+			padding-top: 10px;
+		}
+		.st_bcc_tecket_bottom_hesder {
+			background: rgba(216, 216, 216, 0.12);
+			padding: 15px 30px;
+			margin-top: 40px;
+		}
+
+	</style>
 	<!-- st bc Start -->
 	<div class="st_bcc_main_main_wrapper float_left">
 		<div class="st_bcc_main_wrapper">
@@ -15,7 +52,7 @@
 						<div class="st_bcc_ticket_boxes_wrapper float_left">
 							<div class="st_bcc_tecket_top_hesder float_left">
 								<p>Your Booking is Confirmed!</p>
-								<span th:text="'Payment ID' + ${payment.id}"></span>
+								<span th:text="'Payment ID ' + ${payment.id}"></span>
 							</div>
 							<div class="st_bcc_tecket_bottom_hesder float_left">
 								<div class="st_bcc_tecket_bottom_left_wrapper">
@@ -25,8 +62,8 @@
 										</div>
 										<div class="st_bcc_teckt_bot_inner_img_cont">
 											<h4 th:text="${movie.title}"></h4>
-											<h5 th:text="${schedule.screenId}"></h5>
-											<h3 th:text="${#temporals.format(schedule.watchDate, 'dd-MMM-yy')} + '|' + ${#temporals.format(schedule.startTime, 'hh:mm')}"></h3>
+											<h5 th:text="${schedule.screenId == 1 ? '2D' : (schedule.screenId == 2 ? '3D' : (schedule.screenId == 3 ? '4DX' : (schedule.screenId == 4 ? 'IMAX' : 'Unknown')))}"></h5>
+											<h3 th:text="${#temporals.format(schedule.watchDate, 'yyyy/MM/dd')} + ' | ' + ${#temporals.format(schedule.startTime, 'hh:mm')}"></h3>
 										</div>
 										<div class="st_purchase_img">
 											<img th:src="@{/images/content/pur2.png}" alt="Purchase Icon">
@@ -51,11 +88,8 @@
 							</div>
 						</div>
 						<div class="st_bcc_ticket_boxes_bottom_wrapper float_left">
-							<p>You can access your ticket from your Profile. We will send you
-								<br>an e-Mail/SMS Confirmation within 15 Minutes.</p>
 							<ul>
-								<li><a th:href="@{/invite-friends}">INVITE FRIENDS</a></li>
-								<li><a th:href="@{/locate-friend}">Locate Friend</a></li>
+								<li><a th:href="@{/}">HOME</a></li>
 							</ul>
 						</div>
 					</div>

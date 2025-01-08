@@ -4,7 +4,7 @@
         <div class="row bg-light rounded align-items-center justify-content-center mx-0">
             <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
                 <h1 class="mb-3 text-center" th:text="${movie.title} + '詳細'"></h1>
-                <form id="movie-detail-form" name="movie-detail" method="post" action="/admin/movie/detail" enctype="multipart/form-data" onsubmit="return check()">
+                <form id="movie-detail-form" name="movie-detail" method="post" action="/admin/movie/detail" enctype="multipart/form-data" th:object="${detail}" onsubmit="return check()">
                     <input type="hidden" th:value="${movie.id}" name="movieId">
                     <table class="table table-borderless" >
                         <tr>

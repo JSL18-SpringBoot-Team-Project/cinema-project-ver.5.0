@@ -1,6 +1,5 @@
 package com.movie.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movie.domain.*;
 import com.movie.service.*;
 import com.movie.util.DateUtil;
@@ -9,17 +8,13 @@ import com.movie.util.MovieSchedulesWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -187,15 +182,14 @@ public class AdminController {
     }
 
     @GetMapping("/movie/detailUpdate")
-    public String movieDetailUpdate(long movieId, Model model) {
+    public String movieDetailUpdate(long id, Model model) {
 
-        Movies movies = movieService.movieInfo(movieId);
-        MovieDetails movieDetails = movieDetailService.getMovieDetail(movieId).getMovieDetails();
+        MovieDTO movie = movieDetailService.getMovieDetail(id);
 
         model.addAttribute("content", "admin/movie/movie_detail_update");
         model.addAttribute("title", "admin-movie-detail-update");
-        model.addAttribute("movie", movies);
-        model.addAttribute("detail", movieDetails);
+        model.addAttribute("movie", movie.getMovies());
+        model.addAttribute("detail", movie.getMovieDetails());
 
         return "admin/layout/admin_base";
     }
