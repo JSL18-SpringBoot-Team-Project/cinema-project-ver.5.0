@@ -41,4 +41,11 @@ public class MovieController {
         return "layout/base";
     }
 
+    @GetMapping("/list")
+    public String movieView(Model model) {
+        model.addAttribute("content", "movies/movie_list");
+
+        return "layout/base";
+    }
+
 }
