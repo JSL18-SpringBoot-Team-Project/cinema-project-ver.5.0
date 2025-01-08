@@ -1,0 +1,108 @@
+<div th:fragment="content">
+    <!-- Location Bar -->
+    <div class="location-bar d-flex align-items-center">
+        <span class="me-2">Home</span>
+        <i class="bi bi-chevron-right me-2"></i>
+        <span>マイパージ</span>
+    </div>
+
+    <div class="content-box">
+        <!-- 상단 섹션 -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <!-- WELCOME 이미지와 사용자 이름 -->
+                <img src="https://img.megabox.co.kr/static/pc/images/2023/01/member_WELCOME_2.png" alt="WELCOME" class="rounded-circle" style="width: 100px" />
+                <div class="ms-3">
+                    <h4 class="mb-1">こんにちは !</h4>
+                    <!-- 사용자 이름을 동적으로 표시 -->
+                    <p class="mb-0" th:text="${userName} + 'さま'"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 티켓 -->
+        <div class="card">
+            <div class="card-header">
+                チケット／クーポン
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <!-- 동적 데이터로 티켓 및 쿠폰 개수 표시 -->
+                    <li><strong>映画のチケット：</strong> <span th:text="${ticketCount}">0</span> 枚</li>
+                    <li><strong>クーポン：</strong> <span th:text="${couponCount}">3</span> 枚</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 예매 내역 -->
+        <div class="card">
+            <div class="card-header">
+                私の前売り内訳
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">予約日</th>
+                            <th scope="col">映画名</th>
+                            <th scope="col">上映日時</th>
+                            <th scope="col">金額</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 동적 데이터로 예매 내역 표시 -->
+                        <tr th:each="booking : ${bookingList}">
+                            <td th:text="${booking.bookingDate}"></td>
+                            <td th:text="${booking.movieName}"></td>
+                            <td th:text="${booking.screeningDateTime}"></td>
+                            <td th:text="${booking.amount}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(bookingList)}">
+                            <td colspan="4" class="text-center">予約履歴がありません．．</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 문의 내역 -->
+        <div class="card">
+            <div class="card-header">
+                問い合わせ
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="table-primary">
+                        <tr>
+                            <th scope="col">番号</th>
+                            <th scope="col">タイプ</th>
+                            <th scope="col">題目</th>
+                            <th scope="col">回答状態</th>
+                            <th scope="col">登録日</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 동적 데이터로 문의 내역 표시 -->
+                        <tr th:each="inquiry : ${inquiryList}">
+                            <td th:text="${inquiry.id}">1</td>
+                            <td th:text="${inquiry.type}">予約</td>
+                            <td th:text="${inquiry.subject}">予約に関する質問</td>
+                            <td>
+                                <!-- 상태에 따라 배지 색상 변경 -->
+                                <span th:classappend="${inquiry.status == 'unanswered'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'unanswered' ? '未返答' : '回答完了'}"></span>
+                            </td>
+                            <td th:text="${inquiry.registrationDate}">2023-12-01</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(inquiryList)}">
+                            <td colspan="5" class="text-center">問い合わせのデータがありません。</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

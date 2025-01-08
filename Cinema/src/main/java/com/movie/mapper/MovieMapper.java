@@ -3,9 +3,8 @@ package com.movie.mapper;
 import com.movie.domain.Movies;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -33,4 +32,7 @@ public interface MovieMapper {
 
     @Select("SELECT * FROM movies WHERE title LIKE CONCAT('%', #{title}, '%')")
     List<Movies> searchMoviesByTitle(String title);
+
+    @Update("UPDATE movies SET audience = audience + 1 WHERE id = #{id}")
+    public long updateMovieAudience(long id);
 }

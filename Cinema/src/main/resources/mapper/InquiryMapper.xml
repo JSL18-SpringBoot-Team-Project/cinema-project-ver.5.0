@@ -53,4 +53,16 @@
         WHERE id = #{inquiryId};
     </update>
 
+    <!-- 문의 내역 조회 -->
+    <select id="getInquiriesByUserId" parameterType="long" resultType="map">
+        SELECT
+        id,
+        inquiry_type AS type,
+        LEFT(content, 50) AS subject,
+        status,
+        created_at AS registrationDate
+        FROM inquiries
+        WHERE user_id = #{userId}
+    </select>
+
 </mapper>

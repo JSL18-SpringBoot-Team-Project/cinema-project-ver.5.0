@@ -44,7 +44,7 @@
                                     <ul>
                                         <li data-animation="animated fadeInUp" class="">
                                             <i class="far fa-calendar-alt"></i>
-                                            <span th:text="${#temporals.format(movie.releaseDate, 'dd MMM, yyyy')}"></span>
+                                            <span th:text="${#temporals.format(movie.releaseDate, 'yyyy/MM/dd')}"></span>
                                         </li>
                                         <li data-animation="animated fadeInUp" class="">
                                             <i class="far fa-clock"></i>
@@ -70,9 +70,9 @@
                             th:classappend="${stat.index == 0} ? 'active'">
                             <a data-toggle="tab"
                                th:href="'#day-' + ${stat.index}">
-                                <span th:text="${#strings.toUpperCase(#temporals.format(date, 'EEE'))}"></span>
+                                <span th:text="${#strings.toUpperCase(#temporals.format(date, 'EEE', T(java.util.Locale).JAPAN))}"></span>
                                 <br>
-                                <span th:text="${#temporals.format(date, 'd')}"></span>
+                                <p th:text="${#temporals.format(date, 'd')}"></p>
                             </a>
                         </li>
                     </ul>

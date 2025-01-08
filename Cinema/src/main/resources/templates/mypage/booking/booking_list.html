@@ -1,0 +1,180 @@
+<div th:fragment="booking_list">
+  <!-- Location Bar -->
+  <div class="location-bar d-flex align-items-center">
+    <span class="me-2">Home</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>나의 메가박스</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>예매내역</span>
+  </div>
+
+  <div class="content-box">
+    <h2 class="mb-4">예매내역</h2>
+
+    <!-- 탭 콘텐츠 -->
+    <div class="tab-content" id="myTabContent">
+      <!-- 예매 -->
+      <div class="tab-pane fade show active" id="booking" role="tabpanel" aria-labelledby="booking-tab">
+        <div class="card mt-4">
+          <div class="card-body">
+            <!-- 예매 조회 조건 -->
+            <h5 class="card-title">예매 조회 조건</h5>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">구분</label><br />
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="bookingType" id="currentBooking" value="current" checked />
+                  <label class="form-check-label" for="currentBooking">예매내역</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="bookingType" id="pastBooking" value="past" />
+                  <label class="form-check-label" for="pastBooking">지난내역</label>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label for="startDate" class="form-label">시작 날짜</label>
+                  <input type="date" class="form-control" id="startDate" />
+                </div>
+                <div class="col-md-3">
+                  <label for="endDate" class="form-label">종료 날짜</label>
+                  <input type="date" class="form-control" id="endDate" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                  <button type="button" class="btn btn-primary" onclick="searchBookings()">조회</button>
+                </div>
+              </div>
+
+
+              <div class="col-md-3 d-flex align-items-end">
+                <button type="button" class="btn btn-primary" onclick="searchBookings()">조회</button>
+              </div>
+            </div>
+
+            <!-- 예매 내역 -->
+            <h5 class="card-title mt-4">예매내역</h5>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>예매날짜</th>
+                  <th>영화명</th>
+                  <th>상영일시</th>
+                  <th>예매금액</th>
+                </tr>
+                </thead>
+                <tbody>
+<!--                <tr th:each="booking : ${bookingList}">-->
+<!--                  <td th:text="${booking.timestamp}"></td>-->
+<!--                  <td th:text="${booking.title}"></td>-->
+<!--                  <td th:text="${booking.screeningDateTime}"></td>-->
+<!--                  <td th:text="${booking.price}"></td>-->
+<!--                </tr>-->
+<!--                <tr th:if="${#lists.isEmpty(bookingList)}">-->
+<!--                  <td colspan="4" class="text-center">예매내역이 없습니다.</td>-->
+<!--                </tr>-->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 예매 취소 내역 -->
+            <h5 class="card-title mt-4">예매취소내역</h5>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>취소일시</th>
+                  <th>영화명</th>
+                  <th>상영일시</th>
+                  <th>취소금액</th>
+                </tr>
+                </thead>
+                <tbody>
+<!--                <tr th:each="cancellation : ${cancellationList}">-->
+<!--                  <td th:text="${cancellation.cancelDateTime}"></td>-->
+<!--                  <td th:text="${cancellation.title}"></td>-->
+<!--                  <td th:text="${cancellation.screeningDateTime}"></td>-->
+<!--                  <td th:text="${cancellation.price}"></td>-->
+<!--                </tr>-->
+<!--                <tr th:if="${#lists.isEmpty(cancellationList)}">-->
+<!--                  <td colspan="4" class="text-center">취소내역이 없습니다.</td>-->
+<!--                </tr>-->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+   function searchBookings() {
+     const bookingType = document.querySelector('input[name="bookingType"]:checked').value;
+     const startDate = document.getElementById("startDate").value;
+     const endDate = document.getElementById("endDate").value;
+
+     if (!startDate || !endDate) {
+       alert("시작 날짜와 종료 날짜를 모두 선택해주세요.");
+       return;
+     }
+
+     // 서버로 데이터 전송 (비동기 요청)
+     fetch(`/bookings/search?type=${bookingType}&startDate=${startDate}&endDate=${endDate}`)
+       .then(response => response.json())
+       .then(data => {
+         // 검색 결과를 페이지에 업데이트
+         updateBookingList(data.bookingList);
+         updateCancellationList(data.cancellationList);
+       })
+       .catch(error => console.error("에러 발생:", error));
+   }
+
+   // 비동기 응답을 받아 테이블 업데이트
+   function updateBookingList(bookingList) {
+     const tbody = document.querySelector("#bookingTable tbody");
+     tbody.innerHTML = "";
+
+     if (bookingList.length === 0) {
+       tbody.innerHTML = `<try><td colspan="4" class="text-center">예매내역이 없습니다.</td></tr>`;
+       return;
+     }
+
+     bookingList.forEach(booking => {
+       const row = `
+         <tr>
+           <td>${booking.timestamp}</td>
+           <td>${booking.title}</td>
+           <td>${booking.screeningDateTime}</td>
+           <td>${booking.price}</td>
+         </tr>
+       `;
+       tbody.innerHTML += row;
+     });
+   }
+
+   function updateCancellationList(cancellationList) {
+     const tbody = document.querySelector("#cancellationTable tbody");
+     tbody.innerHTML = "";
+
+     if (cancellationList.length === 0) {
+       tbody.innerHTML = `<tr><td colspan="4" class="text-center">취소내역이 없습니다.</td></tr>`;
+       return;
+     }
+
+     cancellationList.forEach(cancellation => {
+       const row = `
+         <tr>
+           <td>${cancellation.cancelDateTime}</td>
+           <td>${cancellation.title}</td>
+           <td>${cancellation.screeningDateTime}</td>
+           <td>${cancellation.price}</td>
+         </tr>
+       `;
+       tbody.innerHTML += row;
+     });
+   }
+</script>
+
+
