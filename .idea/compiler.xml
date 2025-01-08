@@ -7,6 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for movie" enabled="true">
+        <sourceOutputDir name="../../../GitHub-Repo/cinema-project-ver.5.0/Cinema/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../../GitHub-Repo/cinema-project-ver.5.0/Cinema/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
         <module name="movie" />
       </profile>
     </annotationProcessing>
