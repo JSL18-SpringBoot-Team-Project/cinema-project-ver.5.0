@@ -1,0 +1,108 @@
+<th:block th:fragment="content">
+    <!-- Movie Create Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
+                <h1 class="mb-3 text-center">映画登録</h1>
+                <form name="movie" method="post" action="/admin/movie/create" enctype="multipart/form-data">
+                    <table class="table table-borderless" >
+                        <tr>
+                            <th><label for="movie_title">movie_title</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="title" id="movie_title" required placeholder="movie_title">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="running_time">running_time</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="runningTime" id="running_time" required placeholder="movie_time">
+                                <div id="error-message" style="color: red; display: none;">Please enter a valid number.</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="movie_release_date">movie_release_date</label></th>
+                            <td>
+                                <input type="date" class="form-control" name="releaseDate" id="movie_release_date" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="movie_end_date">movie_end_date</label></th>
+                            <td>
+                                <input type="date" class="form-control" name="endDate" id="movie_end_date" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><label for="genre">genre</label></th>
+                            <td>
+                                <select class="form-select" name="genre" id="genre" required >
+                                    <option value="アニメ">アニメ</option>
+                                    <option value="アクション">アクション</option>
+                                    <option value="コメディ">コメディ</option>
+                                    <option value="ラブロマンス">ラブロマンス</option>
+                                    <option value="ホラー">ホラー</option>
+                                    <option value="SF">SF</option>
+                                    <option value="ファンタジー">ファンタジー</option>
+                                    <option value="ヒューマンドラマ">ヒューマンドラマ</option>
+                                    <option value="スポーツ">スポーツ</option>
+                                    <option value="ドキュメンタリー">ドキュメンタリー</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><label for="poster_img">poster_img</label></th>
+                            <td>
+                                <input type="file" class="form-control" name="poster_img" id="poster_img">
+                            </td>
+                        </tr>
+
+                    </table>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary rounded-pill m-2">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Movie Create End -->
+    <script>
+        // 날짜 포맷 함수
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 오늘 날짜와 일주일 뒤 날짜 계산
+        const today = new Date();
+        const oneWeekLater = new Date();
+        oneWeekLater.setDate(today.getDate() + 7);
+
+        // 기본 값 설정
+        document.getElementById("movie_release_date").value = formatDate(today);
+        document.getElementById("movie_end_date").value = formatDate(oneWeekLater);
+
+        // End 날짜 제한 (Start 날짜 이후만 선택 가능)
+        document.getElementById("movie_release_date").addEventListener("change", function() {
+            const startDate = this.value;
+            document.getElementById("movie_end_end").setAttribute("min", startDate);
+        });
+
+        document.getElementById("running_time").addEventListener("input", function (event) {
+            const inputField = event.target;
+            const value = inputField.value;
+
+            // 숫자만 포함되도록 검사
+            if (!/^\d*$/.test(value)) {
+                inputField.value = value.replace(/\D/g, ""); // 숫자가 아닌 문자는 제거
+                document.getElementById("error-message").style.display = "block";
+            } else {
+                document.getElementById("error-message").style.display = "none";
+            }
+        });
+
+
+    </script>
+</th:block>

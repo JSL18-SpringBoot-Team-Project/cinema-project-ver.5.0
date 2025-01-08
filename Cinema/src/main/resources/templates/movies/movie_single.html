@@ -1,0 +1,145 @@
+<section th:fragment="content">
+	<!-- prs ms trailer wrapper Start -->
+	<div class="prs_ms_trailer_vid_main_wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_heading_section_wrapper">
+						<h2>Movie Trailer</h2>
+					</div>
+				</div>
+				<div class="col-lg-12" style="margin-bottom: 50px;">
+					<div class="prs_ms_trailer_vid_wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; padding-top:0px;">
+						<!-- YouTube 동영상 삽입 -->
+						<iframe th:src="${detail.trailer}"
+								style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen>
+						</iframe>
+					</div>
+				</div>
+
+
+				<div class="col-lg-12" style="background: #fff;">
+					<div class="prs_ms_trailer_slider_main_wrapper" style="display: flex; flex-direction: column; gap: 20px;">
+						<!-- 위쪽 두 개의 박스를 flex로 배치 -->
+						<div style="display: flex; gap: 20px;">
+							<!-- 첫 번째 박스 -->
+							<div class="prs_ms_trailer_slider_left_wrapper" style="width: 35%; margin: 20px; ">
+								<div>
+									<div class="item">
+										<div class="prs_ms_trailer_slider_left_img_wrapper" style="box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.10);">
+											<img th:src="@{'/poster/' + ${movie.posterImg}}" alt="vp_img" class="responsive-img" style="border-radius: 0px;">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 두 번째 박스 -->
+							<div class="prs_ms_trailer_slider_right_wrapper" style="width: 60%; padding: 40px;">
+								<h2 style="font-size:40px; font-weight: bold; " th:text="${movie.title}"></h2>
+								<p style="padding-top:35px; font-weight: bold;" >監督 : <span th:text="${detail.director}"></span></p>
+								<p>俳優 : <br><span th:text="${detail.actor}"></span></p>
+								<p>公開日 : <span th:text="${movie.releaseDate}"></span></p>
+								<p>上映時間 : <span th:text="${movie.runningTime}"></span></p>
+								<p>ジャンル : <span th:text="${movie.genre}"></span></p>
+								<p>国 : <span th:text="${detail.country}"></span></p>
+								<p>製作会社 : <span th:text="${detail.production}"></span></p>
+								<p>配布会社 : <span th:text="${detail.distribution}"></span></p>
+								<p>公開日 : <span th:text="${movie.endDate}"></span></p>
+
+								<div th:if="${movie.endDate != null and now != null and movie.endDate.isAfter(now)}">
+									<button type="submit" class="reserve-button"
+											th:onclick="|window.location.href='@{/booking/schedule(movieId=${movie.id})}'|">予約買い</button>
+								</div>
+							</div>
+						</div>
+						<!-- 아래쪽 박스 -->
+						<div class="prs_ms_trailer_slider_bottom_wrapper" style="width: 100%; padding: 20px; border-top: 1px solid #ddd; box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.10); margin-bottom:20px;">
+							<h2 style="margin-bottom:20px; font-weight: bold;">あらすじ</h2>
+							<p th:text="${detail.content}"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<style>
+		.prs_ms_trailer_slider_left_img_wrapper {
+        width: 100%; /* 부모 div의 너비에 맞춤 */
+        height: auto; /* 원하는 높이 설정 */
+        overflow: hidden; /* 넘치는 이미지를 숨김 */
+    }
+
+    .responsive-img {
+        width: 100%; /* 부모 div에 맞게 너비를 조정 */
+        height: auto; /* 부모 div 높이에 맞게 조정 */
+        object-fit: cover; /* div 크기에 이미지를 채우며 비율 유지 */
+        object-position: center; /* 이미지 중심으로 정렬 */
+    }
+
+    .info-overlay {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
+        color: #fff; /* 텍스트 색상 */
+        text-align: center;
+        padding: 10px 0;
+        z-index: 1; /* 이미지 위에 표시되도록 설정 */
+    }
+    .prs_ms_trailer_slider_left_img_wrapper {
+        position: relative; /* 오버레이를 부모 안에 배치 */
+    }
+
+    .prs_ms_trailer_slider_right_wrapper p {
+        font-weight: bold; /* p 태그의 텍스트를 두껍게 */
+    }
+
+    .prs_ms_trailer_slider_right_wrapper p span {
+        font-weight: normal; /* span 태그의 텍스트는 기본 굵기 유지 */
+    }
+
+
+
+    /* 유튜브동영상
+    .prs_ms_trailer_vid_wrapper {
+        position: relative;
+        padding-bottom: 40%; /* 높이를 기존 56.25%에서 40%로 줄임 */
+        height: 0;
+        overflow: hidden;
+        background: #000; /* 배경색 설정 */
+    }
+
+    .prs_ms_trailer_vid_wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; /* 부모 높이에 맞춤 */
+    }
+
+
+    .reserve-button {
+        background-color: #007bff; /* 버튼 배경색 */
+        color: #fff; /* 텍스트 색상 */
+        border: none; /* 테두리 제거 */
+        padding: 10px 20px; /* 내부 여백 */
+        font-size: 16px; /* 텍스트 크기 */
+        border-radius: 5px; /* 둥근 모서리 */
+        cursor: pointer; /* 커서 모양 변경 */
+        transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+        float: right;
+        margin-top: 20px;
+    }
+
+    .reserve-button:hover {
+        background-color: #0056b3; /* 호버 시 배경색 */
+    }
+
+
+	</style>
+	<!-- prs ms trailer wrapper End -->
+</section>

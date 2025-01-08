@@ -1,0 +1,97 @@
+<section th:fragment="content">
+	<!-- prs es about wrapper Start -->
+	<div class="prs_es_about_main_section_wrapper">
+		<div class="container">
+			<div class="col-lg-12 col-md-12 col-sm-6 col-xs-6">
+				<div class="hs_blog_slider_img_wrapper prs_event_single_slider_wrapper">
+					<div class="owl-carousel owl-theme" style="width: 100% !important; height: auto !important; max-height: 500px !important; display: block;">
+						<div th:each="slider : ${start}" class="item">
+							<img th:src="@{'/event/' + ${slider.eventImg}}" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- prs es about wrapper End -->
+
+	<!-- prs es Event Schedule Start -->
+	<div class="prs_es_schedule_event_section_wrapper" style="margin-bottom:50px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_heading_section_wrapper">
+						<h2>Event Schedule</h2>
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_es_tabs_wrapper">
+						<ul class="nav nav-pills">
+							<li class="active">
+								<a data-toggle="pill" href="#home" style="min-width: 275px;">進行中イベント</a>
+							</li>
+							<li>
+								<a data-toggle="pill" href="#menu1" style="min-width: 275px;">先達てのイベント</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-lg-10 col-lg-offset-1 col-md-9 col-md-offset-1 col-sm-12 col-xs-12">
+					<div class="prs_es_tabs_cont_main_wrapper">
+						<div class="tab-content">
+							<!-- 進行中イベント 탭 -->
+							<div id="home" class="tab-pane fade in active">
+								<!-- 이벤트 데이터 반복 -->
+								<div th:each="event : ${start}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
+									<div class="prs_es_tabs_event_sche_img_wrapper" style="width: 270px;">
+										<img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style="height: 150px; border-radius: 10px;">
+									</div>
+									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
+										<h2><a th:href="@{/event/view(id=${event.id})}"
+												th:text="${event.eventTitle}">Default Title</a></h2>
+										<h3 th:text="${event.eventStartDate} + ' ~ ' + ${event.eventEndDate}">Default Start Date ~ Default End Date</h3>
+									</div>
+								</div>
+								<!-- 반복 끝 -->
+							</div>
+
+							<!-- 先達てのイベント 탭 -->
+							<div id="menu1" class="tab-pane fade">
+								<!-- 지난 이벤트 데이터 반복 -->
+								<div th:each="event : ${end}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
+									<div class="prs_es_tabs_event_sche_img_wrapper" style="width:270px;">
+										<img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style=" height: 150px; border-radius: 10px;">
+									</div>
+									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
+										<h2><a th:href="@{/event/view(id=${event.id})}"
+											   th:text="${event.eventTitle}">Default Title</a></h2>
+										<h3 th:text="${event.eventStartDate} + ' ~ ' + ${event.eventEndDate}">Default Start Date ~ Default End Date</h3>
+									</div>
+								</div>
+								<!-- 반복 끝 -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- prs_es_schedule_event_section_wrapper End -->
+
+	<script>
+		$(document).ready(function () {
+      $(".owl-carousel").owlCarousel({
+        items: 1, // 한 번에 하나의 아이템만 표시
+        loop: true, // 무한 반복 활성화
+        autoplay: true, // 자동 재생 활성화
+        autoplayTimeout: 3000, // 자동 재생 시간 (밀리초 단위)
+        autoplayHoverPause: true, // 마우스 호버 시 일시 중지
+        nav: true, // 이전/다음 버튼 활성화
+        dots: true, // 점 네비게이션 활성화
+        navText: ["<div class='nav-btn prev-slide'>&#9664;</div>", "<div class='nav-btn next-slide'>&#9654;</div>"], // 커스텀 버튼 HTML
+      });
+    });
+
+	</script>
+
+</section>

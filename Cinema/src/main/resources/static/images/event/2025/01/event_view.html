@@ -1,0 +1,41 @@
+<section th:fragment="content">
+	<!-- 기존 코드 유지 -->
+	<div class="prs_es_about_main_section_wrapper">
+		<div class="container">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="hs_blog_view_img_wrapper prs_event_single_slider_wrapper">
+					<img th:src="@{/images/content/event/eventview.png}" alt="Event Image" class="event-image">
+					<div th:attr="data-id=${view.id}" class="overlay-content">
+						<h1 class="merry-christmas"></h1>
+						<div class="title-box">
+							<p th:text="${view.eventTitle}">Default Title</p>
+						</div>
+						<div class="time-box">
+							<p th:text="${view.eventStartDate} + ' ~ ' + ${view.eventEndDate}">Default Start Date ~ Default End Date</p>
+						</div>
+						<div class="content-box">
+							<p th:text="${view.eventContent}">Default Content</p>
+						</div>
+						<div class="button-box">
+							<a href="#" class="event-button">受け取る</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<p th:text="${couponMessage}"></p>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+            const button = document.querySelector('.event-button');
+
+            // "수령하기" 버튼 클릭 시 alert 표시
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // 기본 동작 방지
+                alert('受け取り完了です!');
+            });
+        });
+	</script>
+</section>

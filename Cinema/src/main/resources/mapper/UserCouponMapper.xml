@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.UserCouponMapper">
+    <!-- SQL 문 -->
+    <resultMap id="UserCouponResultMap" type="com.movie.domain.UserCoupon">
+        <result property="userId" column="user_id" />
+        <result property="couponId" column="coupon_id" />
+        <result property="couponStartDate" column="coupon_start_date" />
+        <result property="couponEndDate" column="coupon_end_date" />
+        <result property="state" column="state" />
+        <!-- Association for Coupon -->
+        <association property="coupons" javaType="com.movie.domain.Coupons">
+            <result property="id" column="c_id" />
+            <result property="couponTitle" column="coupon_title" />
+            <result property="couponType" column="coupon_type" />
+            <result property="couponPrice" column="coupon_price" />
+        </association>
+    </resultMap>
+
+    <!-- 유저의 쿠폰 리스트 조회 -->
+    <select id="getUserCouponsByUserId" resultMap="UserCouponResultMap" parameterType="long">
+        SELECT
+        uc.user_id,
+        uc.coupon_id,
+        uc.coupon_start_date,
+        uc.coupon_end_date,
+        uc.state,
+        c.id AS c_id,
+        c.coupon_title,
+        c.coupon_type,
+        c.coupon_price
+        FROM user_coupon uc
+        JOIN coupons c ON uc.coupon_id = c.id
+        WHERE uc.user_id = #{userId} and uc.state = 0
+    </select>
+
+
+
+</mapper>

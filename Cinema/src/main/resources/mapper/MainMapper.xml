@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.MainMapper">
+
+    <select id="mainevent" resultType="com.movie.domain.Events">
+        SELECT id, event_title, event_content, event_start_date, event_end_date, event_img
+        FROM events
+        WHERE event_end_date &gt; NOW()
+        ORDER BY id DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,11 @@
+<div>
+  <h1>사용자 정보</h1>
+  <div th:if="${error != null}">
+    <p style="color: red;" th:text="${error}">로그인 상태 X</p>
+  </div>
+  <div th:if="${error == null}">
+    <p>ID: <span th:text="${id}">사용자 ID</span></p>
+    <p>이름: <span th:text="${name}">사용자 이름</span></p>
+    <p>권한: <span th:text="${role}">사용자 권한</span></p>
+  </div>
+</div>

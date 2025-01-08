@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>결제 테스트</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!-- Template style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/seat.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{#}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body class="booking_type_back">
+<!-- preloader Start -->
+<div id="preloader">
+    <div id="status">
+        <img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+    </div>
+</div>
+<!-- color picker start -->
+<!-- st top header Start -->
+<div class="st_bt_top_header_wrapper float_left">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <div class="st_bt_top_back_btn float_left">
+                    <a th:href="@{/}">
+                        <i class="fas fa-long-arrow-alt-left"></i> &nbsp;Back
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="st_bt_top_center_heading float_left">
+                    <h3>
+                        <span th:text="${movie.title}"></span> -
+                        <span th:text="'(' + ${movie.runningTime / 60}"></span>:
+                        <span th:text="${movie.runningTime % 60} + ')'"></span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st top header End -->
+
+<!-- st dtts section Start -->
+<div class="st_dtts_wrapper float_left">
+    <div class="container">
+        <div class="row">
+            <!-- 좌측 정보 -->
+            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                <div class="st_dtts_left_main_wrapper float_left">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="st_dtts_ineer_box float_left">
+                                <ul>
+                                    <li>
+                                        <span class="dtts1">Date</span>
+                                        <span class="dtts2" th:text="${#temporals.format(schedule.watchDate, 'dd-MMM-yy')}"></span>
+                                    </li>
+                                    <li>
+                                        <span class="dtts1">Time</span>
+                                        <span class="dtts2" th:text="${#temporals.format(schedule.startTime, 'hh:mm')}"></span>
+                                    </li>
+                                    <li>
+                                        <span class="dtts1">Theater</span>
+                                        <span class="dtts2" th:text="${schedule.screenId}"></span>
+                                    </li>
+                                    <li>
+                                        <span class="dtts1">Seat</span>
+                                        <span class="dtts2">
+                                            <span th:each="seat, iterStat : ${seats}">
+                                                <span th:text="${seat.seatColumn} + ${seat.seatRow}"></span>
+                                                <span th:if="${!iterStat.last}">, </span>
+                                            </span>
+                                            ( <span th:text="${#lists.size(seats)}">0</span> Tickets )
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="st_cherity_section float_left">
+                                <div class="st_cherity_img float_left">
+                                    <img th:src="@{/images/content/cc1.jpg}" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 우측: 결제 정보 + 결제버튼 -->
+            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="st_dtts_bs_wrapper float_left">
+                            <div class="st_dtts_bs_heading float_left">
+                                <p>Booking summary</p>
+                            </div>
+                            <div class="st_dtts_sb_ul">
+                                <div class="left-section">
+                                    <span th:each="seat, iterStat : ${seats}">
+                                        <span th:text="${seat.seatColumn} + ${seat.seatRow}"></span>
+                                        <span th:if="${!iterStat.last}">, </span>
+                                    </span>
+                                    <br>
+                                    ( <span th:text="${#lists.size(seats)}"></span> Tickets )
+                                </div>
+
+                                <!-- 오른쪽 섹션: 총 금액 -->
+                                <div class="right-section">
+                                    <span th:text="${totalPrice}"></span>
+                                </div>
+
+                                <div>
+                                    <select id="user-coupon" name="coupon" class="coupon-select">
+                                        <option value="">--Select Coupon--</option>
+                                        <option th:each="userCoupon : ${user.coupons}"
+                                                th:if="${userCoupon.coupons != null}"
+                                                th:value="${userCoupon.coupons.id}"
+                                                th:data-coupon-type="${userCoupon.coupons.couponType}"
+                                                th:data-coupon-price="${userCoupon.coupons.couponPrice}"
+                                                th:text="|${userCoupon.coupons.couponTitle} - ${userCoupon.coupons.couponPrice}${userCoupon.coupons.couponType == 'P' ? '%' : '円'}|">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="st_dtts_sb_h2 float_left">
+                                <h3>
+                                    Sub total
+                                    <span th:text="${totalPrice}" id="subtotal"></span>
+                                </h3>
+                                <h3>Sale <span id="sale"></span></h3>
+                                <h5>Payable Amount
+                                    <span id="payableAmount" th:text="${totalPrice}"></span>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- "결제하기" 버튼 -->
+                    <div class="col-md-12">
+                        <div class="st_dtts_bs_heading">
+                            <button type="button"
+                                    style="font-size:16px; color:#ffffff; text-align:center; background:#333545; height:100%; width:100%; border:0px;"
+                                    onclick="requestPay()">
+                                Proceed to Pay
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- st dtts section End -->
+
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+
+<!-- PortOne Browser SDK -->
+<script th:src="@{'https://cdn.portone.io/v2/browser-sdk.js'}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<!--main js file end-->
+
+<script th:inline="javascript">
+
+    // Isotope 예시 (유지)
+    function protfolioIsotope() {
+        if ($('.st_fb_filter_left_box_wrapper').length) {
+            $(".protfoli_inner, .portfoli_inner").imagesLoaded(function () {
+                $(".protfoli_inner, .portfoli_inner").isotope({
+                    layoutMode: 'masonry',
+                });
+            });
+            $(".protfoli_filter li").on('click', function () {
+                $(".protfoli_filter li").removeClass("active");
+                $(this).addClass("active");
+                var selector = $(this).attr("data-filter");
+                $(".protfoli_inner, .portfoli_inner").isotope({
+                    filter: selector,
+                    animationOptions: {
+                        duration: 450,
+                        easing: "linear",
+                        queue: false,
+                    }
+                });
+                return false;
+            });
+        }
+    };
+    protfolioIsotope();
+
+    // 전역 변수 정의
+    let totalAmount = 0;
+    let selectedCouponId = null; // 전역 변수에 쿠폰 ID 저장
+
+    // 쿠폰 할인 로직
+    document.addEventListener('DOMContentLoaded', function () {
+        const subtotalElement = document.getElementById('subtotal');
+        const saleElement = document.getElementById('sale');
+        const payableElement = document.getElementById('payableAmount');
+        const couponSelect = document.getElementById('user-coupon');
+
+        if (!subtotalElement || !saleElement || !payableElement || !couponSelect) {
+            return;
+        }
+
+        const parseCurrency = (str) => parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
+
+        const subtotal = parseCurrency(subtotalElement.textContent);
+        let sale = 0;
+        let payable = subtotal;
+
+        const updatePayableAmount = () => {
+            const selectedOption = couponSelect.options[couponSelect.selectedIndex];
+            const couponType = selectedOption.getAttribute('data-coupon-type');
+            const couponPrice = parseFloat(selectedOption.getAttribute('data-coupon-price'));
+
+            // 쿠폰 ID를 전역 변수에 저장
+            selectedCouponId = selectedOption.value !== "" ? parseInt(selectedOption.value) : null;
+
+            if (selectedOption.value === "") {
+                sale = 0;
+            } else if (couponType === 'Y') { // 고정 할인
+                sale = couponPrice;
+            } else if (couponType === 'P') { // 퍼센트 할인
+                sale = (couponPrice / 100) * subtotal;
+            }
+
+            sale = Math.min(sale, subtotal);
+            payable = subtotal - sale;
+
+            saleElement.textContent = sale;
+            payableElement.textContent = payable;
+
+            // totalAmount 값을 업데이트
+            totalAmount = payable;
+        };
+
+        // 쿠폰 선택 시 이벤트 핸들러 등록
+        $('#user-coupon').on('change', updatePayableAmount);
+
+        // 초기 값 세팅
+        updatePayableAmount();
+    });
+
+    // (3) 결제창 호출
+    function requestPay() {
+
+        const seatIdArray = [[${seatIdList}]]; // ex) [1,2,3]
+        const couponIdVal = selectedCouponId; // 쿠폰 없으면 ''
+        const payId = [[${paymentId}]];        // ex) 20231231235959
+        const seatNamesArr = [[${seatNames}]];
+        const combinedOrderName = seatNamesArr.join(", ");
+        const movieId = [[${movie.id}]];
+        const scheduleId = [[${schedule.id}]];
+
+        let redirectUrl = `${window.location.origin}/booking/paymentInfo`;
+
+        const requestOptions = {
+            storeId: [[${storeId}]],
+            channelKey: [[${channelKey}]],
+            paymentId: [[${paymentId}]],
+            orderName: combinedOrderName,
+            totalAmount: totalAmount,
+            currency: "KRW",
+            payMethod: "CARD",
+            customer: {
+                customerId: "[[${user.id}]]",
+                fullName: [[${user.name}]],
+                phoneNumber: [[${user.phone}]],
+                email: [[${user.email}]],
+            },
+
+            redirectUrl: redirectUrl,
+        };
+
+        try {
+            console.log("Request Options:", requestOptions);
+            console.log("Redirect URL:", requestOptions.redirectUrl);
+
+            PortOne.requestPayment(requestOptions)
+                .then((response) => {
+                    console.log("결제 요청 성공:", response);
+
+                    if (response.code === undefined && response.paymentId) {
+                        console.log("AJAX 요청 시작");
+                        // AJAX 요청 실행
+                        $.ajax({
+                            url: "/payment/pay",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                seatsId: seatIdArray,
+                                couponId: couponIdVal,
+                                paymentId: payId,
+                                totalAmount: totalAmount,
+                                orderName: combinedOrderName,
+                                movie: movieId,
+                                schedule: scheduleId
+                            }),
+                            success: function (response) {
+                                if(response.result === "success") {
+                                    window.location.href = redirectUrl; // AJAX 요청 성공 후 리디렉션
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("결제 요청 중 오류:", error);
+                                alert("결제 처리 중 오류가 발생했습니다.");
+                            }
+                        });
+                    } else {
+                        console.error("결제 성공 상태 아님:", response);
+                    }
+                })
+                .catch((error) => {
+                    console.error("결제 요청 실패:", error);
+                    alert("결제 요청에 실패했습니다.");
+                });
+
+        } catch (error) {
+            console.error("PortOne 호출 오류:", error);
+        }
+    }
+</script>
+
+
+</body>
+</html>

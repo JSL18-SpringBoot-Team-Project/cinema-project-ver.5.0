@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.SeatMapper">
+    <!-- SQL 문 -->
+    <insert id="insertSeat" parameterType="list">
+        INSERT INTO seats (screen_id, schedule_id, seat_column, seat_row, seat_price)
+        VALUES
+        <foreach collection="list" item="seats" separator=",">
+            (#{seats.screenId}, #{seats.scheduleId}, #{seats.seatColumn}, #{seats.seatRow}, #{seats.seatPrice})
+        </foreach>
+    </insert>
+
+    <resultMap id="ScreenScheduleSeatDto" type="com.movie.domain.ScreenScheduleSeatDto">
+        <id property="scheduleId" column="schedule_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="watchDate" column="watch_date"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="screenName" column="screen_name"/>
+        <result property="screenType" column="screen_type"/>
+        <result property="seatPrice" column="seat_price"/>
+
+        <!-- seatList를 매핑하기 위한 nested select -->
+        <collection property="seatList" ofType="com.movie.domain.Seats">
+            <id property="id" column="seat_id"/>
+            <result property="seatColumn" column="seat_column"/>
+            <result property="seatRow" column="seat_row"/>
+            <result property="state" column="state"/>
+            <result property="seatPrice" column="seat_price"/>
+        </collection>
+    </resultMap>
+
+    <!-- scheduleId를 기준으로 ScreenScheduleSeatDto 가져오기 -->
+    <select id="getSeat" resultMap="ScreenScheduleSeatDto" parameterType="long">
+        SELECT
+        sc.id AS schedule_id,
+        sc.movie_id,
+        sc.watch_date,
+        sc.start_time,
+        sc.end_time,
+        s.screen_name,
+        s.screen_type,
+        st.seat_price,
+        st.id AS seat_id,
+        st.seat_column,
+        st.seat_row,
+        st.state
+        FROM
+        schedules sc
+        JOIN
+        screens s ON sc.screen_id = s.id
+        JOIN
+        seats st ON sc.id = st.schedule_id
+        WHERE
+        sc.id = #{scheduleId}
+    </select>
+
+    <select id="getScreenScheduleByScheduleId" resultType="com.movie.domain.ScreenScheduleSeatDto" parameterType="long">
+        SELECT
+        sc.id AS scheduleId,
+        sc.movie_id AS movieId,
+        sc.watch_date AS watchDate,
+        sc.start_time AS startTime,
+        sc.end_time AS endTime,
+        s.screen_name AS screenName,
+        st.seat_price AS seatPrice
+        FROM
+        schedules sc
+        JOIN
+        screens s ON sc.screen_id = s.id
+        JOIN
+        seats st ON sc.id = st.schedule_id
+        WHERE
+        sc.id = #{scheduleId}
+    </select>
+
+</mapper>

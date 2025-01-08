@@ -1,0 +1,79 @@
+<th:block th:fragment="content">
+    <!-- Movie List Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h2 class="mb-4 text-center">映画リスト</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">title</th>
+                                <th scope="col">running_time</th>
+                                <th scope="col">release_date</th>
+                                <th scope="col">end_date</th>
+                                <th scope="col">detail</th>
+                                <th scope="col">set</th>
+                                <th scope="col">delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="movies : ${movies}">
+                                <tr class="align-middle">
+                                    <th scope="row" th:text="${movies.id}"></th>
+                                    <td>
+                                        <a th:href="@{/admin/movie/update(id=${movies.id})}" th:text="${movies.title}"></a>
+                                    </td>
+                                    <td th:text="${movies.runningTime}"></td>
+                                    <td th:text="${movies.releaseDate}"></td>
+                                    <td th:text="${movies.endDate}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/movie/detailUpdate(id=${movies.id})}"><button type="button" class="btn btn-sm btn-info rounded-pill m-2 modify-btn" th:attr="data-id=${movies.id}">詳細</button></a>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/admin/movie/set(id=${movies.id})}"><button type="button" class="btn btn-sm btn-info rounded-pill m-2 modify-btn" th:attr="data-id=${movies.id}">設定</button></a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-danger rounded-pill m-2 delete-btn" th:attr="data-id=${movies.id}">削除</button>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Movie List End -->
+    <script>
+
+        $(document).on("click", ".delete-btn", function () {
+            var row = $(this).closest("tr"); // 클릭한 버튼의 해당 행
+            var id = $(this).data("id"); // 쿠폰 ID
+
+            if (confirm("この映画を削除してもよろしいですか？")) {
+                $.ajax({
+                    url: '/admin/movie/delete',
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: { id: id.toString() }, // 쿠폰 ID를 전송
+                    success: function (result) {
+                        if (result != "fail") {
+                        alert("削除しました。");
+                        row.remove(); // 행 삭제
+                    } else {
+                        alert("削除に失敗しました。");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("削除に失敗しました。");
+                    console.error("Error:", error);
+                }
+                });
+            }
+        });
+    </script>
+</th:block>

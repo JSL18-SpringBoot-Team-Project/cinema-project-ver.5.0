@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/admin_header :: header"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="admin/fragments/admin_navbar :: navbar"></nav>
+
+    <!-- Main Content -->
+    <section th:replace="${content}"></section>
+
+    <!-- Footer -->
+    <footer th:replace="admin/fragments/admin_footer :: footer"></footer>
+</body>
+</html>

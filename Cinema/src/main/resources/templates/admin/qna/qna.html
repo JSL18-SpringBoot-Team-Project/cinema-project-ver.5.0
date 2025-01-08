@@ -1,0 +1,175 @@
+<!-- Q&A 페이지 -->
+<th:block th:fragment="content">
+    <div class="container-fluid pt-3 px-3">
+        <!-- 메인 영역 -->
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0" style="min-height: 70vh;">
+            <div class="col-md-10">
+                <!-- 제목 -->
+                <h1 class="mb-3 text-center">Q&A</h1>
+
+                <!-- 문의 유형 필터 -->
+                <div class="mb-3 text-center">
+                    <label for="inquiryType" class="form-label">問い合わせタイプ:</label>
+                    <select id="inquiryType" class="form-select d-inline-block w-auto">
+                        <!-- 문의 유형 옵션 -->
+                        <option value="">All</option>
+                        <option th:each="type : ${inquiryTypes}"
+                                th:value="${type.name()}"
+                                th:text="${type.name() == 'RESERVATION' ? '予約'
+                          : (type.name() == 'PAYMENT' ? '支払い'
+                          : (type.name() == 'ACCOUNT' ? 'アカウント'
+                          : (type.name() == 'MOVIE_INFO' ? '映画情報'
+                          : (type.name() == 'SYSTEM_ERROR' ? 'システムエラー'
+                          : (type.name() == 'COUPONS_EVENTS' ? 'クーポン・イベント'
+                          : (type.name() == 'OTHERS' ? 'その他' : type.name()))))))}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 문의 리스트 -->
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <!-- 각 문의 항목 -->
+                    <th:block th:each="inquiry, iterStat : ${inquiries}">
+                        <div class="accordion-item">
+                            <!-- 문의 헤더 -->
+                            <h2 class="accordion-header d-flex align-items-center" th:id="'flush-heading' + ${iterStat.index}">
+                                <!-- 상태 아이콘 -->
+                                <span class="me-2"
+                                      th:classappend="${inquiry.status.name() == 'ANSWERED'} ? 'text-success' : 'text-danger'">
+                                    <i th:classappend="${inquiry.status.name() == 'ANSWERED'} ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+                                </span>
+                                <!-- 문의 유형 -->
+                                <button class="accordion-button collapsed flex-grow-1 text-start" type="button"
+                                        data-bs-toggle="collapse"
+                                        th:data-bs-target="'#flush-collapse' + ${iterStat.index}"
+                                        aria-expanded="false"
+                                        th:aria-controls="'flush-collapse' + ${iterStat.index}">
+                    <span th:text="${inquiry.inquiry_type.name() == 'RESERVATION' ? '予約'
+                          : (inquiry.inquiry_type.name() == 'PAYMENT' ? '支払い'
+                          : (inquiry.inquiry_type.name() == 'ACCOUNT' ? 'アカウント'
+                          : (inquiry.inquiry_type.name() == 'MOVIE_INFO' ? '映画情報'
+                          : (inquiry.inquiry_type.name() == 'SYSTEM_ERROR' ? 'システムエラー'
+                          : (inquiry.inquiry_type.name() == 'COUPONS_EVENTS' ? 'クーポン・イベント'
+                          : (inquiry.inquiry_type.name() == 'OTHERS' ? 'その他' : inquiry.inquiry_type.name()))))))}">
+                    </span>
+                                </button>
+                            </h2>
+                            <!-- 문의 내용 -->
+                            <div th:id="'flush-collapse' + ${iterStat.index}" class="accordion-collapse collapse"
+                                 th:aria-labelledby="'flush-heading' + ${iterStat.index}"
+                                 data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <!-- 문의 내용 -->
+                                    <p><strong>内容:</strong></p>
+                                    <p th:if="${inquiry.content != null}" th:text="${inquiry.content}" style="white-space: pre-wrap; word-wrap: break-word;"></p>
+                                    <p th:if="${inquiry.content == null}" class="text-muted">お問い合わせがありません。</p>
+
+                                    <!-- 이메일 -->
+                                    <p><strong>メール:</strong> <span th:text="${inquiry.email}"></span></p>
+
+                                    <!-- 생성 날짜 -->
+                                    <p><strong>作成日:</strong>
+                                        <span th:text="${#temporals.format(inquiry.created_at, 'yy/MM/dd HH:mm:ss')}"></span>
+                                    </p>
+
+                                    <!-- 답변 작성 영역 -->
+                                    <div th:if="${inquiry.status.name() == 'PENDING'}">
+                                        <textarea class="form-control mt-3" rows="8" th:id="'answerContent' + ${inquiry.id}" placeholder="回答内容を入力してください。"></textarea>
+                                        <button class="btn btn-primary mt-2"
+                                                th:onclick="'submitAnswer(' + ${inquiry.id} + ')'">
+                                            回答する
+                                        </button>
+                                    </div>
+                                    <p th:if="${inquiry.status.name() == 'ANSWERED'}" class="text-success">既に回答済みの内容です。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <!-- 페이징 -->
+                <nav class="mt-4" th:if="${totalPages > 0}">
+                    <ul class="pagination justify-content-center">
+                        <!-- 이전 버튼 -->
+                        <li th:classappend="${currentPage == 1} ? 'disabled' : ''" class="page-item">
+                            <a th:href="@{|/admin/qna?page=${currentPage - 1}&inquiry_type=${selectedType}|}" class="page-link"><i class="bi bi-arrow-left"></i></a>
+                        </li>
+                        <!-- 페이지 번호 -->
+                        <th:block th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                            <li th:classappend="${pageNum == currentPage} ? 'active' : ''" class="page-item">
+                                <a th:href="@{|/admin/qna?page=${pageNum}&inquiry_type=${selectedType}|}"
+                                   class="page-link" th:text="${pageNum}"></a>
+                            </li>
+                        </th:block>
+                        <!-- 다음 버튼 -->
+                        <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''" class="page-item">
+                            <a th:href="@{|/admin/qna?page=${currentPage + 1}&inquiry_type=${selectedType}|}" class="page-link"><i class="bi bi-arrow-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('inquiryType').addEventListener('change', async () => {
+            const inquiryType = document.getElementById('inquiryType').value;
+
+            try {
+                const response = await fetch(`/admin/qna?inquiry_type=${inquiryType}&page=1`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Replace the inquiry list and pagination sections
+                    const inquiryList = document.querySelector('.accordion-flush');
+                    const newInquiryList = doc.querySelector('.accordion-flush');
+                    inquiryList.innerHTML = newInquiryList.innerHTML;
+
+                    const pagination = document.querySelector('.pagination');
+                    const newPagination = doc.querySelector('.pagination');
+                    pagination.innerHTML = newPagination.innerHTML;
+                } else {
+                    console.error('Error loading data:', response.status);
+                }
+            } catch (error) {
+                console.error('Request failed:', error);
+            }
+        });
+
+        async function submitAnswer(inquiryId) {
+            const content = document.getElementById('answerContent' + inquiryId).value;
+
+            if (!content) {
+                alert('回答内容を入力してください。');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/admin/qna/answer`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inquiryId, content })
+                });
+
+                if (response.ok) {
+                    alert('回答が登録されました。');
+                    location.reload(); // ページを再読み込み
+                } else {
+                    alert('回答登録に失敗しました。');
+                }
+            } catch (error) {
+                console.error('Error submitting answer:', error);
+                alert('エラーが発生しました。もう一度お試しください。');
+            }
+        }
+    </script>
+</th:block>

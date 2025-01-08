@@ -1,0 +1,91 @@
+<section th:fragment="content">
+    <div class="container mt-5">
+        <h2 class="text-center" style="margin-top: 12%; margin-bottom: 3%;">会員登録</h2>
+        <form th:action="@{/user/signup}" method="post" class="mt-4" id="signupForm" novalidate>
+            <div class="row justify-content-center">
+                <div class="col-md-6" style="margin-bottom: 10%; margin-left: 24%;">
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">メールアドレス</label>
+                        <input type="email" class="form-control bg-light" id="email" th:name="email" th:value="${email}" readonly>
+                        <div class="text-danger" th:if="${error_email}" th:text="${error_email}"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">パスワード</label>
+                        <input type="password" class="form-control" id="password" th:name="password" placeholder="パスワードを入力してください">
+                        <small class="form-text text-muted">8~16文字の英数字と特殊文字を含む必要があります。</small>
+                        <div class="text-danger" th:if="${error_password}" th:text="${error_password}"></div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name">名前</label>
+                        <input type="text" class="form-control" id="name" th:name="name" placeholder="名前を入力してください">
+                        <div class="text-danger" th:if="${error_name}" th:text="${error_name}"></div>
+                    </div>
+
+                    <!-- Birth -->
+                    <div class="form-group">
+                        <label for="birth">生年月日 (オプション)</label>
+                        <input type="date" class="form-control" id="birth" th:name="birth">
+                        <div class="text-danger" th:if="${error_birth}" th:text="${error_birth}"></div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="phone">電話番号 (オプション)</label>
+                        <input type="text" class="form-control" id="phone" th:name="phone" placeholder="例: 010-1234-5678">
+                        <div class="text-danger" th:if="${error_phone}" th:text="${error_phone}"></div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div id="termsSection" class="form-group">
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" id="agreeTerms">
+                            <label class="form-check-label" for="agreeTerms">
+                                利用規約およびプライバシーポリシーに同意します。
+                            </label>
+                        </div>
+                        <div id="termsContent">
+                            <h5>利用規約</h5>
+                            <p>
+                                本会員規約は、会員登録に関する内容やサービス利用について定めたものです。登録情報は正確に入力し、第三者への会員情報の譲渡は禁止されています。
+                            </p>
+                            <br>
+                            <ul>
+                                <li>個人情報は適切に管理されます。</li>
+                                <li>退会希望時は所定の手続きを行ってください。</li>
+                                <li>不正行為が判明した場合、会員資格を取り消す場合があります。</li>
+                            </ul>
+                            <br>
+                            <p>
+                                登録された個人情報は、サービス提供や問い合わせ対応のために使用されます。詳細はプライバシーポリシーをご確認ください。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-block mt-3" id="submitBtn" disabled>登録</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById('agreeTerms').addEventListener('change', function () {
+            const termsContent = document.getElementById('termsContent');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (this.checked) {
+                termsContent.style.display = 'none';
+                submitBtn.disabled = false;
+            } else {
+                termsContent.style.display = 'block';
+                submitBtn.disabled = true;
+            }
+        });
+    </script>
+</section>

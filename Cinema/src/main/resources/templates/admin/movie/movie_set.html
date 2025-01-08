@@ -1,0 +1,291 @@
+<th:block th:fragment="content">
+    <!-- Movie Schedule Set Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-md-10">
+                <!-- 영화 정보 -->
+                <h1 class="mb-3 text-center">映画スケジュール設定</h1>
+                <h4 class="mb-3 text-center" th:text="${movie.title}"></h4>
+                <h5 class="mb-3 text-center" th:text="${movie.runningTime}"></h5>
+
+
+                <!-- 날짜 체크박스 -->
+                <div class="mb-4">
+                    <h6 class="d-inline-block">日付を選択してください</h6>
+                    <div class="form-check form-check-inline ms-3">
+                        <input type="radio" id="selectAllDates" name="selectDates" class="form-check-input" onchange="toggleAllDates(true)">
+                        <label class="form-check-label" for="selectAllDates">全て選択</label>
+                    </div>
+                </div>
+                <div id="dateCheckboxContainer" class="mb-3 d-flex flex-wrap"></div>
+
+                <!-- 상영관 선택 -->
+                <div id="theaterContainer" class="mt-4">
+                    <h6>上映館</h6>
+                    <div id="theaterCheckboxContainer"></div>
+                </div>
+
+                <!-- 선택 결과 및 시간 설정 -->
+                <form name="schedules" method="post" action="/admin/movie/set">
+                    <div id="resultContainer" class="mt-4">
+                        <h5>選択した日付と上映館</h5>
+                        <ul id="resultList" class="list-group">
+                            <!-- 선택된 날짜와 상영관 및 시간 -->
+                        </ul>
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary rounded-pill m-2">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Movie Schedule Set End -->
+
+    <!-- JavaScript -->
+    <script th:inline="javascript">
+        const runningTime = [[${movie.runningTime}]]; // 영화 러닝타임 (분)
+        const schedules = /*[[${schedules}]]*/ [];    // 기존 스케줄 데이터
+        console.log("schedules: ", schedules);
+
+        // 가능한 시간 생성 (오전 9시 ~ 자정까지, 10분 간격)
+        function generateAvailableTimes() {
+            const times = [];
+            let current = new Date(0, 0, 0, 9, 0); // 오전 9시
+            const end = new Date(0, 0, 0, 23, 59); // 자정
+
+            while (current <= end) {
+                const hours = String(current.getHours()).padStart(2, '0');
+                const minutes = String(current.getMinutes()).padStart(2, '0');
+                times.push(`${hours}:${minutes}`);
+                current.setMinutes(current.getMinutes() + 10);
+            }
+            return times;
+        }
+
+        // 가능한 시간 배열 저장
+        const availableTimes = generateAvailableTimes();
+
+        // 개봉일부터 종영일까지의 날짜 생성
+        const startDate = new Date([[${movie.releaseDate}]]);
+        const endDate = new Date([[${movie.endDate}]]);
+        const dates = [];
+
+        while (startDate <= endDate) {
+            dates.push(new Date(startDate));
+            startDate.setDate(startDate.getDate() + 1);
+        }
+
+        // 모든 날짜 선택/해제 처리
+        function toggleAllDates(selectAll) {
+            const dateCheckboxes = document.querySelectorAll(".date-checkbox");
+            dateCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAll;
+            });
+            // 날짜 변경 처리 실행
+            handleDateChange();
+        }
+
+        // 날짜 체크박스 컨테이너
+        const dateCheckboxContainer = document.getElementById("dateCheckboxContainer");
+        dates.forEach((date, index) => {
+            const dateStr = date.toISOString().split("T")[0];
+            const checkbox = `
+                <div class="form-check me-3">
+                    <input type="checkbox" class="form-check-input date-checkbox" id="date-${index}" value="${dateStr}" onchange="handleDateChange()">
+                    <label class="form-check-label" for="date-${index}">${dateStr}</label>
+                </div>
+            `;
+            dateCheckboxContainer.innerHTML += checkbox;
+        });
+
+        // 날짜 변경 처리
+        function handleDateChange() {
+            // 모든 상영관 초기화
+            resetTheaterSelection();
+            // 결과 리스트 초기화
+            resetResultList();
+            // 라디오 버튼 상태 업데이트
+            updateRadioState();
+
+            // 새로 선택된 날짜들만 상영관 옵션 추가
+            const selectedDates = Array.from(document.querySelectorAll(".date-checkbox:checked")).map(cb => cb.value);
+            selectedDates.forEach(date => addTheaterOptions(date));
+        }
+
+        // 라디오 버튼 상태 업데이트
+        function updateRadioState() {
+            const dateCheckboxes = document.querySelectorAll(".date-checkbox");
+            const allChecked = Array.from(dateCheckboxes).every(checkbox => checkbox.checked);
+            // '모두 선택' 라디오 버튼 상태 동기화
+            const selectAllRadio = document.getElementById("selectAllDates");
+            selectAllRadio.checked = allChecked;
+        }
+
+        // 상영관 체크박스 초기화
+        function resetTheaterSelection() {
+            const theaterContainer = document.getElementById("theaterCheckboxContainer");
+            theaterContainer.innerHTML = ""; // 상영관 체크박스 제거
+        }
+
+        // 결과 리스트 초기화
+        function resetResultList() {
+            const resultList = document.getElementById("resultList");
+            resultList.innerHTML = ""; // 기존 항목 삭제
+        }
+
+        // 상영관 옵션 추가 (날짜별)
+        function addTheaterOptions(date) {
+            const theaterCheckboxContainer = document.getElementById("theaterCheckboxContainer");
+            const theaterOptions = `
+                <div id="theater-options-${date}" class="mb-3">
+                    <h6>${date} の上映館</h6>
+                    <div>
+                        <input type="checkbox" id="${date}-2D" class="theater-checkbox" value="1" onchange="handleTheaterSelection('${date}', '1', '2D')">
+                        <label for="${date}-2D">2D</label>
+
+                        <input type="checkbox" id="${date}-3D" class="theater-checkbox" value="2" onchange="handleTheaterSelection('${date}', '2', '3D')">
+                        <label for="${date}-3D">3D</label>
+
+                        <input type="checkbox" id="${date}-4DX" class="theater-checkbox" value="3" onchange="handleTheaterSelection('${date}', '3', '4DX')">
+                        <label for="${date}-4DX">4DX</label>
+
+                        <input type="checkbox" id="${date}-IMAX" class="theater-checkbox" value="4" onchange="handleTheaterSelection('${date}', '4', 'IMAX')">
+                        <label for="${date}-IMAX">IMAX</label>
+                    </div>
+                </div>
+            `;
+            theaterCheckboxContainer.innerHTML += theaterOptions;
+        }
+
+        // 상영관 선택 핸들러
+        var scheduleIndex = 0;
+
+        function handleTheaterSelection(date, screenId, screenLabel) {
+            const checkbox = document.getElementById(`${date}-${screenLabel}`);
+            const isChecked = checkbox.checked;
+            const resultList = document.getElementById("resultList");
+
+            // 유니크 ID (날짜 + 스크린 레이블)
+            const uniqueId = `${date}-${screenLabel}`;
+            const existingListItem = document.getElementById(`result-${uniqueId}`);
+
+            if (isChecked) {
+                // 체크되어 있고 기존 항목이 없을 경우 새 항목 추가
+                if (!existingListItem) {
+                    const listItem = document.createElement("li");
+                    listItem.id = `result-${uniqueId}`;
+                    listItem.className = "list-group-item";
+
+                    listItem.innerHTML = `
+                        <strong>${date}</strong> - <strong>${screenLabel}</strong>
+                        <input type="hidden" name="schedules[${scheduleIndex}].movieId" value="[[${movie.id}]]">
+                        <input type="hidden" name="schedules[${scheduleIndex}].screenId" value="${screenId}">
+                        <input type="hidden" name="schedules[${scheduleIndex}].watchDate" value="${date}">
+                        <input type="hidden" name="schedules[${scheduleIndex}].endTime" id="endTime-${uniqueId}" value="">
+
+                        <div>
+                            <label for="time-${uniqueId}">開始時間</label>
+                            <select id="time-${uniqueId}" class="form-select mt-2"
+                                    onchange="updateEndTime('${uniqueId}', '${date}', '${screenId}')"
+                                    name="schedules[${scheduleIndex}].startTime">
+                                ${
+                                    getAvailableTimes().map(time => {
+                                        // 09:00이 기본값인 경우
+                                        if (time === '09:00') {
+                                            return `<option value="${time}" selected>${time}</option>`;
+                                        } else {
+                                            return `<option value="${time}">${time}</option>`;
+                                        }
+                                    }).join('')
+                                }
+                            </select>
+                        </div>
+                    `;
+                    resultList.appendChild(listItem);
+                    scheduleIndex++;
+                }
+            } else {
+                // 체크 해제 → 기존 항목 삭제
+                if (existingListItem) {
+                    existingListItem.remove();
+                }
+            }
+        }
+
+        // 종료 시간 계산 + 충돌 검증
+        function updateEndTime(uniqueId, date, screenId) {
+            const selectElement = document.getElementById(`time-${uniqueId}`);
+            const endTimeInput  = document.getElementById(`endTime-${uniqueId}`);
+
+            if (!selectElement || !endTimeInput) return;
+
+            const startTime = selectElement.value;
+            if (!startTime) {
+                endTimeInput.value = "";
+                return;
+            }
+
+            // 충돌 검증
+            if (isScheduleConflict(date, parseInt(screenId, 10), startTime)) {
+                alert("선택한 시간은 다른 스케줄과 충돌합니다.");
+                selectElement.value = ""; // 초기화
+                endTimeInput.value  = "";
+                return;
+            }
+
+            // 충돌 없으면 종료 시간 계산
+            const [hours, minutes] = startTime.split(":").map(Number);
+            const startDateTime    = new Date(0, 0, 0, hours, minutes);
+            const endDateTime      = new Date(startDateTime.getTime() + runningTime * 60 * 1000);
+
+            const endHours   = String(endDateTime.getHours()).padStart(2, "0");
+            const endMinutes = String(endDateTime.getMinutes()).padStart(2, "0");
+            endTimeInput.value = `${endHours}:${endMinutes}`;
+        }
+
+        // 충돌 검증 함수
+        function isScheduleConflict(date, newScreenId, startTime) {
+            const runningTimeInMs = runningTime * 60 * 1000;
+            const startTimeMs     = convertTimeToMs(startTime);
+            const endTimeMs       = startTimeMs + runningTimeInMs;
+
+            for (const schedule of schedules) {
+                // 날짜 다르면 패스
+                if (schedule.watchDate !== date) continue;
+
+                // 기존 스케줄 screenId(문자열일 경우 파싱)
+                const oldScreenId  = parseInt(schedule.screenId, 10);
+                const otherStartMs = convertTimeToMs(schedule.startTime);
+                const otherEndMs   = convertTimeToMs(schedule.endTime);
+
+                if (oldScreenId === newScreenId) {
+                    // [같은 상영관] → 기존 종료 +30분 전에는 새로 시작 불가
+                    // 즉 "새 시작 < (기존 종료+30분)" && "새 종료 > 기존 시작"이면 충돌
+                    if (startTimeMs < (otherEndMs + 30*60*1000) && endTimeMs > otherStartMs) {
+                        return true;
+                    }
+                } else {
+                    // [다른 상영관] → 기존 시작 시각 ±10분 이내면 충돌
+                    if (Math.abs(startTimeMs - otherStartMs) < 10*60*1000) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 시간 문자열 (HH:MM)을 밀리초로 변환
+        function convertTimeToMs(time) {
+            const [hours, minutes] = time.split(":").map(Number);
+            return (hours * 60 + minutes) * 60 * 1000;
+        }
+
+        // 가능한 시간 반환
+        function getAvailableTimes() {
+            return availableTimes;
+        }
+    </script>
+
+</th:block>

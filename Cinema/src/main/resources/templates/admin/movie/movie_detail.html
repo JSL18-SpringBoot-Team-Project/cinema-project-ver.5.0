@@ -1,0 +1,114 @@
+<th:block th:fragment="content">
+    <!-- Movie Create Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
+                <h1 class="mb-3 text-center" th:text="${movie.title} + '詳細'"></h1>
+                <form id="movie-detail-form" name="movie-detail" method="post" action="/admin/movie/detail" enctype="multipart/form-data" onsubmit="return check()">
+                    <input type="hidden" th:value="${movie.id}" name="movieId">
+                    <table class="table table-borderless" >
+                        <tr>
+                            <th><label for="trailer">trailer</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="trailer" id="trailer" required placeholder="trailer">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="movie_img">movie_img</label></th>
+                            <td>
+                                <input type="file" class="form-control" name="movie_img" id="movie_img">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="country">country</label></th>
+                            <td>
+                                <select class="form-select" name="country" id="country" required>
+                                    <option value="日本">日本</option>
+                                    <option value="韓国">韓国</option>
+                                    <option value="中国">中国</option>
+                                    <option value="アメリカ">アメリカ</option>
+                                    <option value="イギリス">イギリス</option>
+                                    <option value="ドイツ">ドイツ</option>
+                                    <option value="インド">インド</option>
+                                    <option value="フランス">フランス</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="production">production</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="production" id="production" required placeholder="production">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="distribution">distribution</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="distribution" id="distribution" required placeholder="distribution">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="director">director</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="director" id="director" required placeholder="director">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="actor">actor</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="actor" id="actor" required placeholder="actor">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="content">content</label></th>
+                            <td>
+                                <textarea class="form-control" name="content" id="content" placeholder="content" required style="width:100%; resize:none; padding:8px; height:300px;"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-sm btn-primary rounded-pill m-2">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Movie Create End -->
+    <script>
+        function check() {
+        // 폼과 트레일러 입력 필드 접근
+        var trailerInput = document.getElementById('trailer');
+        var youtubeUrl = trailerInput.value.trim();
+
+        // YouTube 비디오 ID 추출을 위한 정규 표현식 패턴 정의
+        var patterns = [
+            /https?:\/\/youtu\.be\/([A-Za-z0-9_-]{11})/,
+            /https?:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]{11})/,
+            /https?:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/
+        ];
+
+        var videoId = '';
+
+        // 패턴을 순회하며 비디오 ID 추출
+        for (var i = 0; i < patterns.length; i++) {
+            var match = youtubeUrl.match(patterns[i]);
+            if (match && match[1]) {
+                videoId = match[1];
+                break;
+            }
+        }
+
+        // 비디오 ID가 유효한지 확인
+        if (videoId) {
+            // 트레일러 URL을 embed 형식으로 변환
+            trailerInput.value = "https://www.youtube.com/embed/" + videoId;
+        } else {
+            // 유효하지 않은 URL인 경우 경고 메시지 표시 및 폼 제출 방지
+            alert("유효한 YouTube URL을 입력해주세요.");
+            return false;
+        }
+
+        // 폼 제출 허용
+        return true;
+    }
+    </script>
+</th:block>

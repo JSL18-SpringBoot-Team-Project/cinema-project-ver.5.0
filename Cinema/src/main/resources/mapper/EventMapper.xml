@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.EventMapper">
+    <!-- SQL 문 -->
+    <select id="eventManageList">
+        SELECT
+            events.*,
+            coupons.coupon_title
+        FROM
+            events
+        JOIN
+            coupons
+        ON
+            events.coupon_id = coupons.id
+        ORDER BY
+            events.id DESC
+    </select>
+
+    <update id="updateEvent">
+        UPDATE
+            events
+        SET
+            event_title = #{eventTitle},
+            event_content = #{eventContent},
+            event_img = #{eventImg},
+            event_start_date = #{eventStartDate},
+            event_end_date = #{eventEndDate},
+            coupon_id = #{couponId}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="eventStart" resultType="com.movie.domain.Events">
+        SELECT id, event_title, event_content, event_start_date, event_end_date, event_img
+        FROM events
+        WHERE event_end_date &gt; NOW()
+        ORDER BY id DESC;
+    </select>
+
+    <select id="eventEnd" resultType="com.movie.domain.Events">
+        SELECT id, event_title, event_content, event_start_date, event_end_date, event_img
+        FROM events
+        WHERE event_end_date &lt; NOW()
+        ORDER BY id DESC;
+    </select>
+
+</mapper>

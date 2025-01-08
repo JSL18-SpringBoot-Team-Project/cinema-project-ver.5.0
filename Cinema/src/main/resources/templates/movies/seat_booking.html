@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>座席選択</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Movie Pro"/>
+    <meta name="keywords" content="Movie Pro"/>
+    <meta name="author" content=""/>
+    <meta name="MobileOptimized" content="320"/>
+    <!--Template style -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fonts.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flaticon.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.carousel.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/owl.theme.default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dl-menu.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/venobox.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/layers.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/navigation.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugin/rs_slider/settings.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/seat.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}"/>
+    <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{#}"/>
+    <!-- favicon links -->
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+</head>
+
+<body>
+<form name="seat" id="seat" method="post" action="/payment/proceed">
+    <input type="hidden" name="scheduleId" th:value="${scheduleId}">
+    <div class="st_bt_top_header_wrapper float_left">
+        <div class="container container_seat">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"><a
+                            th:href="@{/booking/schedule(movieId = ${movie.id})}"><i
+                            class="fas fa-long-arrow-alt-left"></i>
+                        &nbsp;Back</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="st_bt_top_center_heading st_bt_top_center_heading_seat_book_page float_left">
+                        <h3>
+                            <span th:text="${movie.title}"></span> -
+                            <span th:text="'(' + ${movie.runningTime / 60}"></span>:<span
+                                th:text="${movie.runningTime % 60} + ')'"></span>
+                        </h3>
+                        <h4>
+                            <span th:text="${#temporals.format(movie.releaseDate, 'dd MMM')}"></span>、
+                            <span th:text="${#temporals.format(schedule.startTime, 'hh:mm')}"></span>
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left"><a href="#"><i
+                            class="fa fa-times"></i></a>
+                    </div>
+
+                    <div class="st_seatlay_btn float_left">
+                        <button type="submit" id="proceedButton"
+                                style="float: left; width: 150px; height: 35px; text-align: center; line-height: 35px; background: #614aee; border: 1px solid transparent; border-radius: 5px; text-transform: uppercase; font-size: 14px; color: #fff; letter-spacing: 1px; margin-right: 30px; margin-top: 10px;">
+                            Proceed to Pay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- st seat Layout Start -->
+    <div class="st_seatlayout_main_wrapper float_left">
+        <div class="container container_seat">
+            <div class="st_seat_full_container">
+                <div class="st_seat_lay_economy_wrapper float_left">
+                    <div class="screen">
+                        <img th:src="@{/images/content/screen.png}">
+                    </div>
+                </div>
+                <div class="st_seat_lay_economy_wrapper st_seat_lay_economy_wrapperexicutive float_left">
+                    <div class="st_seat_lay_row float_left" th:each="columnEntry : ${groupedSeats}">
+                        <ul th:each="seat : ${columnEntry.value}"
+                            th:classappend="${seat.seatRow == 6 || seat.seatRow == 19} ? 'st_eco_second_row' : ''">
+                            <!-- 열 이름 -->
+                            <li th:if="${seat.seatRow == 1}" class="st_seat_heading_row"
+                                th:text="${columnEntry.key}"></li>
+                            <li th:classappend="${seat.state == 0} ? '' : 'seat_disable'">
+                                <input type="checkbox" th:id="${seat.id}" name="cb" th:value="${seat.id}">
+                                <label th:for="${seat.id}"></label>
+                                <span th:if="${seat.state == 0}" th:text="${seat.seatPrice}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- st seat Layout End -->
+<!--main js file start-->
+<script th:src="@{/js/jquery_min.js}"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/jquery.dlmenu.js}"></script>
+<script th:src="@{/js/jquery.sticky.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.js}"></script>
+<script th:src="@{/js/jquery.bxslider.min.js}"></script>
+<script th:src="@{/js/venobox.min.js}"></script>
+<script th:src="@{/js/smothscroll_part1.js}"></script>
+<script th:src="@{/js/smothscroll_part2.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.revolution.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/jquery.themepunch.tools.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.addon.snow.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.actions.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.carousel.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.kenburn.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.layeranimation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.migration.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.navigation.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.parallax.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.slideanims.min.js}"></script>
+<script th:src="@{/js/plugin/rs_slider/revolution.extension.video.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<!--main js file end-->
+</body>
+<script>
+    document.getElementById("proceedButton").onclick = function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+
+        const selectedSeats = [];
+        const checkboxes = document.querySelectorAll('input[name="cb"]:checked');
+
+        if (checkboxes.length === 0) {
+            alert("좌석을 하나 이상 선택해야 합니다.");
+            return; // 좌석 선택이 없을 경우 함수 종료
+        }
+
+        // 선택된 좌석 ID 수집
+        checkboxes.forEach(function(checkbox) {
+            const seatId = parseLong(checkbox.value); // value에서 seat ID 가져오기
+            if (seatId !== null) { // 유효한 seatId인 경우에만 추가
+                selectedSeats.push(seatId);
+            }
+        });
+
+        // AJAX 요청으로 좌석 상태 확인
+        $.ajax({
+            url: '/booking/checkSeatState', // 좌석 상태 확인을 위한 엔드포인트
+            type: 'POST',
+            contentType: 'application/json', // JSON 형식으로 데이터 전송
+            data: JSON.stringify(selectedSeats), // 선택된 좌석 ID 배열을 JSON 문자열로 변환
+            success: function(response) {
+                if (response.state === "possible") { // 모든 좌석이 사용 가능할 경우
+                    console.log("possible");
+
+                    // 선택된 좌석 ID를 폼에 숨겨진 입력 필드로 추가
+                    const seatIdInput = document.createElement("input");
+                    seatIdInput.type = "hidden";
+                    seatIdInput.name = "selectedSeatIds"; // 서버로 전송할 파라미터 이름
+                    seatIdInput.value = selectedSeats.join(","); // 배열을 쉼표로 구분된 문자열로 변환
+
+                    // 폼에 숨겨진 입력 필드 추가
+                    document.getElementById("seat").appendChild(seatIdInput);
+
+                    // 폼 제출
+                    document.getElementById("seat").submit();
+                } else {
+                    alert("이미 선택된 좌석이 있습니다."); // 일부 좌석이 이미 선택된 경우
+                }
+            },
+            error: function() {
+                alert("좌석 상태를 확인하는 데 오류가 발생했습니다.");
+            }
+        });
+    };
+
+    // 문자열을 long 타입으로 변환하는 유틸리티 함수
+    function parseLong(value) {
+        const parsed = Number(value);
+        if (isNaN(parsed)) {
+            console.error("유효하지 않은 좌석 ID:", value);
+            return null;
+        }
+        return parsed;
+    }
+</script>
+
+
+</html>

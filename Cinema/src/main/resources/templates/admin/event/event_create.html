@@ -1,0 +1,84 @@
+<th:block th:fragment="content">
+            <!-- Event Create Start -->
+            <div class="container-fluid pt-3 px-3">
+                <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+                    <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
+                        <h1 class="mb-3 text-center">イベント登録</h1>
+                        <form name="event" id="eventForm" method="post" action="/admin/event/create" enctype="multipart/form-data">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th><label for="event_name">event_name</label></th>
+                                    <td>
+                                        <input type="text" class="form-control" th:name="eventTitle" id="event_name" required placeholder="event_name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="event_img">event_img</label></th>
+                                    <td>
+                                        <input type="file" class="form-control" th:name="event_img" id="event_img">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="event_start">event_start</label></th>
+                                    <td>
+                                        <input type="date" class="form-control" th:name="eventStartDate" id="event_start" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="event_end">event_end</label></th>
+                                    <td>
+                                        <input type="date" class="form-control" th:name="eventEndDate" id="event_end" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="event_content">event_content</label></th>
+                                    <td>
+                                        <textarea class="form-control" th:name="eventContent" id="event_content" required placeholder="event_content" style="width:100%; resize:none; padding:8px; height:300px;"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="coupon">coupon</label></th>
+                                    <td>
+                                        <select class="form-select" th:name="couponId" id="coupon" required>
+                                            <th:block th:each="coupon : ${coupons}">
+                                                <option th:value="${coupon.id}" th:text="${coupon.couponTitle}" th:attr="data-couponId=${coupon.id}"></option>
+                                            </th:block>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-sm btn-primary rounded-pill m-2">登録</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Event Create End -->
+    <script>
+        // 날짜 포맷 함수
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // 오늘 날짜와 일주일 뒤 날짜 계산
+    const today = new Date();
+    const oneWeekLater = new Date();
+    oneWeekLater.setDate(today.getDate() + 7);
+
+    // 기본 값 설정
+    document.getElementById("event_start").value = formatDate(today);
+    document.getElementById("event_end").value = formatDate(oneWeekLater);
+
+    // End 날짜 제한 (Start 날짜 이후만 선택 가능)
+    document.getElementById("event_start").addEventListener("change", function() {
+        const startDate = this.value;
+        document.getElementById("event_end").setAttribute("min", startDate);
+    });
+
+
+    </script>
+</th:block>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.ScheduleMapper">
+    <!-- SQL 문 -->
+    <insert id="insertSchedule" useGeneratedKeys = "true" keyProperty = "id">
+        INSERT INTO schedules (screen_id, movie_id, watch_date, start_time, end_time)
+                values (#{screenId}, #{movieId}, #{watchDate}, #{startTime}, #{endTime})
+    </insert>
+
+    <select id="usedScheduleList" resultType="com.movie.domain.Schedules">
+        SELECT
+            s.id          AS id,
+            s.screen_id   AS screen_id,
+            s.movie_id    AS movie_id,
+            s.watch_date  AS watch_date,
+            s.start_time  AS start_time,
+            s.end_time    AS end_time
+        FROM schedules s
+        JOIN movies m
+        ON s.movie_id = m.id
+        WHERE s.watch_date BETWEEN m.release_date AND m.end_date
+    </select>
+
+    <select id="scheduleList" resultType="com.movie.domain.Schedules">
+        SELECT *
+        FROM schedules
+        WHERE watch_date <![CDATA[>]]> CURDATE()
+        ORDER BY id DESC;
+    </select>
+
+    <!-- ResultMap 정의 -->
+    <resultMap id="ScreenScheduleSeatDtoMap" type="com.movie.domain.ScreenScheduleSeatDto">
+        <!-- Schedules 테이블 -->
+        <id property="scheduleId" column="scheduleId"/>
+        <result property="movieId" column="movieId"/>
+        <result property="watchDate" column="watchDate"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+
+        <!-- Screens 테이블 -->
+        <result property="screenName" column="screenName"/>
+        <result property="screenType" column="screenType"/>
+
+        <!-- Seats 테이블 -->
+        <result property="seatPrice" column="seatPrice"/>
+    </resultMap>
+
+    <!-- SELECT 쿼리 정의 -->
+    <select id="movieScheduleList" resultMap="ScreenScheduleSeatDtoMap">
+        SELECT
+        sch.id AS scheduleId,
+        sch.movie_id AS movieId,
+        sch.watch_date AS watchDate,
+        sch.start_time AS startTime,
+        sch.end_time AS endTime,
+        scr.screen_name AS screenName,
+        scr.screen_type AS screenType,
+        MIN(s.seat_price) AS seatPrice
+        FROM schedules sch
+        JOIN screens scr ON sch.screen_id = scr.id
+        JOIN seats s ON sch.id = s.schedule_id
+        WHERE sch.watch_date >= CURDATE()
+        AND sch.movie_id = #{movieId}
+        GROUP BY
+        sch.id,
+        sch.movie_id,
+        sch.watch_date,
+        sch.start_time,
+        sch.end_time,
+        scr.screen_name,
+        scr.screen_type
+        ORDER BY sch.watch_date, sch.start_time;
+    </select>
+
+
+
+</mapper>

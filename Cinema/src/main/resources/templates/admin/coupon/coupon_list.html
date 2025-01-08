@@ -1,0 +1,68 @@
+<th:block th:fragment="content">
+    <!-- Users Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h2 class="mb-4 text-center">クーポンリスト</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">title</th>
+                                <th scope="col">type</th>
+                                <th scope="col">price</th>
+                                <th scope="col">button</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="coupons : ${coupons}">
+                                <tr class="align-middle" th:attr="data-id=${coupons.id}">
+                                    <th scope="row" th:text="${coupons.id}"></th>
+                                    <td>
+                                        <a th:href="@{/admin/coupon/update(id=${coupons.id})}" th:text="${coupons.couponTitle}"></a>
+                                    </td>
+                                    <td th:text="${coupons.couponType}"></td>
+                                    <td th:text="${coupons.couponPrice}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-danger rounded-pill m-2 delete-btn" th:attr="data-id=${coupons.id}">削除</button>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Users End -->
+    <script>
+        $(document).on("click", ".delete-btn", function () {
+            var row = $(this).closest("tr"); // 클릭한 버튼의 해당 행
+            var id = $(this).data("id"); // 쿠폰 ID
+
+            if (confirm("このクーポンを削除してもよろしいですか？")) {
+                $.ajax({
+                    url: '/admin/coupon/delete',
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: { id: id.toString() }, // 쿠폰 ID를 전송
+                    success: function (result) {
+                        if (result != "fail") {
+                        alert("削除しました。");
+                        row.remove(); // 행 삭제
+                    } else {
+                        alert("削除に失敗しました。");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("削除に失敗しました。");
+                    console.error("Error:", error);
+                }
+                });
+            }
+        });
+    </script>
+</th:block>

@@ -1,0 +1,79 @@
+<section th:fragment="content">
+	<div class="prs_es_about_main_section_wrapper">
+		<div class="container">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="hs_blog_view_img_wrapper prs_event_single_slider_wrapper">
+					<img th:src="@{/images/content/event/eventview.png}" alt="Event Image" class="event-image">
+					<div th:attr="data-id=${view.id}" class="overlay-content">
+						<h1 class="merry-christmas"></h1>
+						<div class="title-box">
+							<p th:text="${view.eventTitle}">Default Title</p>
+						</div>
+						<div class="time-box">
+							<p th:text="${view.eventStartDate} + ' ~ ' + ${view.eventEndDate}">Default Start Date ~ Default End Date</p>
+						</div>
+						<div class="content-box">
+							<p th:text="${view.eventContent}">Default Content</p>
+						</div>
+						<!-- 버튼 조건부 렌더링 -->
+						<div class="button-box" th:if="${view.eventEndDate != null and view.eventEndDate.isAfter(now)}">
+							<button class="event-button" id="checkCouponBtn" th:data-coupon-id="${view.couponId}">
+								受け取る
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const button = document.getElementById('checkCouponBtn');
+
+if (button) {
+    button.addEventListener('click', function () {
+        const couponId = button.getAttribute('data-coupon-id');
+
+        fetch('/event/assign', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `couponId=${couponId}`, // 쿠폰 ID만 전송
+            credentials: 'include', // 세션 쿠키 포함
+        })
+            .then(response => {
+                if (response.status === 401) {
+                    alert('로그인이 필요합니다.');
+                    window.location.href = '/login'; // 로그인 페이지로 리디렉션
+                    return null;
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    if (data.status === 'success') {
+                        alert(data.message); // 성공 메시지
+                    } else if (data.status === 'duplicate') {
+                        alert(data.message); // 중복 쿠폰 메시지
+                    } else if (data.status === 'error') {
+                        alert(data.message); // 기타 오류 메시지
+                    }
+                    // 어떤 상태든 인덱스 페이지로 리디렉션
+                    window.location.href = '/index';
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+                alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+                window.location.href = '/index'; // 네트워크 오류 시에도 인덱스로 리디렉션
+            });
+    });
+}
+});
+	</script>
+</section>

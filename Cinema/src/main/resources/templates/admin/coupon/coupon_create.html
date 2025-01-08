@@ -1,0 +1,132 @@
+<th:block th:fragment="content">
+    <!-- Event Create Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0" style="min-height: 70vh;">
+            <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
+                <h1 class="mb-3 text-center">クーポン登録</h1>
+                <form id="couponForm" name="coupon" method="post" action="/admin/coupon/create">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th><label for="coupon_title">coupon_title</label></th>
+                            <td>
+                                <input type="text" class="form-control" name="couponTitle" id="coupon_title" placeholder="coupon_title" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="coupon_type">coupon_type</label></th>
+                            <td>
+                                <select class="form-select" name="couponType" id="coupon_type" required>
+                                    <option value="">--Coupon Type--</option>
+                                    <option value="P">P</option>
+                                    <option value="Y">Y</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="priceRow" style="display: none;">
+                            <th><label for="coupon_price">coupon_price</label></th>
+                            <td class="d-flex align-items-center">
+                                <input type="number" class="form-control" name="couponPrice" id="coupon_price" placeholder="coupon_price" min="1" required>
+                                <span id="priceSuffix" class="ms-2"></span>
+                                <div id="priceError" class="text-danger mt-2" style="display: none;">Invalid coupon price.</div>
+                                <div id="error-message" style="color: red; display: none;">Please enter a valid number.</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="mt-4 text-end">
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill m-2" onclick="validateForm()">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Event Create End -->
+
+    <script>
+        $(document).ready(function () {
+            // 쿠폰 타입 변경 시 이벤트 처리
+            $("#coupon_type").on("change", function () {
+                const couponType = $(this).val();
+                const priceRow = $("#priceRow");
+                const priceSuffix = $("#priceSuffix");
+
+                if (couponType) {
+                    priceRow.show();
+
+                    // 타입에 따라 접미사 설정
+                    if (couponType === "P") {
+                        priceSuffix.text("%");
+                        $("#coupon_price").attr("max", 30); // P 타입은 최대 30
+                    } else if (couponType === "Y") {
+                        priceSuffix.text("₩");
+                        $("#coupon_price").attr("max", 300); // Y 타입은 최대 300
+                    }
+                } else {
+                    priceRow.hide();
+                    $("#coupon_price").val("");
+                    priceSuffix.text("");
+                }
+            });
+
+            // coupon_price 입력 시 유효성 검사
+            $("#coupon_price").on("input", function () {
+                const couponType = $("#coupon_type").val();
+                const couponPrice = parseInt($(this).val(), 10);
+                const priceError = $("#priceError");
+
+                if (
+                    isNaN(couponPrice) ||
+                    couponPrice < 1 ||
+                    (couponType === "P" && couponPrice > 30) ||
+                    (couponType === "Y" && couponPrice > 300)
+                ) {
+                    priceError.show();
+                } else {
+                    priceError.hide();
+                }
+            });
+        });
+
+        // 폼 유효성 검사
+        function validateForm() {
+            const couponTitle = $("#coupon_title").val();
+            const couponType = $("#coupon_type").val();
+            const couponPrice = $("#coupon_price").val();
+
+            if (!couponTitle) {
+                alert("Please enter a coupon title.");
+                $("#coupon_title").focus();
+                return false;
+            }
+
+            if (!couponType) {
+                alert("Please select a coupon type.");
+                $("#coupon_type").focus();
+                return false;
+            }
+
+            if (!couponPrice || $("#priceError").is(":visible")) {
+                alert("Please enter a valid coupon price.");
+                $("#coupon_price").focus();
+                return false;
+            }
+
+            // 폼 제출
+            $("#couponForm").submit();
+        }
+
+    document.getElementById("coupon_price").addEventListener("input", function (event) {
+        const inputField = event.target;
+        const value = inputField.value;
+
+        // 숫자만 포함되도록 검사
+        if (!/^\d*$/.test(value)) {
+            inputField.value = value.replace(/\D/g, ""); // 숫자가 아닌 문자는 제거
+            document.getElementById("error-message").style.display = "block";
+        } else {
+            document.getElementById("error-message").style.display = "none";
+        }
+    });
+
+
+    </script>
+</th:block>

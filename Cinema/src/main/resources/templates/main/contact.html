@@ -1,0 +1,130 @@
+<section th:fragment="content">
+	<!-- prs title wrapper Start -->
+	<div class="prs_title_main_sec_wrapper">
+		<div class="prs_title_img_overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_title_heading_wrapper">
+						<h2>contact us</h2>
+						<ul>
+							<li><a href="#">Home</a>
+							</li>
+							<li>&nbsp;&nbsp; >&nbsp;&nbsp; contact</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- prs title wrapper End -->
+	<!-- prs contact form wrapper Start -->
+	<div class="prs_contact_form_main_wrapper" style="border-bottom: 1px solid;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="prs_contact_left_wrapper">
+						<h2>お問い合わせ</h2>
+					</div>
+					<div class="row">
+						<form th:action="@{/contact}" method="post">
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="email" id="email" th:name="email" th:value="${email}" class="form-control" readonly>
+							</div>
+							<script>
+								$(document).ready(function() {
+                                    $('select').not('#inquiryType').niceSelect();
+                                    $('#inquiryType').niceSelect('destroy');
+                                });
+							</script>
+							<div class="form-group">
+								<label for="inquiryType">問い合わせタイプ</label>
+								<select id="inquiryType" th:name="inquiry_type" class="form-control" style="display: block;" required>
+									<option th:value="RESERVATION" th:text="${'予約'}">Reservation</option>
+									<option th:value="PAYMENT" th:text="${'支払い'}">Payment</option>
+									<option th:value="ACCOUNT" th:text="${'アカウント'}">Account</option>
+									<option th:value="MOVIE_INFO" th:text="${'映画情報'}">Movie Information</option>
+									<option th:value="SYSTEM_ERROR" th:text="${'システムエラー'}">System Error</option>
+									<option th:value="COUPONS_EVENTS" th:text="${'クーポン・イベント'}">Coupons/Events</option>
+									<option th:value="OTHERS" th:text="${'その他'}">Others</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="content">Content</label>
+								<textarea id="content" th:name="content" class="form-control" rows="13" style="resize: none;"></textarea>
+							</div>
+								<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+								<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+							<button type="submit" class="btn btn-primary">送信</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- prs contact form wrapper End -->
+	<!-- prs contact map Start -->
+	<div class="hs_contact_map_main_wrapper">
+		<div id="map"></div>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFg4PEEpXrQHCMT2PbZMOmIdawDzuWlqk&callback=initMap" async defer></script>
+		<script>
+			function initMap() {
+                let location = { lat: 36.3268, lng: 127.4076 };
+                let map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 18,
+                    center: location,
+                });
+                new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    title: 'My Location',
+                });
+            }
+		</script>
+		<style>
+			#map {
+				left: 25%;
+                height: 450px;
+                width: 50%;
+            }
+		</style>
+	</div>
+	<!-- prs contact map End -->
+	<!-- prs contact info Start -->
+	<div class="prs_contact_info_main_wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<div class="prs_contact_info_box_wrapper">
+						<div class="prs_contact_info_smallbox">	<i class="flaticon-call-answer"></i>
+						</div>
+						<h3>contact</h3>
+						<p style="padding-top: 5px;"><a href="tel:0422424412">042-242-4412</a></p>
+						<p style="padding-top: 3px;"><a href="tel:01065699007">010-6569-9007</a></p>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<div class="prs_contact_info_box_wrapper prs_contact_info_box_wrapper2">
+						<div class="prs_contact_info_smallbox">	<i class="flaticon-call-answer"></i>
+						</div>
+						<h3>Location</h3>
+						〒34856<br>
+						大田広域市 中区 鶏龍路825,<br>KKCW_CINEMA
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<div class="prs_contact_info_box_wrapper prs_contact_info_box_wrapper2">
+						<div class="prs_contact_info_smallbox">	<i class="flaticon-call-answer"></i>
+						</div>
+						<h3>Email</h3>
+						<p><a href="#">cyw9007@gmail.com</a>
+							<br> <a href="#">kkcw_cinema@gmail.com</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- prs contact info End -->
+</section>

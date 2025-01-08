@@ -1,0 +1,190 @@
+<section th:fragment="content">
+    <!-- prs title wrapper Start -->
+    <div class="prs_title_main_sec_wrapper">
+        <div class="prs_title_img_overlay">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="prs_title_heading_wrapper">
+                        <h2>Movie Booking</h2>
+                        <ul>
+                            <li><a th:href="@{/}">Home</a>
+                            </li>
+                            <li>&nbsp;&nbsp; >&nbsp;&nbsp; Movie Booking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- prs title wrapper End -->
+    <!-- prs video top Start -->
+    <div class="prs_booking_main_div_section_wrapper">
+        <div class="prs_top_video_section_wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="st_video_slider_inner_wrapper float_left">
+                            <div class="st_video_slider_overlay">
+                                <img th:src="@{'/poster/' + ${detail.movieImg}}" style="width:100%; height:100%;">
+                            </div>
+                            <div class="st_video_slide_sec float_left">
+                                <a rel="external" th:href="${detail.trailer}" title="title" data-popup="iframe">
+                                    <img th:src="@{/images/booking/icon.png}">
+                                </a>
+                                <h3 th:text="${movie.title}"></h3>
+                                <h4 th:text="${movie.genre}"></h4>
+                                <h5>
+                                    <span th:each="format : ${formats}" th:text="${format}" class="format-span"></span>
+                                </h5>
+                            </div>
+                            <div class="st_video_slide_social float_left">
+                                <div class="st_video_slide_social_right float_left">
+                                    <ul>
+                                        <li data-animation="animated fadeInUp" class="">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span th:text="${#temporals.format(movie.releaseDate, 'dd MMM, yyyy')}"></span>
+                                        </li>
+                                        <li data-animation="animated fadeInUp" class="">
+                                            <i class="far fa-clock"></i>
+                                            <span th:text="${movie.runningTime / 60}">0</span> hrs
+                                            <span th:text="${movie.runningTime % 60}">0</span> mins
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- prs video top End -->
+        <!-- st slider rating wrapper Start -->
+        <div class="st_slider_rating_main_wrapper float_left">
+            <div class="container">
+                <div class="st_calender_tabs">
+                    <ul class="nav nav-tabs">
+                        <!-- 날짜(dates) 순회 -->
+                        <li th:each="date, stat : ${dates}"
+                            th:classappend="${stat.index == 0} ? 'active'">
+                            <a data-toggle="tab"
+                               th:href="'#day-' + ${stat.index}">
+                                <span th:text="${#strings.toUpperCase(#temporals.format(date, 'EEE'))}"></span>
+                                <br>
+                                <span th:text="${#temporals.format(date, 'd')}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- st slider rating wrapper End -->
+        <!-- st slider sidebar wrapper Start -->
+        <div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_booking float_left">
+            <div class="container">
+                <div class="row">
+                    <!-- 메인 콘텐츠 영역 -->
+                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                        <div class="st_indx_slider_main_container float_left">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="tab-content">
+                                        <div th:each="date, stat : ${dates}"
+                                             th:id="'day-' + ${stat.index}"
+                                             th:class="tab-pane"
+                                             th:classappend="${stat.index == 0} ? ' active' : ''">
+
+                                            <div class="st_calender_contant_main_wrapper float_left">
+                                                <div class="st_calender_row_cont st_calender_row_cont2 float_left"
+                                                     th:each="sch : ${schedules}"
+                                                     th:if="${sch.watchDate} == ${date}">
+
+                                                    <!-- 상영관 정보 -->
+                                                    <div class="st_calender_asc">
+                                                        <div class="st_calen_asc_heart_cont">
+                                                            <h2 th:text="${sch.screenName}"></h2>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 시간 & 가격 정보 -->
+                                                    <div class="st_calen_asc_tecket_time_select">
+                                                        <ul>
+                                                            <li>
+                                                            <span>
+                                                                <h4 th:text="${#numbers.formatDecimal(sch.seatPrice, 1, 'COMMA', 2, 'POINT')}"></h4>
+                                                                <p class="asc_pera1">Executive</p>
+                                                                <p class="asc_pera2">Filling Fast</p>
+                                                            </span>
+                                                                <a th:href="@{|/booking/seat?scheduleId=${sch.scheduleId}|}"
+                                                                   th:text="${#temporals.format(sch.startTime, 'hh:mm')}">
+                                                                </a>
+                                                            </li>
+                                                            <!-- 추가적인 스케줄 항목들 -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- 추가적인 상영관 정보들 -->
+                                            </div>
+                                        </div>
+                                        <!-- 추가적인 탭 콘텐츠들 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="prs_mcc_left_side_wrapper">
+
+                            <div class="prs_mcc_event_title_wrapper" style="margin-top:0px;">
+                                <h2>Top Events</h2>
+                                <img src="images/content/movie_category/event_img.jpg" alt="event_img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- st slider sidebar wrapper End -->
+    <script>
+        $(document).ready(function() {
+            $('a[data-popup="iframe"]').magnificPopup({
+                type: 'iframe',
+                mainClass: 'mfp-fade', // 애니메이션 효과 (선택 사항)
+                removalDelay: 160, // 애니메이션 지속 시간 (선택 사항)
+                preloader: false, // 로더 표시 여부 (선택 사항)
+                fixedContentPos: false, // 고정 위치 여부 (선택 사항)
+                iframe: {
+                    patterns: {
+                        // 기본 YouTube 패턴을 수정하여 embed URL을 직접 사용하도록 설정
+                        youtube: {
+                            index: 'youtube.com/embed/', // iframe href의 URL 패턴
+                            id: function(url) {
+                                // YouTube 임베드 URL에서 동영상 ID 추출
+                                var m = url.match(/embed\/([a-zA-Z0-9_-]{11})/);
+                                if (m && m[1]) {
+                                    return m[1];
+                                }
+                                return null;
+                            },
+                            src: '//www.youtube.com/embed/%id%?autoplay=1' // iframe src 설정
+                        }
+                    }
+                },
+                callbacks: {
+                    beforeOpen: function() {
+                        var magnificPopup = $.magnificPopup.instance;
+                        console.log('beforeOpen: iframe src =', magnificPopup.st.iframe.src);
+                    },
+                    open: function() {
+                        console.log('Popup opened with iframe src:', this.st.iframe.src);
+                    },
+                    error: function() {
+                        console.log('Error loading content.');
+                    }
+                }
+            });
+        });
+    </script>
+</section>

@@ -1,0 +1,616 @@
+<nav th:fragment="navbar">
+	<style>
+		.logout-button {
+                  font-size: 12px;
+                  border: 1px solid #ccc;
+                  background-color: transparent;
+                  color: #333;
+                  text-decoration: none;
+                  border-radius: 4px;
+              }
+
+              .logout-button span {
+                  font-weight: bold;
+              }
+	</style>
+	<!-- preloader Start -->
+	<div id="preloader">
+		<div id="status">
+			<img th:src="@{/images/header/horoscope.gif}" id="preloader_image" alt="loader">
+		</div>
+	</div>
+	<!-- color picker start
+           <div id="style-switcher">
+             <div>
+               <h3>Choose Color</h3>
+               <ul class="colors">
+                 <li>
+                   <p class='colorchange' id='color'></p>
+                 </li>
+                 <li>
+                   <p class='colorchange' id='color2'></p>
+                 </li>
+                 <li>
+                   <p class='colorchange' id='color3'></p>
+                 </li>
+                 <li>
+                   <p class='colorchange' id='color4'></p>
+                 </li>
+                 <li>
+                   <p class='colorchange' id='color5'></p>
+                 </li>
+                 <li>
+                   <p class='colorchange' id='style'></p>
+                 </li>
+               </ul>
+             </div>
+             <div class="bottom"> <a th:href="@{#}" class="settings"><i class="fa fa-gear"></i></a> </div>
+           </div> -->
+
+	<!-- color picker end -->
+	<!-- prs navigation Start -->
+	<div class="prs_navigation_main_wrapper">
+		<div class="container-fluid">
+			<div id="search_open" class="gc_search_box">
+				<input type="text" placeholder="Search here">
+				<button><i class="fa fa-search" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="row">
+				<div class="prs_navi_left_main_wrapper col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div class="prs_logo_main_wrapper">
+						<a th:href="@{/}">
+							<img th:src="@{/images/header/logo.png}" alt="logo" />
+						</a>
+					</div>
+					<div class="prs_menu_main_wrapper">
+						<nav class="navbar navbar-default">
+							<div id="dl-menu" class="xv-menuwrapper responsive-menu">
+								<button class="dl-trigger">
+									<img th:src="@{/images/header/bars.png}" alt="bar_png">
+								</button>
+								<div class="prs_mobail_searchbar_wrapper" id="search_button">   <i class="fa fa-search"></i>
+								</div>
+								<div class="clearfix"></div>
+								<ul class="dl-menu">
+									<li class="parent"><a th:href="@{#}">Home</a>
+										<ul class="lg-submenu">
+											<li><a th:href="@{index.html}">Index-I</a></li>
+											<li><a th:href="@{index2.html}">Index-II</a></li>
+											<li><a th:href="@{index3.html}">Index-III</a></li>
+											<li><a th:href="@{index4.html}">Index-IV</a></li>
+										</ul>
+									</li>
+									<li class="parent megamenu"><a th:href="@{#}">movie</a>
+										<ul class="lg-submenu">
+											<li><a>Popular Hindi Movies</a>
+												<ul class="lg-submenu">
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Bajiro Mastani</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Drishyam</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Queen</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Wanted</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Veer</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Jannat</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Baaghi</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Baaghi-2</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Ki & Ka</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Kahaani</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Jab We Met</a>
+													</li>
+												</ul>
+											</li>
+											<li><a>Popular Kannada Movies</a>
+												<ul class="lg-submenu">
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Zoom</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Kirik Party</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Mahakali</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">karvva</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Ishtakamya</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Jigarthanda</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Abhimani</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Priyanka</a>
+													</li>
+												</ul>
+											</li>
+											<li><a>Popular Bengali Movies</a>
+												<ul class="lg-submenu">
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Baro Bou</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Tomake</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Jeevan</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Haraner </a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Bidhilipi</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Bhalobasa </a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Prateek</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Aparanher</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Mukhyamantri</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Charmurti</a>
+													</li>
+												</ul>
+											</li>
+											<li><a>Popular Hollywood Movies</a>
+												<ul class="lg-submenu">
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Wind River</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Logan</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Coco</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Meyerowitz </a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Ragnarok</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Driver</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Dunkirk</a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Big Sick </a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">American </a>
+													</li>
+													<li class="ar_left"><i class="fa fa-film"></i><a th:href="@{#}">Logan  </a>
+													</li>
+												</ul>
+											</li>
+											<li>
+												<div class="prs_navi_slider_wraper">
+													<div class="owl-carousel owl-theme">
+														<div class="item">
+															<img th:src="@{/images/content/up1.jpg}" alt="navi_img">
+														</div>
+														<div class="item">
+															<img th:src="@{/images/content/up2.jpg}" alt="navi_img">
+														</div>
+														<div class="item">
+															<img th:src="@{/images/content/up3.jpg}" alt="navi_img">
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="parent"><a th:href="@{#}">tv show</a>
+										<ul class="lg-submenu">
+											<li><a th:href="@{#}">Star Plus</a></li>
+											<li><a th:href="@{#}">Star Jalsha</a></li>
+											<li><a th:href="@{#}">Star Gold</a></li>
+											<li><a th:href="@{#}">Sony TV</a></li>
+											<li><a th:href="@{#}">Sab TV</a></li>
+											<li><a th:href="@{#}">Sony Pal</a></li>
+											<li><a th:href="@{#}">Set Max</a></li>
+										</ul>
+									</li>
+									<li class="parent megamenu"><a th:href="@{#}">video</a>
+										<ul class="lg-submenu prs_navi_video_wrapper">
+											<li>
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp1.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp2.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp3.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp4.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp5.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+											<li class="hidden-sm">
+												<div class="prs_video_navi_img_main_wrapper">
+													<img th:src="@{/images/content/vp6.jpg}" alt="video_img">
+													<div class="prs_video_navi_overlay_wrapper">   <a class="test-popup-link button" rel='external' href='https://www.youtube.com/embed/ryzOXAO0Ss0' title='title'><i class="flaticon-play-button"></i></a>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li class="parent"><a th:href="@{#}">pages</a>
+										<ul class="lg-submenu">
+											<li class="parent"><a th:href="@{#}">Blog</a>
+												<ul class="lg-submenu">
+													<li><a th:href="@{blog_category.html}">Blog-Category</a>
+													</li>
+													<li><a th:href="@{blog_single.html}">Blog-Single</a>
+													</li>
+												</ul>
+											</li>
+											<li class="parent"><a th:href="@{#}">Event</a>
+												<ul class="lg-submenu">
+													<li><a th:href="@{event_category.html}">Event-Category</a>
+													</li>
+													<li><a th:href="@{event_single.html}">Event-Single</a>
+													</li>
+												</ul>
+											</li>
+											<li class="parent"><a th:href="@{#}">Movie</a>
+												<ul class="lg-submenu">
+													<li><a th:href="@{movie_category.html}">Movie-Category</a>
+													</li>
+													<li><a th:href="@{movie_single.html}">Movie-Single</a>
+													</li>
+													<li><a th:href="@{movie_single_second.html}">Movie-Single-II</a>
+													</li>
+												</ul>
+											</li>
+											<li><a th:href="@{gallery.html}">gallery</a>
+											</li>
+											<li><a th:href="@{booking_type.html}">Booking-Type</a>
+											</li>
+											<li><a th:href="@{confirmation_screen.html}">Confirmation-Screen</a>
+											</li>
+											<li><a th:href="@{movie_booking.html}">Movie-Booking</a>
+											</li>
+											<li><a th:href="@{seat_booking.html}">Seat-Booking</a>
+											</li>
+										</ul>
+									</li>
+									<li class="parent" sec:authorize="isAuthenticated()"><a th:href="@{/contact}">contact</a></li>
+								</ul>
+							</div>
+							<!-- /dl-menuwrapper -->
+						</nav>
+					</div>
+				</div>
+				<div class="prs_navi_right_main_wrapper col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div class="prs_top_login_btn_wrapper" th:style="${session.USER != null} ? 'width: 390px;' : ''">
+						<div class="prs_animate_btn1">
+							<ul>
+								<li sec:authorize="isAuthenticated()" style="float: left;">
+									<a th:href="@{/mypage/}" class="button button--tamaya" data-text="My Page" style="background-color: #1b1b1b; width: 180px;">
+										<span>My Page</span>
+									</a>
+								</li>
+								<li sec:authorize="isAnonymous()">
+									<a th:href="@{#}" class="button button--tamaya" data-text="LOGIN" data-toggle="modal" data-target="#myModal" style="background-color: #1b1b1b; width: 180px;">
+										<span>LOGIN</span>
+									</a>
+								</li>
+								<li sec:authorize="isAuthenticated()">
+									<a th:href="@{/user/logout}" class="button logout-button" data-text="Logout" style="margin-left: 5%; border: 1px solid #fff; width: 180px;">
+										<span>Logout</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="product-heading">
+						<div class="con">
+							<button id="search-icon" style="border-radius: 10px;">
+								<i class="flaticon-tool"></i>
+							</button>
+						</div>
+					</div>
+
+					<style>
+						.no-scroll {
+                                            overflow: hidden;
+                                            position: fixed;
+                                            width: 100%;
+                                        }
+
+                                        .modal2 {
+                                            display: none;
+                                            position: fixed;
+                                            z-index: 10001;
+                                            left: 0;
+                                            top: 0;
+                                            width: 100%;
+                                            height: 100%;
+                                            background-color: rgba(0, 0, 0, 0.5);
+                                        }
+
+                                        .modal-content2 {
+                                            position: relative;
+                                            margin: 5% auto;
+                                            padding: 20px;
+                                            width: 40%;
+                                            max-height: 80%;
+                                            background-color: white;
+                                            border-radius: 10px;
+                                            text-align: center;
+                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                                            overflow-y: auto;
+                                        }
+
+                                        .close2 {
+                                            position: absolute;
+                                            top: 10px;
+                                            right: 15px;
+                                            color: black;
+                                            font-size: 20px;
+                                            font-weight: bold;
+                                            cursor: pointer;
+                                        }
+
+                                        .close2:hover,
+                                        .close2:focus {
+                                            color: red;
+                                        }
+
+                                        #movie-search {
+                                            width: 80%;
+                                            padding: 10px;
+                                            margin: 10px 0;
+                                            border: 1px solid #ccc;
+                                            border-radius: 5px;
+                                        }
+
+                                        #modal-body {
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: flex-start;
+                                            margin-top: 20px;
+                                        }
+
+                                        #main-movie {
+                                            flex: 1;
+                                            text-align: center;
+                                        }
+
+                                        #main-movie img {
+                                            width: 300px;
+                                            height: 400px;
+                                            border-radius: 10px;
+                                            margin-bottom: 10px;
+                                        }
+
+                                        #popular-movies {
+                                            flex: 1;
+                                            margin-left: 20px;
+                                            text-align: left;
+                                        }
+
+                                        #popular-movies h3 {
+                                            font-size: 20px;
+                                            margin-bottom: 10px;
+                                        }
+
+                                        #popular-movies ul {
+                                            list-style: none;
+                                            padding: 0;
+                                        }
+
+                                        #popular-movies li {
+                                            font-size: 16px;
+                                            margin: 12px 0;
+                                        }
+
+                                        #search-results {
+                                            display: none;
+                                            margin-top: 20px;
+                                        }
+
+                                        #search-results div {
+                                            text-align: center;
+                                        }
+
+                                        #search-results img {
+                                            width: 150px;
+                                            height: 200px;
+                                            border-radius: 10px;
+                                        }
+
+                                        #search-results button {
+                                            padding: 10px 20px;
+                                            margin: 5px;
+                                            border: none;
+                                            border-radius: 5px;
+                                            background-color: #515151;
+                                            color: white;
+                                            cursor: pointer;
+                                        }
+					</style>
+
+					<div id="searchModal" class="modal2">
+						<div class="modal-content2">
+							<span class="close2">&times;</span>
+							<input type="text" id="movie-search" placeholder="映画を検索してください。">
+							<div id="modal-body">
+								<div id="main-movie">
+									<img id="main-movie-image" src="/poster/2025/01/02/20250102141643.jpg" alt="대표 이미지">
+								</div>
+								<div id="popular-movies">
+									<h3 style="text-align: center; margin-bottom: 16px;">最新映画ランキング</h3>
+									<ul id="movie-list">
+										<li>
+											<a th:href="@{/movie/detail(id=${2})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102141643.jpg')">1　はたらく細胞</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${3})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102144542.jpg')">2　モアナと伝説の海2</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${4})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102153136.jpg')">3　ライオン・キング：ムファサ</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${5})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102155633.jpg')">4　劇場版 忍たま乱太郎 ドクタケ忍者隊...</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${6})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102161405.jpg')">5　劇場版ドクターX</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${7})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102163243.jpg')">6　聖☆おにいさん THE MOVIE～ホーリ...</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${8})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102164547.jpg')">7　映画「ふしぎ駄菓子屋 銭天堂」</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${10})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102170058.jpg')">8　【推しの子】-The Final Act-</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${11})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102171814.jpg')">9　ソニック × シャドウ TOKYO MISSION</a>
+										</li>
+										<li>
+											<a th:href="@{/movie/detail(id=${12})}" onmouseover="updateMainMovie('/poster/2025/01/02/20250102172753.jpg')">10　勝ち切る覚悟～日本一までの79日～</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div id="search-results"></div>
+						</div>
+					</div>
+
+					<script>
+						function updateMainMovie(imagePath) {
+                                            const mainMovieDiv = document.getElementById('main-movie');
+                                            mainMovieDiv.innerHTML = `<img id="main-movie-image" src="${imagePath}" alt="대표 이미지">`;
+                                        }
+
+                                        document.getElementById('search-icon').addEventListener('click', function (event) {
+                                            event.preventDefault();
+                                            document.body.classList.add('no-scroll');
+                                            document.body.classList.add('no-click');
+                                            document.getElementById('searchModal').style.display = 'block';
+                                        });
+
+                                        document.querySelector('.close2').addEventListener('click', function () {
+                                            closeModal();
+                                        });
+
+                                        window.addEventListener('keydown', function (event) {
+                                            if (event.key === 'Escape') {
+                                                closeModal();
+                                            }
+                                        });
+
+                                        window.addEventListener('click', function (event) {
+                                            const modal = document.getElementById('searchModal');
+                                            if (event.target === modal) {
+                                                closeModal();
+                                            }
+                                        });
+
+                                        function closeModal() {
+                                            const modal = document.getElementById('searchModal');
+                                            const searchInput = document.getElementById('movie-search');
+                                            const searchResults = document.getElementById('search-results');
+                                            const modalBody = document.getElementById('modal-body');
+                                            const mainMovieImage = document.getElementById('main-movie-image');
+
+                                            modal.style.display = 'none';
+                                            searchInput.value = '';
+                                            searchResults.style.display = 'none';
+                                            modalBody.style.display = 'flex';
+                                            document.body.classList.remove('no-click');
+                                            document.body.classList.remove('no-scroll');
+
+                                            // 메인 이미지 초기화
+                                            mainMovieImage.src = '/poster/2025/01/02/20250102141643.jpg';
+                                        }
+
+                                        document.getElementById('movie-search').addEventListener('input', function () {
+          const searchInput = this.value.trim();
+          const searchResults = document.getElementById('search-results');
+          const modalBody = document.getElementById('modal-body');
+
+          if (searchInput) {
+              fetch(`/api/movies/search?title=${encodeURIComponent(searchInput)}`)
+                  .then(response => response.json())
+                  .then(data => {
+                      modalBody.style.display = 'none';
+                      searchResults.style.display = 'block';
+                      searchResults.innerHTML = "";
+
+                      if (data.length > 0) {
+                          data.forEach(movie => {
+                              const movieContainer = document.createElement('div');
+                              movieContainer.style.display = 'flex';
+                              movieContainer.style.alignItems = 'center';
+                              movieContainer.style.border = '1px solid #ccc';
+                              movieContainer.style.margin = '10px 0';
+                              movieContainer.style.padding = '10px';
+                              movieContainer.style.borderRadius = '10px';
+
+                              movieContainer.innerHTML = `
+                                  <div style="flex: 1; text-align: center;">
+                                      <img src="/poster/${movie.posterImg}" alt="${movie.title}" style="width: 260px; height: 300px; border-radius: 10px;">
+                                  </div>
+                                  <div style="flex: 2; margin-left: 10px;">
+                                     <div>
+                                         <h3>${movie.title}</h3>
+                                      </div>
+                                      <div style="margin: 50px 0 66px 0;">
+                                 <p><strong>上映時間:</strong> ${movie.runningTime} 분</p>
+                                 <p><strong>公開日:</strong> ${movie.releaseDate}</p>
+                                 <p><strong>ジャンル:</strong> ${movie.genre}</p>
+                              </div>
+                                      <div style="margin-top: 10px;">
+                                          <button onclick="viewMovie(${movie.id})" style="padding: 10px 15px; background-color: #515151; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">映画情報</button>
+                                          <button onclick="bookMovie(${movie.id})" style="padding: 10px 15px; background-color: #515151; color: white; border: none; border-radius: 5px; cursor: pointer;">予約する</button>
+                                      </div>
+                                  </div>
+                              `;
+                              searchResults.appendChild(movieContainer);
+                          });
+                      } else {
+                          searchResults.innerHTML = "<p>検索結果が見つかりません。</p>";
+                      }
+                  })
+                  .catch(error => console.error('検索中にエラーが発生しました:', error));
+          } else {
+              searchResults.style.display = 'none';
+              modalBody.style.display = 'flex';
+          }
+      });
+
+      function viewMovie(id) {
+          window.location.href = `/movie/detail?id=${id}`;
+      }
+
+      function bookMovie(id) {
+          window.location.href = `/booking/schedule?movieId=${id}`;
+      }
+
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>
+<!-- prs navigation End -->

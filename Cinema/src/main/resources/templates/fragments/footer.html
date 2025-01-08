@@ -1,0 +1,275 @@
+<footer th:fragment="footer">
+    <!-- prs footer Wrapper Start -->
+
+    <div class="prs_bottom_footer_wrapper"><a href="javascript:" id="return-to-top"><i class="flaticon-play-button"></i></a>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                    <div class="prs_bottom_footer_cont_wrapper">
+                        <p>Copyright 2020-21 <a href="#">Movie Pro</a> . All rights reserved - Design by <a href="#">Webstrot</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                    <div class="prs_footer_social_wrapper">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                            </li>
+                            <li><a href="#"><i class="fa fa-youtube-play"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- prs footer Wrapper End -->
+    <!-- st login wrapper Start -->
+    <div class="modal fade st_pop_form_wrapper" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="st_pop_form_heading_wrapper float_left">
+                    <h3>Log in</h3>
+                </div>
+                <form id="loginForm" th:action="@{/user/login}" method="post">
+                    <div class="st_profile_input float_left">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" th:name="username" placeholder="Email">
+                    </div>
+                    <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" th:name="password" placeholder="Password">
+                    </div>
+                    <div class="st_form_pop_fp float_left">
+                        <h3><a href="#" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a>
+                        </h3>
+                    </div>
+                    <p id="loginErrorMsg" class="error-message" style="font-size: 12px; color: red; display: none;"></p>
+                    <div class="st_form_pop_login_btn float_left">
+                        <button type="submit" id="login-button">LOGIN</button>
+                    </div>
+                </form>
+                <div class="st_form_pop_or_btn float_left">
+                    <h4>or</h4>
+                </div>
+                <div class="st_form_pop_gmail_btn float_left">
+                    <a href="/oauth2/authorization/google">Connect with Google</a>
+                </div>
+                <div class="st_form_pop_signin_btn float_left">
+                    <h4>Don’t have an account? <a href="#" data-toggle="modal" data-target="#myModa3" target="_blank">Sign
+                        Up</a></h4>
+                    <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade st_pop_form_wrapper" id="myModa2" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="st_pop_form_heading_wrapper st_pop_form_heading_wrapper_fpass float_left">
+                    <h3>Forgot Password</h3>
+                    <p>We can help! All you need to do is enter your email ID and follow the instructions!</p>
+                </div>
+                <div class="st_profile_input float_left">
+                    <label>Email Address</label>
+                    <input type="text">
+                </div>
+                <div class="st_form_pop_fpass_btn float_left"><a href="#">Verify</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade st_pop_form_wrapper" id="myModa3" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="st_pop_form_heading_wrapper float_left">
+                    <h3>会員登録</h3>
+                </div>
+                <div class="st_profile_input float_left form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="emailInput" placeholder="Email Address">
+                    <span id="emailError" style="color:red; display:none; font-size: 12px;"></span>
+                </div>
+                <div class="st_form_pop_login_btn float_left">
+                    <button id="sendMailBtn">
+                        認証コードを送信
+                    </button>
+                </div>
+                <div id="verificationBox" style="display:none;">
+                    <div class="st_profile_input float_left">
+                        <label>認証コード</label>
+                        <input type="text" id="verificationCode" placeholder="認証コードを入力してください">
+                        <span id="codeError" class="error-message"
+                              style="color:red; display:none;">無効な認証コードです。</span>
+                    </div>
+                    <div class="st_form_pop_login_btn float_left">
+                        <button id="verifyCodeBtn"
+                                style="background-color: #28a745; color: white; border: none; border-radius: 4px;">
+                            確認
+                        </button>
+                    </div>
+                </div>
+                <div class="st_form_pop_signin_btn st_form_pop_signin_btn_signup float_left">
+                    <h5>
+                        <a href="#">利用規約</a>および<a href="#">プライバシーポリシー</a>に同意します。
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // 폼 기본 동작 방지
+
+    const formData = new FormData(this);
+    fetch("/user/login", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = "/";
+        } else {
+            return response.text();
+        }
+    })
+    .then(errorMessage => {
+        if (errorMessage) {
+            document.getElementById("loginErrorMsg").innerText = errorMessage;
+            document.getElementById("loginErrorMsg").style.display = "block";
+        }
+    })
+    .catch(error => {
+        console.error("로그인 요청 중 오류:", error);
+    });
+});
+
+
+        // 이메일 인증 및 검증 로직
+        let validateEmail = (email) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+
+        // 인증 코드 전송
+        $("#sendMailBtn").click(function () {
+            let email = $("#emailInput").val();
+
+            if (!validateEmail(email)) {
+                $("#emailError").text("無効なメールアドレスです。").show();
+                return;
+            }
+
+            $("#emailError").hide();
+
+            $.ajax({
+        url: "/user/checkemail",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: email }),
+        success: function (response) {
+            if (response.exists) {
+                $("#emailError").text("既に登録されているメールアドレスです。").show();
+            } else {
+                $("#emailError").hide();
+
+                // 인증 코드 전송 요청
+                $.ajax({
+                    url: "/user/sendcode",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ email: email }),
+                    success: function () {
+                        alert("認証コードが送信されました。");
+                        $("#sendMailBtn").prop("disabled", true);
+                        $("#verificationBox").show();
+                    },
+                    error: function () {
+                        alert("認証コードの送信に失敗しました。");
+                    }
+                });
+            }
+        },
+        error: function () {
+            alert("メールアドレスの確認中にエラーが発生しました。");
+        }
+    });
+        });
+
+        // 인증 코드 확인
+        $("#verifyCodeBtn").click(function () {
+            let code = $("#verificationCode").val();
+
+            if (!/^[0-9]{6}$/.test(code)) {
+                $("#codeError").text("無効な認証コードです。").show();
+                return;
+            }
+
+            $("#codeError").hide();
+
+            $.ajax({
+                url: "/user/verifycode",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    email: $("#emailInput").val(),
+                    code: code
+                }),
+                success: function () {
+                    alert("認証が完了しました。");
+                    window.location.href = "/user/signup";
+                },
+                error: function () {
+                    alert("認証コードが間違っています。");
+                }
+            });
+        });
+
+        // 모든 모달 닫힘 이벤트 감지 및 초기화
+$(".modal").on("hidden.bs.modal", function () {
+    resetModal($(this)); // 현재 닫힌 모달을 매개변수로 전달
+});
+
+// 모달 상태 초기화 함수
+function resetModal(modal) {
+    // 닫힌 모달 내부의 입력 필드 초기화
+    modal.find("input").val("");
+    modal.find("textarea").val("");
+    modal.find("select").val("");
+
+    // 오류 메시지 및 추가 UI 요소 숨기기
+    modal.find(".error-message").hide();
+    modal.find(".verification-box").hide();
+
+    // 버튼 상태 초기화
+    modal.find("button").prop("disabled", false);
+}
+
+<!--function resetModal(modal) {-->
+<!--    // 공통 초기화-->
+<!--    modal.find("input").val(""); -->
+<!--    modal.find(".error-message").hide();-->
+<!--    modal.find(".verification-box").hide();-->
+
+<!--    // 특정 모달에만 적용되는 초기화-->
+<!--    if (modal.attr("id") === "myModal") {-->
+<!--        modal.find("#loginErrorMsg").hide();-->
+<!--    }-->
+<!--    if (modal.attr("id") === "myModa3") {-->
+<!--        modal.find("#sendMailBtn").prop("disabled", false);-->
+<!--    }-->
+<!--}-->
+
+    </script>
+
+
+</footer>

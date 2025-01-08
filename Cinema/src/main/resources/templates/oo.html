@@ -1,0 +1,25 @@
+<section th:fragment="content">
+
+<div>
+  <h1>사용자 정보</h1>
+  <div th:if="${error != null}">
+    <p style="color: red;" th:text="${error}">로그인 상태 X</p>
+  </div>
+  <div th:if="${error == null}">
+    <p>ID: <span th:text="${id}">사용자 ID</span></p>
+    <p>이메일: <span th:text="${email}">사용자 이메일</span></p>
+    <p>이름: <span th:text="${name}">사용자 이름</span></p>
+    <p>전화번호: <span th:text="${phone}">사용자 전화번호</span></p>
+    <p>생년월일: <span th:text="${birth}">사용자 생년월일</span></p>
+    <p>소셜 제공자: <span th:text="${socialProvider}">소셜 제공자</span></p>
+    <p>권한: <span th:text="${role}">사용자 권한</span></p>
+    <p>소셜 ID: <span th:text="${socialId}">소셜 ID</span></p>
+    <p>생성일: <span th:text="${createdAt}">생성일</span></p>
+    <p>업데이트일: <span th:text="${updatedAt}">업데이트일</span></p>
+  </div>
+  <p>쿠폰가격: <span th:text="${coupon}">쿠폰가격</span></p>
+  <p>id: <span th:text="${coup.id}"></span></p>
+  <p>title: <span th:text="${coup.couponTitle}"></span></p>
+</div>
+
+</section>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.InquiryMapper">
+
+    <!-- Insert Inquiry -->
+    <insert id="insertInquiry" parameterType="com.movie.domain.Inquiries">
+        INSERT INTO inquiries (
+        user_id,
+        email,
+        inquiry_type,
+        content,
+        created_at,
+        updated_at
+        ) VALUES (
+        #{user_id},
+        #{email},
+        #{inquiry_type},
+        #{content},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <resultMap id="InquiriesMap" type="com.movie.domain.Inquiries">
+        <id property="id" column="id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="email" column="email"/>
+        <result property="inquiry_type" column="inquiry_type"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="created_at" column="created_at"/>
+        <result property="updated_at" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectInquiries" parameterType="map" resultMap="InquiriesMap">
+        select id, user_id, email, inquiry_type, content, status, created_at, updated_at from inquiries where (#{inquiryType} is NULL or inquiry_type = #{inquiryType}) order by case when status = 'PENDING' then 1 when status = 'ANSWERED' then 2 else 3 end, created_at asc limit #{pageSize} offset #{offset}
+    </select>
+
+    <select id="countFilteredInquiries" parameterType="map" resultType="long">
+        select count(*) from inquiries where (#{inquiryType} is NULL or inquiry_type = #{inquiryType})
+    </select>
+
+    <insert id="insertAnswer" parameterType="map">
+        INSERT INTO inquiry_answers (inquiry_id, content, created_at, updated_at)
+        VALUES (#{inquiryId}, #{content}, NOW(), NOW());
+    </insert>
+
+    <update id="updateInquiryStatus" parameterType="map">
+        UPDATE inquiries
+        SET status = #{status}, updated_at = NOW()
+        WHERE id = #{inquiryId};
+    </update>
+
+</mapper>
