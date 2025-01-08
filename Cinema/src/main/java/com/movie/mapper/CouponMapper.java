@@ -4,6 +4,7 @@ import com.movie.domain.Coupons;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CouponMapper {
@@ -24,4 +25,10 @@ public interface CouponMapper {
 
     @Delete("DELETE FROM coupons WHERE id = #{id}")
     long deleteCoupon(long id);
+
+    List<Map<String, Object>> getCouponListByUserId(long userId);
+
+    Integer checkCouponCodeValid(long couponCode);
+
+    void registerCoupon(Map<String, Object> params);
 }

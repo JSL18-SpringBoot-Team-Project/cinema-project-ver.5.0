@@ -12,4 +12,5 @@ public class SessionUser {
     private String name;
     private String email;
     private Role role;
+    private SocialProvider socialProvider;
 }

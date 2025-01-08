@@ -36,6 +36,13 @@
         WHERE uc.user_id = #{userId} and uc.state = 0
     </select>
 
+    <!-- 쿠폰 개수 조회 -->
+    <select id="getCouponCountByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM user_coupon
+        WHERE user_id = #{userId} AND state = 0;
+    </select>
+
 
 
 </mapper>
