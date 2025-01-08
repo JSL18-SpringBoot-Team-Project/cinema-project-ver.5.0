@@ -29,6 +29,7 @@
     <link rel="stylesheet" id="theme-color" type="text/css" th:href="@{#}"/>
     <!-- favicon links -->
     <link rel="shortcut icon" type="image/png" th:href="@{/images/header/favicon.ico}"/>
+
 </head>
 
 <body class="booking_type_back">
@@ -77,7 +78,7 @@
                                 <ul>
                                     <li>
                                         <span class="dtts1">Date</span>
-                                        <span class="dtts2" th:text="${#temporals.format(schedule.watchDate, 'dd-MMM-yy')}"></span>
+                                        <span class="dtts2" th:text="${#temporals.format(schedule.watchDate, 'yyyy/MM/dd')}"></span>
                                     </li>
                                     <li>
                                         <span class="dtts1">Time</span>
@@ -85,7 +86,7 @@
                                     </li>
                                     <li>
                                         <span class="dtts1">Theater</span>
-                                        <span class="dtts2" th:text="${schedule.screenId}"></span>
+                                        <span class="dtts2" th:text="${schedule.screenId == 1 ? '2D' : (schedule.screenId == 2 ? '3D' : (schedule.screenId == 3 ? '4DX' : (schedule.screenId == 4 ? 'IMAX' : 'Unknown')))}"></span>
                                     </li>
                                     <li>
                                         <span class="dtts1">Seat</span>
@@ -103,7 +104,7 @@
                         <div class="col-md-12">
                             <div class="st_cherity_section float_left">
                                 <div class="st_cherity_img float_left">
-                                    <img th:src="@{/images/content/cc1.jpg}" alt="img">
+                                    <img th:src="@{'/poster/' + ${detail.movieImg}}" alt="img">
                                 </div>
                             </div>
                         </div>
@@ -319,8 +320,6 @@
                 phoneNumber: [[${user.phone}]],
                 email: [[${user.email}]],
             },
-
-            redirectUrl: redirectUrl,
         };
 
         try {
@@ -348,8 +347,12 @@
                                 schedule: scheduleId
                             }),
                             success: function (response) {
+                            console.log(response.result);
                                 if(response.result === "success") {
                                     window.location.href = redirectUrl; // AJAX 요청 성공 후 리디렉션
+                                } else {
+                                    alert("決済失敗");
+                                    return;
                                 }
                             },
                             error: function (xhr, status, error) {

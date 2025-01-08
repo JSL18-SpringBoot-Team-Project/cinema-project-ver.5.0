@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +39,11 @@ public class PaymentController {
     @Autowired
     private MovieService movieService;
 
-    @Autowired TicketService ticketService;
+    @Autowired
+    private MovieDetailService movieDetailService;
+
+    @Autowired
+    private TicketService ticketService;
 
     @Autowired
     private RandomIdUtil randomIdUtil;
@@ -67,7 +70,7 @@ public class PaymentController {
             User user = userService.getUserInfo(sessionUser.getId());
             List<Seats> seats = seatService.bookingSeats(seatIds);
             Schedules schedule = scheduleService.getSchedule(scheduleId);
-            Movies movie = movieService.movieInfo(schedule.getMovieId());
+            MovieDTO movie = movieDetailService.getMovieDetail(schedule.getMovieId());
 
             int totalPrice = 0;
 
@@ -91,7 +94,8 @@ public class PaymentController {
             model.addAttribute("user", user);
             model.addAttribute("seats", seats);
             model.addAttribute("schedule", schedule);
-            model.addAttribute("movie", movie);
+            model.addAttribute("movie", movie.getMovies());
+            model.addAttribute("detail", movie.getMovieDetails());
             model.addAttribute("totalPrice", totalPrice);
             model.addAttribute("storeId", storeId);
             model.addAttribute("channelKey", channelKey);
@@ -130,9 +134,9 @@ public class PaymentController {
                 .toArray(Long[]::new);
 
         Long couponId = null;
-        if (payload.get("couponId") != null && !"null".equals(payload.get("couponId").toString().trim())) {
+        if (payload.get("couponId") != null) {
             try {
-                couponId = Long.valueOf(payload.get("couponId").toString());
+                couponId = Long.parseLong(payload.get("couponId").toString());
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Invalid couponId format: " + payload.get("couponId"), e);
             }
@@ -148,42 +152,53 @@ public class PaymentController {
                 paymentService.calculateTotalPrice(seatsId, couponId) :
                 paymentService.calculateTotalPrice(seatsId);
 
-        seatService.paymentStates(seatsId);
-
-        Bookings bookings = (couponId != null) ?
-                bookingService.insertBooking(sessionUser.getId(), scheduleId, couponId, serverCalculatedPrice) :
-                bookingService.insertBooking(sessionUser.getId(), scheduleId, serverCalculatedPrice);
-
-        Payment payment = new Payment();
-        payment.setId(paymentId);
-        payment.setUserId(sessionUser.getId());
-        payment.setBookingId(bookings.getId());
-        payment.setOrderName(orderName);
-        payment.setTotalAmount(serverCalculatedPrice);
-
-        paymentService.insertPayment(payment);
-        ticketService.insertTickets(bookings.getId(), seatsId, paymentId, (long)sessionUser.getId());
-
-        List<Seats> seats = seatService.bookingSeats(seatsId);
-
-        Schedules schedule = scheduleService.getSchedule(scheduleId);
-
-        Movies movie = movieService.movieInfo(movieId);
-
         String result = "";
+
+        Map<String, Object> response = new HashMap<>();
 
         if(serverCalculatedPrice != clientPaidAmount) {
             result = "fail";
+            response.put("result", result);
+            System.out.println("clientPaidAmount = " + clientPaidAmount);
+            System.out.println("serverCalculatedPrice = " + serverCalculatedPrice);
+            return response;
         } else {
+            seatService.paymentStates(seatsId);
+
+            Bookings bookings = (couponId != null) ?
+                    bookingService.insertBooking(sessionUser.getId(), scheduleId, couponId, serverCalculatedPrice) :
+                    bookingService.insertBooking(sessionUser.getId(), scheduleId, serverCalculatedPrice);
+
+            Payment payment = new Payment();
+            payment.setId(paymentId);
+            payment.setUserId(sessionUser.getId());
+            payment.setBookingId(bookings.getId());
+            payment.setOrderName(orderName);
+            payment.setTotalAmount(serverCalculatedPrice);
+
+            paymentService.insertPayment(payment);
+            ticketService.insertTickets(bookings.getId(), seatsId, paymentId, (long)sessionUser.getId());
+
+            List<Seats> seats = seatService.bookingSeats(seatsId);
+
+            Schedules schedule = scheduleService.getSchedule(scheduleId);
+
+            movieService.updateMovieAudience(movieId);
+            Movies movie = movieService.movieInfo(movieId);
+
             result = "success";
+
             session.setAttribute("payment", payment);
             session.setAttribute("seats", seats);
             session.setAttribute("schedule", schedule);
             session.setAttribute("movie", movie);
+
+            response.put("result", result);
+            System.out.println(result);
+
+            return response;
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("result", result);
-        return response;
+
     }
 }

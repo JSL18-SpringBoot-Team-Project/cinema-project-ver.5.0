@@ -45,7 +45,7 @@ public class PaymentService {
         if(coupons.getCouponType().equals("P")) {
             sale = (int) ((coupons.getCouponPrice() / 100.0) * totalAmount);
         } else if (coupons.getCouponType().equals("Y")) {
-            sale = coupons.getCouponPrice() - totalAmount;
+            sale = coupons.getCouponPrice();
         }
 
         totalAmount -= sale;
