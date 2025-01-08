@@ -1,0 +1,129 @@
+body {
+  background-color: #f5f5f5; /* 밝은 배경 */
+  font-family: 'Noto Sans JP', sans-serif; /* 노토 산스 JP */
+}
+
+/* Sidebar 스타일 */
+.sidebar {
+  position: fixed;
+  width: 200px;
+  background-color: #351f67; /* 메인 보라색 */
+  color: white;
+  left: 50px;
+  top: 60%;
+  transform: translateY(-50%); /* 화면 중앙에 위치 */
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto; /* 스크롤 허용 */
+  padding: 10px;
+  min-height: auto; /* 최소 높이는 컨텐츠에 맞게 */
+}
+
+.sidebar h4 {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.sidebar a {
+  color: #d1c4e9; /* 연한 보라색 */
+  text-decoration: none;
+  display: block;
+  padding: 10px 15px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #503396; /* 더 밝은 보라색 */
+  color: white;
+}
+
+.sidebar .active {
+  background-color: #513397; /* 강조된 보라색 */
+  color: white;
+}
+
+/* Content-box 스타일 */
+.content-box {
+  margin-top: 50px;
+  margin-left: 300px;
+  margin-right: 100px;
+  padding: 20px;
+}
+
+/* Location Bar */
+.location-bar {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  width: 100%; /* 좌우를 채우도록 설정 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-left: none; /* 강조선을 제거 */
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 텍스트와 아이콘 사이의 일정한 간격 */
+  position: relative; /* 위치 고정을 위해 필요 */
+  margin-bottom: 20px;
+}
+
+.location-bar i {
+  color: #513397; /* 화살표 색상 */
+  font-size: 1.2rem;
+}
+
+/* 텍스트 간격 유지 */
+.location-bar span {
+  margin: 0; /* 여백 초기화 */
+}
+
+/* 카드 스타일 */
+.card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #503396; /* 카드 헤더 색상 */
+  color: white;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 4px 4px 0 0;
+}
+
+.btn-light {
+  color: #503396; /* 버튼 텍스트 색상 */
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid #d1c4e9;
+}
+
+.btn-light:hover {
+  color: #503396;
+}
+
+.no-history-reservation {
+  color: #78909c;
+  font-size: 1.1rem;
+
+  /* 개인정보수정 폼 */
+  .form-label-required::after {
+    content: ' *';
+    color: red;
+    margin-left: 4px;
+  }
+  .form-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+  }
+}

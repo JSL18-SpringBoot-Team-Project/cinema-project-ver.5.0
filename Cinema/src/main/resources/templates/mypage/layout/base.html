@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:el="http://www.thymeleaf.org/expression">
+<head th:replace="mypage/fragments/header :: header"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="mypage/fragments/navbar :: navbar"></nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- 컨트롤러에서 전달된 content를 포함 -->
+        <div th:replace="${content}"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="mypage/fragments/footer :: footer"></footer>
+</body>
+</html>
