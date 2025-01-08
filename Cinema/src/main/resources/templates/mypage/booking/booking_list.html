@@ -56,23 +56,31 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th>예매날짜</th>
-                  <th>영화명</th>
-                  <th>상영일시</th>
-                  <th>예매금액</th>
-                </tr>
+                  <tr>
+                    <th>예매날짜</th>
+                    <th>영화명</th>
+                    <th>상영일시</th>
+                    <th>좌석번호</th>
+                    <th>예매금액</th>
+                  </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="booking : ${bookingList}">-->
-<!--                  <td th:text="${booking.timestamp}"></td>-->
-<!--                  <td th:text="${booking.title}"></td>-->
-<!--                  <td th:text="${booking.screeningDateTime}"></td>-->
-<!--                  <td th:text="${booking.price}"></td>-->
-<!--                </tr>-->
-<!--                <tr th:if="${#lists.isEmpty(bookingList)}">-->
-<!--                  <td colspan="4" class="text-center">예매내역이 없습니다.</td>-->
-<!--                </tr>-->
+                  <tr th:each="booking : ${bookingList}">
+                    <td th:text="${booking.timestamp}"></td>
+                    <td th:text="${booking.title}"></td>
+                    <td th:text="${#temporals.format(booking.screeningDateTime, 'yyyy-MM-dd hh:mm')}"></td>
+                    <td>
+                        <span th:each="seat, iterStat : ${booking.seats}">
+                            <span th:text="${seat.seatColumn} + ${seat.seatRow}"></span>
+                            <span th:if="${!iterStat.last}">, </span>
+                        </span>
+                    </td>
+                    <td th:text="${booking.price}"></td>
+                  </tr>
+                  <!-- 예매 내역이 없을 경우 -->
+                  <tr th:if="${#lists.isEmpty(bookingList)}">
+                    <td colspan="5" class="text-center">예매내역이 없습니다.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -82,23 +90,23 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th>취소일시</th>
-                  <th>영화명</th>
-                  <th>상영일시</th>
-                  <th>취소금액</th>
-                </tr>
+                  <tr>
+                    <th>취소일시</th>
+                    <th>영화명</th>
+                    <th>상영일시</th>
+                    <th>취소금액</th>
+                  </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="cancellation : ${cancellationList}">-->
-<!--                  <td th:text="${cancellation.cancelDateTime}"></td>-->
-<!--                  <td th:text="${cancellation.title}"></td>-->
-<!--                  <td th:text="${cancellation.screeningDateTime}"></td>-->
-<!--                  <td th:text="${cancellation.price}"></td>-->
-<!--                </tr>-->
-<!--                <tr th:if="${#lists.isEmpty(cancellationList)}">-->
-<!--                  <td colspan="4" class="text-center">취소내역이 없습니다.</td>-->
-<!--                </tr>-->
+                  <tr th:each="cancellation : ${cancellationList}">
+                    <td th:text="${cancellation.cancelDateTime}"></td>
+                    <td th:text="${cancellation.title}"></td>
+                    <td th:text="${cancellation.screeningDateTime}"></td>
+                    <td th:text="${cancellation.price}"></td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(cancellationList)}">
+                    <td colspan="4" class="text-center">취소내역이 없습니다.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

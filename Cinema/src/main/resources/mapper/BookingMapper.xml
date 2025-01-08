@@ -18,11 +18,11 @@
     <!-- 예매 내역 조회 -->
     <select id="getBookingsByUserId" resultType="map">
         SELECT
-        b.timestamp AS bookingDate,
-        m.title AS movieName,
-        CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
-        GROUP_CONCAT(seat.seat_row, seat.seat_column) AS seatNumber,
-        b.price AS bookingPrice
+            b.timestamp,
+            m.title,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price,
+        GROUP_CONCAT(seat.seat_row, seat.seat_column) AS seats
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
