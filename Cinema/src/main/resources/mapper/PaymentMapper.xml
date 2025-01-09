@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.PaymentMapper">
+    <resultMap id="PaymentDetailsResultMap" type="com.movie.domain.PaymentDetail">
+        <result property="paymentId" column="paymentId" />
+        <result property="watchDate" column="watchDate" />
+        <result property="startTime" column="startTime" />
+        <result property="orderName" column="orderName" />
+        <result property="title" column="title" />
+        <result property="totalAmount" column="totalAmount" />
+    </resultMap>
+
+    <select id="getRecentPayment" resultMap="PaymentDetailsResultMap">
+        SELECT
+        p.id AS paymentId,
+        s.watch_date AS watchDate,
+        s.start_time AS startTime,
+        p.order_name AS orderName,
+        m.title AS title,
+        p.total_amount AS totalAmount
+        FROM payment p
+        INNER JOIN bookings b ON p.booking_id = b.id
+        INNER JOIN schedules s ON b.schedule_id = s.id
+        INNER JOIN movies m ON s.movie_id = m.id
+        WHERE b.cancel_timestamp IS NULL OR b.state != 1
+        ORDER BY p.id DESC
+        LIMIT 5
+    </select>
+
+    <select id="getPaymentList" resultMap="PaymentDetailsResultMap">
+        SELECT
+        p.id AS paymentId,
+        s.watch_date AS watchDate,
+        s.start_time AS startTime,
+        p.order_name AS orderName,
+        m.title AS title,
+        p.total_amount AS totalAmount
+        FROM payment p
+        INNER JOIN bookings b ON p.booking_id = b.id
+        INNER JOIN schedules s ON b.schedule_id = s.id
+        INNER JOIN movies m ON s.movie_id = m.id
+        WHERE b.cancel_timestamp IS NULL OR b.state != 1
+        ORDER BY p.id DESC
+    </select>
+
+</mapper>

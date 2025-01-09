@@ -30,4 +30,8 @@ public interface BookingMapper {
     // 날짜 선택
     List<Map<String, Object>> getDateOptions(@Param("userId") long userId);
 
+    long getTodaySale();
+
+    long getTotalSale();
+
 }

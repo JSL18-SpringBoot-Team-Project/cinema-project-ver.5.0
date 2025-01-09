@@ -63,7 +63,7 @@
 										<div class="st_bcc_teckt_bot_inner_img_cont">
 											<h4 th:text="${movie.title}"></h4>
 											<h5 th:text="${schedule.screenId == 1 ? '2D' : (schedule.screenId == 2 ? '3D' : (schedule.screenId == 3 ? '4DX' : (schedule.screenId == 4 ? 'IMAX' : 'Unknown')))}"></h5>
-											<h3 th:text="${#temporals.format(schedule.watchDate, 'yyyy/MM/dd')} + ' | ' + ${#temporals.format(schedule.startTime, 'hh:mm')}"></h3>
+											<h3 th:text="${#temporals.format(schedule.watchDate, 'yyyy/MM/dd')} + ' | ' + ${#temporals.format(schedule.startTime, 'HH:mm')}"></h3>
 										</div>
 										<div class="st_purchase_img">
 											<img th:src="@{/images/content/pur2.png}" alt="Purchase Icon">

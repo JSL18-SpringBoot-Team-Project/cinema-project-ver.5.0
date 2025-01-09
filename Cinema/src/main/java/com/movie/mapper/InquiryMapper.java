@@ -34,5 +34,13 @@ public interface InquiryMapper {
 
     // 답변 삽입 결과 반환
     int insertAnswerAndReturnId(@Param("inquiryId") long inquiryId, @Param("content") String content);
+
+    // 문의 답변 미완료 개수
+    @Select("SELECT count(*) as count FROM inquiries WHERE status = 'pending'")
+    long getInquiriesNotAnswerCount();
+
+    @Select("SELECT * FROM inquiries WHERE status = 'pending' ORDER BY id desc LIMIT 3")
+    List<Inquiries> getInquiriesNotAnswer();
+
 }
 

@@ -64,4 +64,15 @@
         ORDER BY date DESC
     </select>
 
+    <select id="getTodaySale" resultType="long">
+        SELECT IFNULL(SUM(price), 0) as sum
+        FROM bookings
+        WHERE cancel_timestamp IS NULL AND DATE(booking_timestamp) = CURDATE()
+    </select>
+
+    <select id="getTotalSale" resultType="long">
+        SELECT SUM(price) as sum
+        FROM bookings
+        WHERE cancel_timestamp IS NULL
+    </select>
 </mapper>
