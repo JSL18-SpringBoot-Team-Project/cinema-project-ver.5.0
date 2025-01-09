@@ -95,4 +95,12 @@ public class BookingService {
     public List<Map<String, Object>> getCancellationList(long userId) {
         return bookingMapper.getCancellationList(userId);
     }
+
+    public long getTodaySale() {
+        return bookingMapper.getTodaySale();
+    }
+
+    public long getTotalSale() {
+        return bookingMapper.getTotalSale();
+    }
 }
