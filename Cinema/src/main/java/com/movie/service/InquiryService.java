@@ -84,4 +84,19 @@ public class InquiryService {
     public List<Inquiries> getInquiriesByUserId(long userId) {
         return inquiryMapper.getInquiriesByUserId(userId);
     }
+
+    public String getInquiriesNotAnswerCount() {
+        String result = "";
+        long count = inquiryMapper.getInquiriesNotAnswerCount();
+        if(count > 3) {
+            result = "3+";
+        } else {
+            result = String.valueOf(count);
+        }
+        return result;
+    }
+
+    public List<Inquiries> getInquiriesNotAnswer() {
+        return inquiryMapper.getInquiriesNotAnswer();
+    }
 }

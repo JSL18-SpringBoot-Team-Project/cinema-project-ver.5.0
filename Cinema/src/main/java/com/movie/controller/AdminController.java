@@ -28,6 +28,8 @@ public class AdminController {
     private final CouponService couponService;
     private final EventService eventService;
     private final ScheduleService scheduleService;
+    private final BookingService bookingService;
+    private final PaymentService paymentService;
     private final FileUtil fileUtil;
     private final MovieDetailService movieDetailService;
     private final InquiryService inquiryService;
@@ -35,22 +37,43 @@ public class AdminController {
 
     @GetMapping({"", "/"})
     public String admin(Model model) {
+
+        long todaySale = bookingService.getTodaySale();
+        long totalSale = bookingService.getTotalSale();
+        List<PaymentDetail> paymentList = paymentService.getRecentPayment();
+
         model.addAttribute("content", "admin/index");
         model.addAttribute("title", "admin");
+        model.addAttribute("todaySale", todaySale);
+        model.addAttribute("totalSale", totalSale);
+        model.addAttribute("payment", paymentList);
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
     @GetMapping("/movie/create")
     public String movieCreate(Model model) {
+
         model.addAttribute("content", "admin/movie/movie_create");
         model.addAttribute("title", "admin-movie-create");
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "/admin/layout/admin_base";
     }
 
     @PostMapping("/movie/create")
     public String insertMovie(@ModelAttribute Movies movies, @RequestParam("poster_img") MultipartFile poster_img) {
         try {
-            if(!poster_img.isEmpty()) {
+            if (!poster_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(poster_img, true);
 
@@ -63,7 +86,7 @@ public class AdminController {
 
         long id = movieService.insertMovie(movies);
 
-        if(id > 0) {
+        if (id > 0) {
             return "redirect:/admin/movie/detail?movieId=" + movies.getId();
         } else {
             return "redirect:/admin/movie/create";
@@ -79,6 +102,11 @@ public class AdminController {
         model.addAttribute("title", "admin-movie-detail");
         model.addAttribute("movie", movies);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -86,7 +114,7 @@ public class AdminController {
     public String movieDetail(MovieDetails movieDetails, MultipartFile movie_img) {
 
         try {
-            if(!movie_img.isEmpty()) {
+            if (!movie_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(movie_img, true);
 
@@ -99,7 +127,7 @@ public class AdminController {
 
         long result = movieDetailService.insertMovieDetail(movieDetails);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/movie/set?id=" + movieDetails.getMovieId();
         } else {
             return "redirect:/admin/movie/detail?movieId=" + movieDetails.getMovieId();
@@ -116,6 +144,11 @@ public class AdminController {
         model.addAttribute("title", "admin-movie-list");
         model.addAttribute("movies", movies);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -129,6 +162,11 @@ public class AdminController {
         model.addAttribute("title", "admin-movie-set");
         model.addAttribute("movie", movies);
         model.addAttribute("schedules", schedules);
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
 
         return "admin/layout/admin_base";
     }
@@ -153,6 +191,11 @@ public class AdminController {
         model.addAttribute("title", "admin-movie-update");
         model.addAttribute("movie", movie);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -161,7 +204,7 @@ public class AdminController {
     public String movieUpdate(Movies movies, MultipartFile poster_img) {
 
         try {
-            if(!poster_img.isEmpty()) {
+            if (!poster_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(poster_img, true);
 
@@ -174,7 +217,7 @@ public class AdminController {
 
         long result = movieService.updateMovie(movies);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/movie/list";
         } else {
             return "redirect:/admin/movie/update?id" + movies.getId();
@@ -191,6 +234,11 @@ public class AdminController {
         model.addAttribute("movie", movie.getMovies());
         model.addAttribute("detail", movie.getMovieDetails());
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -198,7 +246,7 @@ public class AdminController {
     public String movieDetailUpdate(MovieDetails movieDetails, MultipartFile movie_img) {
 
         try {
-            if(!movie_img.isEmpty()) {
+            if (!movie_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(movie_img, true);
 
@@ -211,7 +259,7 @@ public class AdminController {
 
         long result = movieDetailService.insertMovieDetail(movieDetails);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/movie/list";
         } else {
             return "redirect:/admin/movie/detailUpdate?movieId=" + movieDetails.getMovieId();
@@ -225,7 +273,7 @@ public class AdminController {
 
         long result = movieService.deleteMovie(id);
 
-        if(result > 0) {
+        if (result > 0) {
             return "success";
         } else {
             return "fail";
@@ -237,6 +285,12 @@ public class AdminController {
 
         model.addAttribute("content", "admin/coupon/coupon_create");
         model.addAttribute("title", "admin-coupon-create");
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -245,7 +299,7 @@ public class AdminController {
 
         long result = couponService.insertCoupon(coupons);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/coupon/list";
         } else {
             return "redirect:/admin/coupon/create";
@@ -261,6 +315,11 @@ public class AdminController {
         model.addAttribute("title", "admin-coupon-list");
         model.addAttribute("coupons", coupons);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -273,6 +332,11 @@ public class AdminController {
         model.addAttribute("title", "admin-coupon-list");
         model.addAttribute("coupon", coupon);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -281,7 +345,7 @@ public class AdminController {
 
         long result = couponService.updateCoupon(coupons);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/coupon/list";
         } else {
             return "redirect:/admin/coupon/update?id=" + coupons.getId();
@@ -294,7 +358,7 @@ public class AdminController {
 
         long result = couponService.deleteCoupon(id);
 
-        if(result > 0) {
+        if (result > 0) {
             return "success";
         } else {
             return "fail";
@@ -310,17 +374,19 @@ public class AdminController {
         model.addAttribute("title", "admin-event-create");
         model.addAttribute("coupons", coupons);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
     @PostMapping("/event/create")
     public String insertEvent(@ModelAttribute Events events, @RequestParam("event_img") MultipartFile event_img) {
 
-        System.out.println("이벤트 이미지 넘어옴: " + event_img);
-        System.out.println("ㄱㄱㄱㄱ: " + events.getEventTitle());
-
         try {
-            if(!event_img.isEmpty()) {
+            if (!event_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(event_img, false);
 
@@ -333,7 +399,7 @@ public class AdminController {
         System.out.println("이벤트 이미지 경로: " + events.getEventImg());
         long result = eventService.insertEvent(events);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/event/list";
         } else {
             return "redirect:/admin/event/create";
@@ -350,6 +416,11 @@ public class AdminController {
         model.addAttribute("title", "admin-event-list");
         model.addAttribute("events", events);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -364,6 +435,11 @@ public class AdminController {
         model.addAttribute("event", events);
         model.addAttribute("coupons", coupons);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -371,7 +447,7 @@ public class AdminController {
     public String updateEvent(Events events, MultipartFile event_img) {
 
         try {
-            if(!event_img.isEmpty()) {
+            if (!event_img.isEmpty()) {
 
                 String filePath = fileUtil.saveFile(event_img, false);
 
@@ -384,7 +460,7 @@ public class AdminController {
 
         long result = eventService.updateEvent(events);
 
-        if(result > 0) {
+        if (result > 0) {
             return "redirect:/admin/event/list";
         } else {
 
@@ -401,7 +477,7 @@ public class AdminController {
 
         long result = eventService.deleteEvent(id);
 
-        if(result > 0) {
+        if (result > 0) {
             return "success";
         } else {
             return "fail";
@@ -418,6 +494,11 @@ public class AdminController {
         model.addAttribute("title", "admin-users");
         model.addAttribute("users", users);
 
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -427,7 +508,7 @@ public class AdminController {
 
         long result = userService.deleteUser(id);
 
-        if(result > 0) {
+        if (result > 0) {
             return "success";
         } else {
             return "fail";
@@ -454,6 +535,12 @@ public class AdminController {
 
         model.addAttribute("content", "admin/qna/qna");
         model.addAttribute("title", "admin-qna");
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
         return "admin/layout/admin_base";
     }
 
@@ -473,5 +560,22 @@ public class AdminController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to submit answer");
         }
+    }
+
+    @GetMapping("/payment")
+    public String paymentList(Model model) {
+
+        List<PaymentDetail> paymentList = paymentService.getPaymentList();
+
+        model.addAttribute("content", "admin/payment/payment");
+        model.addAttribute("title", "決済リスト");
+        model.addAttribute("payment", paymentList);
+
+        List<Inquiries> inquiriesNotAnswerList = inquiryService.getInquiriesNotAnswer();
+        String inquiriesNotAnswerCount = inquiryService.getInquiriesNotAnswerCount();
+        model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
+        model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
+
+        return "admin/layout/admin_base";
     }
 }

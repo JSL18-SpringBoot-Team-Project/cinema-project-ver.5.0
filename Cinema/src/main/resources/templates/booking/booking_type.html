@@ -8,6 +8,9 @@
     <meta name="keywords" content="Movie Pro"/>
     <meta name="author" content=""/>
     <meta name="MobileOptimized" content="320"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <!-- Template style -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
@@ -82,7 +85,7 @@
                                     </li>
                                     <li>
                                         <span class="dtts1">Time</span>
-                                        <span class="dtts2" th:text="${#temporals.format(schedule.startTime, 'hh:mm')}"></span>
+                                        <span class="dtts2" th:text="${#temporals.format(schedule.startTime, 'HH:mm')}"></span>
                                     </li>
                                     <li>
                                         <span class="dtts1">Theater</span>
@@ -212,6 +215,17 @@
 <!--main js file end-->
 
 <script th:inline="javascript">
+    (function() {
+        // 현재 상태를 history에 추가
+        history.pushState(null, null, location.href);
+
+        // 뒤로가기 버튼 감지
+        window.addEventListener('popstate', function(event) {
+            // 뒤로가기 버튼 클릭 시 다시 현재 페이지로 이동
+            history.pushState(null, null, location.href);
+            alert("뒤로가기가 비활성화되어 있습니다."); // 사용자에게 알림 (선택 사항)
+        });
+    })();
 
     // Isotope 예시 (유지)
     function protfolioIsotope() {
