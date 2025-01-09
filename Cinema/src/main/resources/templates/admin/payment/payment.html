@@ -1,0 +1,40 @@
+<th:block th:fragment="content">
+    <!-- Movie List Start -->
+    <div class="container-fluid pt-3 px-3">
+        <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h2 class="mb-4 text-center">決済リスト</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Paid Date</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Seat</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="payment : ${payment}">
+                                <tr>
+                                    <td th:text="${payment.paymentId}"></td>
+                                    <td th:text="${payment.title}"></td>
+                                    <td th:text="${payment.watchDate}"></td>
+                                    <td th:text="${payment.startTime}"></td>
+                                    <td th:text="${payment.orderName}"></td>
+                                    <td th:text="${payment.totalAmount}"></td>
+                                </tr>
+                            </th:block>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
