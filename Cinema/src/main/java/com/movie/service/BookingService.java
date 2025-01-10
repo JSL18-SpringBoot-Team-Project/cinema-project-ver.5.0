@@ -74,4 +74,7 @@ public class BookingService {
         return bookingMapper.getTodaySale();
     }
 
+    public long getTotalSale() {
+        return bookingMapper.getTotalSale();
+    }
 }

@@ -1741,15 +1741,7 @@ body.active #mobile-nav {
     transition: all 0.5s;
 	margin-right:0;
 }
-.prs_upcome_tabs_wrapper .nav > li > a:hover, .prs_upcome_tabs_wrapper .nav > li > a:focus{
-	background:#614aee;
-	color:#ffffff;
-	-webkit-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    transition: all 0.5s;
-}
+
 .prs_upcom_movie_box_wrapper{
 	float:left;
 	width:100%;
@@ -1809,15 +1801,7 @@ body.active #mobile-nav {
     -moz-transition: all 0.5s;
     transition: all 0.5s;
 }
-.prs_upcom_movie_img_btn_wrapper li:first-child a:hover{
-	background:transparent;
-	border:1px solid #614aee;
-	-webkit-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    transition: all 0.5s;
-}
+
 .prs_upcom_movie_img_btn_wrapper li:last-child a{
 	display:inline-block;
 	width:150px;
@@ -8607,15 +8591,7 @@ letter-spacing: 0.5px;
     -moz-transition: all 0.5s;
     transition: all 0.5s;
 }
-.prs_upcom_movie_img_btn_wrapper li:first-child a:hover{
-	background:transparent;
-	border:1px solid #614aee;
-	-webkit-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    transition: all 0.5s;
-}
+
 .prs_upcom_movie_img_btn_wrapper li:last-child a{
 	display:inline-block;
 	width:150px;
@@ -8624,7 +8600,7 @@ letter-spacing: 0.5px;
 	line-height:50px;
 	border:1px solid #614aee;
 	margin-right:-900px;
-	background:transparent;
+	background:#614aee;
 	color:#ffffff;
 	margin-top:10px;
     font-size: 12px;
@@ -8639,15 +8615,7 @@ letter-spacing: 0.5px;
     -moz-transition: all 0.5s;
     transition: all 0.5s;
 }
-.prs_upcom_movie_img_btn_wrapper li:last-child a:hover{
-	background:#614aee;
-	border:1px solid #614aee;
-	-webkit-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    transition: all 0.5s;
-}
+
 .st_indx_slider_img:hover .prs_upcom_movie_img_btn_wrapper li:first-child a{
 	margin-left:0;
 	-webkit-transition:all 0.45s linear;

@@ -1,11 +1,16 @@
 <section th:fragment="content">
+	<style>
+		.prs_ms_trailer_vid_wrapper{
+			background: none;
+		}
+	</style>
 	<!-- prs ms trailer wrapper Start -->
 	<div class="prs_ms_trailer_vid_main_wrapper">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div class="prs_heading_section_wrapper">
-						<h2>Movie Trailer</h2>
+						<h2>映画情報</h2>
 					</div>
 				</div>
 				<div class="col-lg-12" style="margin-bottom: 50px;">
@@ -46,7 +51,6 @@
 								<p>国 : <span th:text="${detail.country}"></span></p>
 								<p>製作会社 : <span th:text="${detail.production}"></span></p>
 								<p>配布会社 : <span th:text="${detail.distribution}"></span></p>
-								<p>公開日 : <span th:text="${movie.endDate}"></span></p>
 
 								<div th:if="${movie.endDate != null and now != null and movie.endDate.isAfter(now)}">
 									<button type="submit" class="reserve-button"
