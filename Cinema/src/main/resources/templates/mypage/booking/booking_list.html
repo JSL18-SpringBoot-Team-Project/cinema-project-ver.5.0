@@ -17,62 +17,46 @@
       <div class="tab-pane fade show active" id="booking" role="tabpanel" aria-labelledby="booking-tab">
         <div class="card mt-4">
           <div class="card-body">
-            <!-- 예매 조회 조건 -->
-            <h5 class="card-title">예매 조회 조건</h5>
+            <!-- 영화 제목 검색 -->
             <div class="row mb-3">
-              <div class="col-md-3">
-                <label class="form-label">구분</label><br />
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="bookingType" id="currentBooking" value="current" checked />
-                  <label class="form-check-label" for="currentBooking">예매내역</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="bookingType" id="pastBooking" value="past" />
-                  <label class="form-check-label" for="pastBooking">지난내역</label>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-md-3">
-                  <label for="startDate" class="form-label">시작 날짜</label>
-                  <input type="date" class="form-control" id="startDate" />
-                </div>
-                <div class="col-md-3">
-                  <label for="endDate" class="form-label">종료 날짜</label>
-                  <input type="date" class="form-control" id="endDate" />
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                  <button type="button" class="btn btn-primary" onclick="searchBookings()">조회</button>
-                </div>
-              </div>
-
-
-              <div class="col-md-3 d-flex align-items-end">
-                <button type="button" class="btn btn-primary" onclick="searchBookings()">조회</button>
+              <div class="col-md-6">
+                <form th:action="@{/booking/list}" method="get" class="d-flex">
+                  <input
+                          type="text"
+                          class="form-control"
+                          name="title"
+                          placeholder="영화 제목을 입력하시오"
+                          th:value="${param.title}" />
+                  <button type="submit" class="btn btn-primary ms-2">조회</button>
+                </form>
               </div>
             </div>
 
-            <!-- 예매 내역 -->
+
+            <!-- 예매 내역 테이블 -->
             <h5 class="card-title mt-4">예매내역</h5>
             <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-striped" id="bookingTable">
                 <thead>
                 <tr>
-                  <th>예매날짜</th>
-                  <th>영화명</th>
-                  <th>상영일시</th>
-                  <th>예매금액</th>
+                  <th scope="col">예매날짜</th>
+                  <th scope="col">영화명</th>
+                  <th scope="col">상영일시</th>
+                  <th scope="col">좌석번호</th>
+                  <th scope="col">예매금액</th>
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="booking : ${bookingList}">-->
-<!--                  <td th:text="${booking.timestamp}"></td>-->
-<!--                  <td th:text="${booking.title}"></td>-->
-<!--                  <td th:text="${booking.screeningDateTime}"></td>-->
-<!--                  <td th:text="${booking.price}"></td>-->
-<!--                </tr>-->
-<!--                <tr th:if="${#lists.isEmpty(bookingList)}">-->
-<!--                  <td colspan="4" class="text-center">예매내역이 없습니다.</td>-->
-<!--                </tr>-->
+                <tr th:each="booking : ${bookingList}">
+                    <td th:text="${booking.timestamp}"></td>
+                    <td th:text="${booking.title}"></td>
+                    <td th:text="${booking.screeningDateTime}"></td>
+                    <td th:text="${booking.seats.join(', ')}"></td>
+                    <td th:text="${booking.price.toLocaleString()} + '원'"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookingList)}">
+                    <td colspan="5" class="text-center">예매내역이 없습니다.</td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -82,23 +66,24 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th>취소일시</th>
-                  <th>영화명</th>
-                  <th>상영일시</th>
-                  <th>취소금액</th>
-                </tr>
+                  <tr>
+                    <th scope="col">예매날짜</th>
+                    <th scope="col">영화명</th>
+                    <th scope="col">상영일시</th>
+                    <th scope="col">좌석번호</th>
+                    <th scope="col">예매금액</th>
+                  </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="cancellation : ${cancellationList}">-->
-<!--                  <td th:text="${cancellation.cancelDateTime}"></td>-->
-<!--                  <td th:text="${cancellation.title}"></td>-->
-<!--                  <td th:text="${cancellation.screeningDateTime}"></td>-->
-<!--                  <td th:text="${cancellation.price}"></td>-->
-<!--                </tr>-->
-<!--                <tr th:if="${#lists.isEmpty(cancellationList)}">-->
-<!--                  <td colspan="4" class="text-center">취소내역이 없습니다.</td>-->
-<!--                </tr>-->
+                  <tr th:each="cancel : ${cancelList}">
+                    <td th:text="${cancel.cancelDateTime}"></td>
+                    <td th:text="${cancel.title}"></td>
+                    <td th:text="${cancel.screeningDateTime}"></td>
+                    <td th:text="${cancel.price}"></td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(cancelList)}">
+                    <td colspan="4" class="text-center">취소내역이 없습니다.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -110,71 +95,60 @@
 </div>
 
 <script>
-   function searchBookings() {
-     const bookingType = document.querySelector('input[name="bookingType"]:checked').value;
-     const startDate = document.getElementById("startDate").value;
-     const endDate = document.getElementById("endDate").value;
+  const API_BASE_URL = '/api/bookings';
 
-     if (!startDate || !endDate) {
-       alert("시작 날짜와 종료 날짜를 모두 선택해주세요.");
-       return;
-     }
+  document.addEventListener('DOMContentLoaded', () => {
+    // 페이지 로드 시 기본 예매내역 로드
+    fetchData(`${API_BASE_URL}/initial`, updateBookingTable, '예매 내역을 불러오는 중 문제가 발생했습니다.');
+  });
 
-     // 서버로 데이터 전송 (비동기 요청)
-     fetch(`/bookings/search?type=${bookingType}&startDate=${startDate}&endDate=${endDate}`)
-       .then(response => response.json())
-       .then(data => {
-         // 검색 결과를 페이지에 업데이트
-         updateBookingList(data.bookingList);
-         updateCancellationList(data.cancellationList);
-       })
-       .catch(error => console.error("에러 발생:", error));
-   }
+  function searchBookings() {
+    const movieTitle = document.getElementById('movieSearch').value.trim();
 
-   // 비동기 응답을 받아 테이블 업데이트
-   function updateBookingList(bookingList) {
-     const tbody = document.querySelector("#bookingTable tbody");
-     tbody.innerHTML = "";
+    if (!movieTitle) {
+      alert('영화 제목을 입력하세요.');
+      return;
+    }
 
-     if (bookingList.length === 0) {
-       tbody.innerHTML = `<try><td colspan="4" class="text-center">예매내역이 없습니다.</td></tr>`;
-       return;
-     }
+    fetchData(`${API_BASE_URL}/search?title=${encodeURIComponent(movieTitle)}`, updateBookingTable, '예매 내역을 가져오는 중 문제가 발생했습니다.');
+  }
 
-     bookingList.forEach(booking => {
-       const row = `
-         <tr>
-           <td>${booking.timestamp}</td>
-           <td>${booking.title}</td>
-           <td>${booking.screeningDateTime}</td>
-           <td>${booking.price}</td>
-         </tr>
-       `;
-       tbody.innerHTML += row;
-     });
-   }
+  function fetchData(url, onSuccess, errorMessage) {
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(errorMessage);
+        }
+        return response.json();
+      })
+      .then(onSuccess)
+      .catch(error => {
+        console.error('Error:', error);
+        alert(errorMessage);
+      });
+  }
 
-   function updateCancellationList(cancellationList) {
-     const tbody = document.querySelector("#cancellationTable tbody");
-     tbody.innerHTML = "";
+  function updateBookingTable(data) {
+    const tbody = document.querySelector('#bookingTable tbody');
+    tbody.innerHTML = ''; // 기존 내용을 초기화
 
-     if (cancellationList.length === 0) {
-       tbody.innerHTML = `<tr><td colspan="4" class="text-center">취소내역이 없습니다.</td></tr>`;
-       return;
-     }
+    if (!data || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center">검색된 예매내역이 없습니다.</td></tr>';
+      return;
+    }
 
-     cancellationList.forEach(cancellation => {
-       const row = `
-         <tr>
-           <td>${cancellation.cancelDateTime}</td>
-           <td>${cancellation.title}</td>
-           <td>${cancellation.screeningDateTime}</td>
-           <td>${cancellation.price}</td>
-         </tr>
-       `;
-       tbody.innerHTML += row;
-     });
-   }
+    data.forEach(item => {
+      const row = `
+        <tr>
+          <td>${item.timestamp}</td>
+          <td>${item.title}</td>
+          <td>${item.screeningDateTime}</td>
+          <td>${item.seats.join(', ')}</td>
+          <td>${item.price.toLocaleString()}원</td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+  }
+
 </script>
-
-

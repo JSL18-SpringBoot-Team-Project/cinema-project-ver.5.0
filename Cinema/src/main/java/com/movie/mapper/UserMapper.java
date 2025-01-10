@@ -42,5 +42,18 @@ public interface UserMapper {
     @Delete("DELETE FROM users where id = #{id}")
     public long deleteUser(long id);
 
+    // 비밀번호 조회
+    @Select("SELECT password FROM users WHERE id = #{userId}")
+    String getPassword(long userId);
+
+    // 비밀번호 업데이트
+    @Update("UPDATE users SET password = #{password}, last_password_change = now(), updated_at = now() WHERE id = #{id}")
+    void updatePassword(User user);
+
+    // 사용자 정보 수정
+    @Update("UPDATE users SET name = #{name}, email = #{email}, phone = #{phone}, birth = #{birth}, updated_at = now() WHERE id = #{id}" +
+            "AND NOT EXISTS (SELECT 1 FROM users WHERE email = #{email} AND id != #{id})")
+    void updateUser(User user);
+
 
 }

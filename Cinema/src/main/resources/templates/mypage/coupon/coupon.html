@@ -12,14 +12,10 @@
   <div class="content-box">
     <h2 class="mb-4">クーポン</h2>
 
-    <!-- 쿠폰 등록 설명 -->
+    <!-- 쿠폰 설명 -->
     <div class="row mb-4">
       <div class="col-md-6">
         <p>• 保有されているクーポンの一覧です。</p>
-        <p>• 各クーポンの使用方法は、使用前に詳細を確認してください。</p>
-      </div>
-      <div class="col-md-6 text-end">
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">クーポン登録</button>
       </div>
     </div>
 
@@ -49,40 +45,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="coupon : ${couponList}">
-          <td th:text="${coupon.couponTitle}"></td>
-          <td th:text="${coupon.couponStartDate} ~ ${coupon.couponEndDate}"></td>
-          <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用完了' : '期限満了')}"></td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(couponList)}">
-          <td colspan="3" class="text-center">クーポン情報がありません。</td>
-        </tr>
+<!--        <tr th:each="coupon : ${couponList}">-->
+<!--          <td th:text="${coupon.couponTitle}"></td>-->
+<!--          <td th:text="${coupon.couponStartDate} ~ ${coupon.couponEndDate}"></td>-->
+<!--          <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用完了' : '期限満了')}"></td>-->
+<!--        </tr>-->
+<!--        <tr th:if="${#lists.isEmpty(couponList)}">-->
+<!--          <td colspan="3" class="text-center">クーポン情報がありません。</td>-->
+<!--        </tr>-->
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- 모달창: 쿠폰 등록 -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">クーポン登録</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form th:action="@{/mypage/registerCoupon}" method="post">
-            <div class="mb-3">
-              <label for="couponCode" class="form-label">クーポン登録番号</label>
-              <input type="text" id="couponCode" name="couponCode" class="form-control" placeholder="クーポン番号入力" required/>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-              <button type="submit" class="btn btn-primary">登録</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

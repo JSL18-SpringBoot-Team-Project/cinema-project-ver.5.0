@@ -23,13 +23,13 @@
         <!-- 티켓 -->
         <div class="card">
             <div class="card-header">
-                チケット／クーポン
+                예매/쿠폰
             </div>
             <div class="card-body">
                 <ul class="list-unstyled">
                     <!-- 동적 데이터로 티켓 및 쿠폰 개수 표시 -->
-                    <li><strong>映画のチケット：</strong> <span th:text="${ticketCount}">0</span> 枚</li>
-                    <li><strong>クーポン：</strong> <span th:text="${couponCount}">3</span> 枚</li>
+                    <li><strong>映画のチケット：</strong> <span th:text="${ticketCount}"></span> 枚</li>
+                    <li><strong>クーポン：</strong> <span th:text="${couponCount}"></span> 枚</li>
                 </ul>
             </div>
         </div>
@@ -37,26 +37,28 @@
         <!-- 예매 내역 -->
         <div class="card">
             <div class="card-header">
-                私の前売り内訳
+                최근 예매 내역
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">予約日</th>
-                            <th scope="col">映画名</th>
-                            <th scope="col">上映日時</th>
-                            <th scope="col">金額</th>
+                            <th scope="col">예매날짜</th>
+                            <th scope="col">영화명</th>
+                            <th scope="col">상영일시</th>
+                            <th scope="col">좌석번호</th>
+                            <th scope="col">예매금액</th>
                         </tr>
                         </thead>
                         <tbody>
                         <!-- 동적 데이터로 예매 내역 표시 -->
                         <tr th:each="booking : ${bookingList}">
                             <td th:text="${booking.bookingDate}"></td>
-                            <td th:text="${booking.movieName}"></td>
+                            <td th:text="${booking.movieTitle}"></td>
                             <td th:text="${booking.screeningDateTime}"></td>
-                            <td th:text="${booking.amount}"></td>
+                            <td th:text="${booking.seatNumber}"></td>
+                            <td th:text="${booking.price}"></td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(bookingList)}">
                             <td colspan="4" class="text-center">予約履歴がありません．．</td>
