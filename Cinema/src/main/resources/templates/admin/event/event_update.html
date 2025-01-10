@@ -4,7 +4,7 @@
                 <div class="row bg-light rounded align-items-center justify-content-center mx-0">
                     <div class="col-md-10"> <!-- 폼의 최대 너비를 설정 -->
                         <h1 class="mb-3 text-center">イベント編集</h1>
-                        <form name="event" method="post" action="/admin/event/update" th:object="${event}">
+                        <form name="event" method="post" action="/admin/event/update" th:object="${event}" enctype="multipart/form-data">
                             <table class="table table-borderless">
                                 <input type="hidden" th:field="${event.id}">
                                 <tr>
@@ -16,7 +16,7 @@
                                 <tr>
                                     <th><label for="event_img">event_img</label></th>
                                     <td>
-                                        <input type="file" class="form-control" name="eventImg" id="event_img">
+                                        <input type="file" class="form-control" th:name="event_img" id="event_img">
                                     </td>
                                 </tr>
                                 <tr>

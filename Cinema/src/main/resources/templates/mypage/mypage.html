@@ -1,0 +1,74 @@
+<section th:fragment="content">
+  <div class="container mt-5">
+    <h1 class="mb-4">マイページ</h1>
+
+    <!-- 왼쪽 네비게이션 바 -->
+    <div class="lnb-area">
+      <nav id="lnb">
+        <p class="lnb-title on">
+          <a th:href="@{/mypage}" title="나의 메가박스">나의 메가박스</a>
+        </p>
+
+        <ul class="lnb-menu">
+          <li class="lnb-item">
+            <a th:href="@{/mypage/bookinglist}" title="예매/구매내역">예매/구매내역</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/movie-coupon}" title="영화/스토어 관람권">영화/스토어 관람권</a>
+            <ul class="lnb-submenu">
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/movie-coupon}" title="영화관람권">영화관람권</a>
+              </li>
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/store-coupon}" title="스토어 교환권">스토어 교환권</a>
+              </li>
+            </ul>
+          </li>
+          <li class="lnb-item">
+            <a id="discountCoupon" th:href="@{/mypage/discount-coupon}" title="메가박스/제휴쿠폰">메가박스/제휴쿠폰</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/point-list}" title="멤버십 포인트">멤버십 포인트</a>
+            <ul class="lnb-submenu">
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/point-list}" title="포인트 이용내역">포인트 이용내역</a>
+              </li>
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/card-list}" title="멤버십 카드관리">멤버십 카드관리</a>
+              </li>
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/milk-service}" title="MiL.k 제휴서비스">MiL.k 포인트</a>
+              </li>
+            </ul>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/moviestory}" title="나의 무비스토리">나의 무비스토리</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/myevent}" title="나의 이벤트 응모내역">나의 이벤트 응모내역</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/myinquiry}" title="나의 문의내역">나의 문의내역</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/joongAngPayMng}" title="중앙페이 결제수단 관리">중앙페이 결제수단 관리</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/mydiscount}" title="자주쓰는 할인카드">자주쓰는 카드 관리</a>
+          </li>
+          <li class="lnb-item">
+            <a th:href="@{/mypage/myinfo}" title="회원정보">회원정보</a>
+            <ul class="lnb-submenu">
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/myinfo}" title="개인정보 수정">개인정보 수정</a>
+              </li>
+              <li class="lnb-subitem">
+                <a th:href="@{/mypage/additionalinfo}" title="선택정보 수정">선택정보 수정</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</section>

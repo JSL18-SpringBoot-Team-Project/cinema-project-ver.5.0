@@ -1,29 +1,20 @@
 package com.movie.controller;
 
-import com.movie.domain.Coupons;
 import com.movie.domain.Events;
 import com.movie.domain.SessionUser;
-import com.movie.domain.User;
 import com.movie.service.EventService;
-import com.movie.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,20 +24,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EventController {
 
-	@Autowired
-	private EventService eventService;
-	@Autowired
-	private UserService userService;
+	private final EventService eventService;
 
-
-	@GetMapping("/single")
+	@GetMapping("/")
 	public String eventSingle(Model model) {
 		List<Events> eventStart = eventService.eventStart();
 		List<Events> eventEnd = eventService.eventEnd();
 		model.addAttribute("start", eventStart);
 		model.addAttribute("end", eventEnd);
 		model.addAttribute("content", "events/event_single");
-		model.addAttribute("title", "smkun");
+		model.addAttribute("title", "イベント");
 
 		return "layout/base";
 	}
@@ -62,7 +49,7 @@ public class EventController {
 		model.addAttribute("view", eventview); // 올바르게 변수 사용
 		model.addAttribute("now", now); // 현재 시간 전달
 		model.addAttribute("content", "events/event_view");
-		model.addAttribute("title", "smkun2");
+		model.addAttribute("title", "イベント");
 
 		// 레이아웃으로 반환
 		return "layout/base";
@@ -91,7 +78,7 @@ public class EventController {
 			if (existingCouponCount > 0) {
 				System.out.println("중복된 쿠폰: 사용자 ID " + userId + ", 쿠폰 ID " + couponId);
 				response.put("status", "duplicate");
-				response.put("message", "이미 쿠폰을 수령하셨습니다.");
+				response.put("message", "このクーポンはすでに受け取っています。");
 				return ResponseEntity.ok(response);
 			}
 
@@ -101,12 +88,12 @@ public class EventController {
 			eventService.usercoupon(userId, couponId, startDateTime, endDateTime);
 
 			response.put("status", "success");
-			response.put("message", "쿠폰이 성공적으로 수령되었습니다.");
+			response.put("message", "クーポンが正常に受け取りました。");
 			return ResponseEntity.ok(response);
 
 		} catch (Exception e) {
 			response.put("status", "error");
-			response.put("message", "쿠폰 수령 중 오류가 발생했습니다.");
+			response.put("message", "クーポンの受け取り中にエラーが発生しました。");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}

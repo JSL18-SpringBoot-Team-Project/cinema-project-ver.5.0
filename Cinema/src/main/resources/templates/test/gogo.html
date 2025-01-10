@@ -1,0 +1,7 @@
+<section th:fragment="content">
+  <h1>사용자 정보</h1>
+  <th:block th:each="movie : ${movie}">
+    <p style="color: red;" th:text="${movie.title}">로그인 상태 X</p>
+    <p>ID: <span th:text="${movie.posterImg}">사용자 ID</span></p>
+  </th:block>
+</section>

@@ -1,0 +1,134 @@
+<section th:fragment="content" style="text-align: center;">
+
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 50px;">
+		<div class="prs_heading_section_wrapper">
+			<h2>映画一覧</h2>
+		</div>
+	</div>
+	<!-- st slider rating wrapper Start -->
+	<div class="st_slider_rating_main_wrapper float_left" style="display: flex; justify-content: center; align-items: center; text-align: center; background: none;">
+		<div class="container">
+			<div style="display: flex; justify-content: center; align-items: center; background: #333545; padding:20px;">
+				<ul class="nav nav-tabs" style="padding: 0; margin: 0; list-style: none; text-align: center; display: flex; flex-direction: row; border-bottom: none;">
+					<li id="allMoviesTab" class="active" style="margin: 0 10px;">
+						<a data-toggle="tab" href="#home" style="padding: 20px; width: 110px; height: auto; display: inline-block; text-decoration: none; font-weight: bold; border-radius: 4px;">全体映画</a>
+					</li>
+					<li id="nowPlayingTab" style="margin: 0 10px;">
+						<a data-toggle="tab" href="#start" style="padding: 20px; width: 110px; height: auto; display: inline-block; text-decoration: none; font-weight: bold; border-radius: 4px;">上映中</a>
+					</li>
+					<li id="upcomingTab" class="nav-item" style="margin: 0 10px;">
+						<a data-toggle="tab" href="#menu1" style="padding: 20px; width: 110px; height: auto; display: inline-block; text-decoration: none; font-weight: bold; border-radius: 4px;">公開予定</a>
+					</li>
+					<li id="pastMoviesTab" style="margin: 0 10px;">
+						<a data-toggle="tab" href="#menu2" style="padding: 20px; width: 110px; height: auto; display: inline-block; text-decoration: none; font-weight: bold; border-radius: 4px;">上映終了</a>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</div>
+	<!-- st slider rating wrapper End -->
+
+	<!-- st slider sidebar wrapper Start -->
+	<div class="st_slider_index_sidebar_main_wrapper st_slider_index_sidebar_main_wrapper_booking float_left" style="text-align: center; padding-top:0;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="margin: 0 auto; width:1170px;">
+					<div class="st_indx_slider_main_container float_left">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="tab-content" style="text-align: center;">
+
+									<!-- 전체 영화 -->
+									<div id="home" class="tab-pane active">
+										<div class="st_calender_contant_main_wrapper float_left" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; padding: 20px 10px;">
+											<!-- 반복문 시작 -->
+											<div th:each="start : ${movie}" style="flex: 1 1 calc(33.33% - 20px); max-width: calc(33.33% - 20px); box-sizing: border-box; text-align: center;">
+												<div class="st_calender_asc">
+													<div class="st_calen_asc_heart"></div>
+													<div class="st_calen_asc_heart_cont" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+														<div style="width: 100%; height: 100%; text-align: center; display: flex; justify-content: center; align-items: center;">
+															<a th:href="@{/movie/detail(id=${start.id})}"><img th:src="@{'/poster/' + ${start.posterImg}}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; min-width: 340px; min-height: 485px; max-height: 485px;"></a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- 반복문 종료 -->
+										</div>
+									</div>
+
+									<!-- 상영중인 영화 -->
+									<div id="start" class="tab-pane fade">
+										<div class="st_calender_contant_main_wrapper float_left" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; padding: 20px 10px;">
+											<div th:each="start : ${start}" style="flex: 1 1 calc(33.33% - 20px); max-width: calc(33.33% - 20px); box-sizing: border-box; text-align: center;">
+												<div class="st_calender_asc">
+													<div class="st_calen_asc_heart"></div>
+													<div class="st_calen_asc_heart_cont" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+														<div style="width: 100%; height: 100%; text-align: center; display: flex; justify-content: center; align-items: center;">
+															<a th:href="@{/movie/detail(id=${start.id})}"><img th:src="@{'/poster/' + ${start.posterImg}}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; min-width: 340px; min-height: 485px; max-height: 485px;"></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- 예정 영화 -->
+									<div id="menu1" class="tab-pane fade">
+										<div class="st_calender_contant_main_wrapper float_left" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; padding: 20px 10px;">
+											<div th:each="schedule : ${schedule}" style="flex: 1 1 calc(33.33% - 20px); max-width: calc(33.33% - 20px); box-sizing: border-box; text-align: center;">
+												<div class="st_calender_asc">
+													<div class="st_calen_asc_heart"></div>
+													<div class="st_calen_asc_heart_cont" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+														<div style="width: 100%; height: 100%; text-align: center; display: flex; justify-content: center; align-items: center;">
+															<a th:href="@{/movie/detail(id=${schedule.id})}"><img th:src="@{'/poster/' + ${schedule.posterImg}}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; min-width: 340px; min-height: 485px; max-height: 485px;"></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- 지난 영화 -->
+									<div id="menu2" class="tab-pane fade">
+										<div class="st_calender_contant_main_wrapper float_left" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; padding: 20px 10px;">
+											<div th:each="end : ${end}" style="flex: 1 1 calc(33.33% - 20px); max-width: calc(33.33% - 20px); box-sizing: border-box; text-align: center;">
+												<div class="st_calender_asc">
+													<div class="st_calen_asc_heart"></div>
+													<div class="st_calen_asc_heart_cont" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+														<div style="width: 100%; height: 100%; text-align: center; display: flex; justify-content: center; align-items: center;">
+															<a th:href="@{/movie/detail(id=${end.id})}"><img th:src="@{'/poster/' + ${end.posterImg}}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; min-width: 340px; min-height: 485px; max-height: 485px;"></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Tab Content End -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- st slider sidebar wrapper End -->
+
+	<script>
+		// 페이지 로드 시 전체영화 탭 활성화
+        document.addEventListener('DOMContentLoaded', function () {
+            // 모든 탭 비활성화
+            document.querySelectorAll('.nav-tabs li').forEach(tab => tab.classList.remove('active'));
+            // 전체영화 탭 활성화
+            document.getElementById('allMoviesTab').classList.add('active');
+
+            // 모든 탭 콘텐츠 비활성화
+            document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove('active', 'in'));
+            // 전체영화 콘텐츠 활성화
+            document.getElementById('home').classList.add('active', 'in');
+        });
+	</script>
+
+</section>

@@ -78,4 +78,8 @@ public class MovieService {
     public List<Movies> searchMoviesByTitle(String title) {
         return movieMapper.searchMoviesByTitle(title);
     }
+
+    public void updateMovieAudience(long id) {
+        movieMapper.updateMovieAudience(id);
+    }
 }

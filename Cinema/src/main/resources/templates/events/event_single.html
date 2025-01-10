@@ -21,7 +21,7 @@
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div class="prs_heading_section_wrapper">
-						<h2>Event Schedule</h2>
+						<h2>イベントスケジュール</h2>
 					</div>
 				</div>
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -45,7 +45,7 @@
 								<!-- 이벤트 데이터 반복 -->
 								<div th:each="event : ${start}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
 									<div class="prs_es_tabs_event_sche_img_wrapper" style="width: 270px;">
-										<img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style="height: 150px; border-radius: 10px;">
+										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style="height: 150px; border-radius: 10px;"></a>
 									</div>
 									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
 										<h2><a th:href="@{/event/view(id=${event.id})}"
@@ -61,7 +61,7 @@
 								<!-- 지난 이벤트 데이터 반복 -->
 								<div th:each="event : ${end}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
 									<div class="prs_es_tabs_event_sche_img_wrapper" style="width:270px;">
-										<img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style=" height: 150px; border-radius: 10px;">
+										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style=" height: 150px; border-radius: 10px;"></a>
 									</div>
 									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
 										<h2><a th:href="@{/event/view(id=${event.id})}"

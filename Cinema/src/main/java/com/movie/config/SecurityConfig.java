@@ -95,7 +95,7 @@ public class SecurityConfig {
                 User user = userMapper.findByEmail(email)
                         .orElseThrow(() -> new IllegalStateException("소셜 사용자 정보를 찾을 수 없습니다."));
 
-                sessionUser = new SessionUser(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getSocialProvider());
+                sessionUser = new SessionUser(user.getId(), user.getName(), user.getEmail(), user.getRole());
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 eventService.userEvent(sessionUser.getId());
 
@@ -106,7 +106,7 @@ public class SecurityConfig {
                 User user = userMapper.findByEmail(username)
                         .orElseThrow(() -> new IllegalStateException("일반 사용자 정보를 찾을 수 없습니다."));
 
-                sessionUser = new SessionUser(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getSocialProvider());
+                sessionUser = new SessionUser(user.getId(), user.getName(), user.getEmail(), user.getRole());
 
                 authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
             }

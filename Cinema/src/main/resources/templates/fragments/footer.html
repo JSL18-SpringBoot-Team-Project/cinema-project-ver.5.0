@@ -34,36 +34,36 @@
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="st_pop_form_heading_wrapper float_left">
-                    <h3>Log in</h3>
+                    <h3>ログイン</h3>
                 </div>
                 <form id="loginForm" th:action="@{/user/login}" method="post">
                     <div class="st_profile_input float_left">
-                        <label for="email">Email</label>
-                        <input type="text" id="email" th:name="username" placeholder="Email">
+                        <label for="email">メール</label>
+                        <input type="text" id="email" th:name="username" placeholder="Email Address">
                     </div>
-                    <div class="st_profile__pass_input st_profile__pass_input_pop float_left">
-                        <label for="password">Password</label>
+                    <div class="st_profile_input st_profile__pass_input_pop float_left" style="margin-top: unset;">
+                        <label for="password">パスワード</label>
                         <input type="password" id="password" th:name="password" placeholder="Password">
                     </div>
                     <div class="st_form_pop_fp float_left">
-                        <h3><a href="#" data-toggle="modal" data-target="#myModa2" target="_blank">Forgot Password?</a>
+                        <h3><a href="#" data-toggle="modal" data-target="#myModa2"
+                               target="_blank">パスワードをお忘れの方</a>
                         </h3>
                     </div>
                     <p id="loginErrorMsg" class="error-message" style="font-size: 12px; color: red; display: none;"></p>
                     <div class="st_form_pop_login_btn float_left">
-                        <button type="submit" id="login-button">LOGIN</button>
+                        <button type="submit" id="login-button">ログイン</button>
                     </div>
                 </form>
                 <div class="st_form_pop_or_btn float_left">
                     <h4>or</h4>
                 </div>
                 <div class="st_form_pop_gmail_btn float_left">
-                    <a href="/oauth2/authorization/google">Connect with Google</a>
+                    <a href="/oauth2/authorization/google">Googleでログイン</a>
                 </div>
                 <div class="st_form_pop_signin_btn float_left">
-                    <h4>Don’t have an account? <a href="#" data-toggle="modal" data-target="#myModa3" target="_blank">Sign
-                        Up</a></h4>
-                    <h5>I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></h5>
+                    <h4>まだ会員ではない方 |<a href="#" data-toggle="modal" data-target="#myModa3" target="_blank">
+                        会員登録</a></h4>
                 </div>
             </div>
         </div>
@@ -73,14 +73,39 @@
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="st_pop_form_heading_wrapper st_pop_form_heading_wrapper_fpass float_left">
-                    <h3>Forgot Password</h3>
-                    <p>We can help! All you need to do is enter your email ID and follow the instructions!</p>
+                    <h3>パスワード再登録</h3>
                 </div>
-                <div class="st_profile_input float_left">
-                    <label>Email Address</label>
-                    <input type="text">
+                <div class="st_profile_input float_left form-group">
+                    <label for="resetEmailInput">メール</label>
+                    <input type="email" class="form-control" id="resetEmailInput" placeholder="Email Address">
+                    <span id="resetEmailError" style="color:red; display:none; font-size: 12px;"></span>
                 </div>
-                <div class="st_form_pop_fpass_btn float_left"><a href="#">Verify</a>
+                <div class="st_form_pop_fpass_btn float_left">
+                    <button id="sendResetCodeBtn" class="btn btn-primary btn-block">認証コードを送信</button>
+                </div>
+                <div id="resetVerificationBox" style="display:none; margin-top: 20px;">
+                    <div class="st_profile_input float_left form-group">
+                        <label for="resetVerificationCode">認証コード</label>
+                        <input type="text" class="form-control" id="resetVerificationCode"
+                               placeholder="認証コードを入力してください">
+                        <span id="resetCodeError"
+                              style="color:red; display:none; font-size: 12px;">無効な認証コードです。</span>
+                    </div>
+                    <div class="st_form_pop_fpass_btn float_left">
+                        <button id="verifyResetCodeBtn" class="btn btn-success btn-block">確認</button>
+                    </div>
+                </div>
+                <div id="resetPasswordBox" style="display:none; margin-top: 20px;">
+                    <div class="st_profile_input float_left form-group">
+                        <label for="newPasswordInput">新しいパスワード</label>
+                        <input type="password" class="form-control" id="newPasswordInput"
+                               placeholder="新しいパスワード">
+                        <span id="passwordError"
+                              style="color:red; display:none; font-size: 12px;">無効なパスワード形式です。</span>
+                    </div>
+                    <div class="st_form_pop_fpass_btn float_left">
+                        <button id="resetPasswordBtn" class="btn btn-success btn-block">パスワードを更新</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,7 +118,7 @@
                     <h3>会員登録</h3>
                 </div>
                 <div class="st_profile_input float_left form-group">
-                    <label for="email">Email</label>
+                    <label for="email">メール</label>
                     <input type="email" class="form-control" id="emailInput" placeholder="Email Address">
                     <span id="emailError" style="color:red; display:none; font-size: 12px;"></span>
                 </div>
@@ -126,41 +151,116 @@
     </div>
 
     <script>
-
-        document.getElementById("loginForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // 폼 기본 동작 방지
-
-    const formData = new FormData(this);
-    fetch("/user/login", {
-        method: "POST",
-        body: formData,
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = "/";
-        } else {
-            return response.text();
-        }
-    })
-    .then(errorMessage => {
-        if (errorMessage) {
-            document.getElementById("loginErrorMsg").innerText = errorMessage;
-            document.getElementById("loginErrorMsg").style.display = "block";
-        }
-    })
-    .catch(error => {
-        console.error("로그인 요청 중 오류:", error);
-    });
-});
-
-
-        // 이메일 인증 및 검증 로직
         let validateEmail = (email) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
 
-        // 인증 코드 전송
+        let validatePassword = (password) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/.test(password);
+
+    $("#sendResetCodeBtn").click(function () {
+            let email = $("#resetEmailInput").val();
+
+            if (!validateEmail(email)) {
+                $("#resetEmailError").text("無効なメールアドレスです。").show();
+                return;
+            }
+
+            $("#resetEmailError").hide();
+
+            $.ajax({
+                url: "/user/send-reset-code",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email }),
+                success: function () {
+                    $("#resetVerificationBox").show();
+                    $("#sendResetCodeBtn").prop("disabled", true);
+                },
+                error: function () {
+                    $("#resetEmailError").text("入力したメールアドレスをご確認ください。").show();
+                }
+            });
+        });
+
+        $("#verifyResetCodeBtn").click(function () {
+            let email = $("#resetEmailInput").val();
+            let code = $("#resetVerificationCode").val();
+
+            if (!/^[0-9]{6}$/.test(code)) {
+                $("#resetCodeError").text("無効な認証コードです。").show();
+                return;
+            }
+
+            $("#resetCodeError").hide();
+
+            $.ajax({
+                url: "/user/verify-reset-code",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email, code: code }),
+                success: function () {
+                    $("#resetPasswordBox").show();
+                    $("#resetVerificationBox").hide();
+                },
+                error: function () {
+                    $("#resetCodeError").text("認証コードが無効です。").show();
+                }
+            });
+        });
+
+        $("#resetPasswordBtn").click(function () {
+            let email = $("#resetEmailInput").val();
+            let newPassword = $("#newPasswordInput").val();
+
+            if (!validatePassword(newPassword)) {
+                $("#passwordError").text("パスワードは8~16文字の英数字と特殊文字を組み合わせてください。").show();
+                return;
+            }
+
+            $("#passwordError").hide();
+
+            $.ajax({
+                url: "/user/reset-password",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email, newPassword: newPassword }),
+                success: function () {
+                    alert("パスワードが更新されました。");
+                    window.location.href = "/user/login";
+                },
+                error: function () {
+                    $("#passwordError").text("パスワードの更新に失敗しました。").show();
+                }
+            });
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            fetch("/user/login", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/";
+                } else {
+                    return response.text();
+                }
+            })
+            .then(errorMessage => {
+                if (errorMessage) {
+                    document.getElementById("loginErrorMsg").innerText = errorMessage;
+                    document.getElementById("loginErrorMsg").style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("로그인 요청 중 오류:", error);
+            });
+        });
+
         $("#sendMailBtn").click(function () {
             let email = $("#emailInput").val();
 
@@ -172,40 +272,38 @@
             $("#emailError").hide();
 
             $.ajax({
-        url: "/user/checkemail",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ email: email }),
-        success: function (response) {
-            if (response.exists) {
-                $("#emailError").text("既に登録されているメールアドレスです。").show();
-            } else {
-                $("#emailError").hide();
+                url: "/user/checkemail",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email }),
+                success: function (response) {
+                    if (response.exists) {
+                        $("#emailError").text("既に登録されているメールアドレスです。").show();
+                    } else {
+                        $("#emailError").hide();
 
-                // 인증 코드 전송 요청
-                $.ajax({
-                    url: "/user/sendcode",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ email: email }),
-                    success: function () {
-                        alert("認証コードが送信されました。");
-                        $("#sendMailBtn").prop("disabled", true);
-                        $("#verificationBox").show();
-                    },
-                    error: function () {
-                        alert("認証コードの送信に失敗しました。");
+                        $.ajax({
+                            url: "/user/sendcode",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({ email: email }),
+                            success: function () {
+                                alert("認証コードが送信されました。");
+                                $("#sendMailBtn").prop("disabled", true);
+                                $("#verificationBox").show();
+                            },
+                            error: function () {
+                                alert("認証コードの送信に失敗しました。");
+                            }
+                        });
                     }
-                });
-            }
-        },
-        error: function () {
-            alert("メールアドレスの確認中にエラーが発生しました。");
-        }
-    });
+                },
+                error: function () {
+                    alert("メールアドレスの確認中にエラーが発生しました。");
+                }
+            });
         });
 
-        // 인증 코드 확인
         $("#verifyCodeBtn").click(function () {
             let code = $("#verificationCode").val();
 
@@ -234,42 +332,29 @@
             });
         });
 
-        // 모든 모달 닫힘 이벤트 감지 및 초기화
-$(".modal").on("hidden.bs.modal", function () {
-    resetModal($(this)); // 현재 닫힌 모달을 매개변수로 전달
+$(".modal").on("hidden.bs.modal", function (e) {
+    let closedModalId = $(this).attr("id"); // 현재 닫힌 모달의 ID
+
+    resetModal($(this));
+
+    if (closedModalId === "myModa3" || closedModalId === "myModa2") {
+        $("#myModal").modal({ backdrop: true, keyboard: true, show: true });
+    }
 });
 
-// 모달 상태 초기화 함수
-function resetModal(modal) {
-    // 닫힌 모달 내부의 입력 필드 초기화
-    modal.find("input").val("");
-    modal.find("textarea").val("");
-    modal.find("select").val("");
+        $(".modal").on("show.bs.modal", function () {
+            $(".modal").not(this).modal("hide");
+        });
 
-    // 오류 메시지 및 추가 UI 요소 숨기기
-    modal.find(".error-message").hide();
-    modal.find(".verification-box").hide();
+        function resetModal(modal) {
+            modal.find("input").val("");
+            modal.find("textarea").val("");
+            modal.find("select").val("");
 
-    // 버튼 상태 초기화
-    modal.find("button").prop("disabled", false);
-}
+            modal.find(".error-message").hide();
+            modal.find(".verification-box").hide();
 
-<!--function resetModal(modal) {-->
-<!--    // 공통 초기화-->
-<!--    modal.find("input").val(""); -->
-<!--    modal.find(".error-message").hide();-->
-<!--    modal.find(".verification-box").hide();-->
-
-<!--    // 특정 모달에만 적용되는 초기화-->
-<!--    if (modal.attr("id") === "myModal") {-->
-<!--        modal.find("#loginErrorMsg").hide();-->
-<!--    }-->
-<!--    if (modal.attr("id") === "myModa3") {-->
-<!--        modal.find("#sendMailBtn").prop("disabled", false);-->
-<!--    }-->
-<!--}-->
-
+            modal.find("button").prop("disabled", false);
+        }
     </script>
-
-
 </footer>

@@ -2,10 +2,8 @@ package com.movie.mapper;
 
 import com.movie.domain.Events;
 import com.movie.domain.MemberCoupon;
-import com.movie.domain.UserCoupon;
 import org.apache.ibatis.annotations.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,7 +32,6 @@ public interface EventMapper {
 
     public List<Events> eventEnd();
 
-
     @Select("select count(*) from user_coupon where user_id = #{userid} and coupon_id = #{couponId}")
     public long userid(long userid, long couponId);
 
@@ -46,8 +43,3 @@ public interface EventMapper {
                     @Param("endDateTime") LocalDateTime endDateTime);
 
 }
-
-
-
-
-

@@ -38,14 +38,14 @@
     <div class="st_bt_top_header_wrapper float_left">
         <div class="container container_seat">
             <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                     <div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"><a
                             th:href="@{/booking/schedule(movieId = ${movie.id})}"><i
                             class="fas fa-long-arrow-alt-left"></i>
                         &nbsp;Back</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="st_bt_top_center_heading st_bt_top_center_heading_seat_book_page float_left">
                         <h3>
                             <span th:text="${movie.title}"></span> -
@@ -53,14 +53,14 @@
                                 th:text="${movie.runningTime % 60} + ')'"></span>
                         </h3>
                         <h4>
-                            <span th:text="${#temporals.format(movie.releaseDate, 'dd MMM')}"></span>、
-                            <span th:text="${#temporals.format(schedule.startTime, 'hh:mm')}"></span>
+                            <span th:text="${#temporals.format(movie.releaseDate, 'yyyy/MM/dd')}"></span>、
+                            <span th:text="${#temporals.format(schedule.startTime, 'HH:mm')}"></span>
                         </h4>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                    <div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left"><a href="#"><i
-                            class="fa fa-times"></i></a>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="st_bt_top_close_btn st_bt_top_close_btn2 float_left">
+                        <a th:href="@{/booking/seat(scheduleId = ${scheduleId})}"><i class="fa fa-times"></i></a>
                     </div>
 
                     <div class="st_seatlay_btn float_left">

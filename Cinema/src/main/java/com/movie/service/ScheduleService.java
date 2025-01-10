@@ -56,13 +56,13 @@ public class ScheduleService {
 
         switch (screenId) {
             case 1:
-                return 1000;
-            case 2:
-                return 1200;
-            case 3:
                 return 1500;
-            case 4:
+            case 2:
+                return 1700;
+            case 3:
                 return 2000;
+            case 4:
+                return 2500;
             default:
                 throw new IllegalArgumentException("Invalid screen ID: " + screenId);
         }

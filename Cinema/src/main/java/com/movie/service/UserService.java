@@ -47,17 +47,6 @@ public class UserService {
         eventService.userEvent(userid);
     }
 
-    // OAuth 사용자 처리 (일반 사용자와 구분)
-    public void registerSocialUser(User user) {
-        if (isEmailRegistered(user.getEmail())) {
-            // 이미 등록된 사용자인 경우 업데이트
-            userMapper.updateSocialUser(user);
-        } else {
-            // 새 사용자인 경우 등록
-            userMapper.insertSocialUser(user);
-        }
-    }
-
     public boolean isEmailRegistered(String email) {
         return userMapper.existsByEmail(email);
     }
@@ -98,8 +87,12 @@ public class UserService {
         userMapper.updateSocialUser(user);
     }
 
+    public boolean isEmailRegisteredWithProvider(String email, String provider) {
+        return userMapper.existsByEmailAndProvider(email, provider);
+    }
 
-
-
-
+    public void updatePassword(String email, String newPassword) {
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        userMapper.updatePassword(email, hashedPassword);
+    }
 }

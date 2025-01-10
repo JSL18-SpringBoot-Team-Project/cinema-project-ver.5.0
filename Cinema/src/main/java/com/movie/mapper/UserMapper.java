@@ -42,5 +42,9 @@ public interface UserMapper {
     @Delete("DELETE FROM users where id = #{id}")
     public long deleteUser(long id);
 
+    @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email} AND social_provider = #{provider}")
+    boolean existsByEmailAndProvider(String email, String provider);
 
+    @Update("UPDATE users SET password = #{password}, updated_at = NOW() WHERE email = #{email}")
+    void updatePassword(@Param("email") String email, @Param("password") String password);
 }

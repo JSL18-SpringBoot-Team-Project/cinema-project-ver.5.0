@@ -68,8 +68,6 @@ public class EventService {
             userCouponMapper.insertUserCoupon(userCoupon);
         }
     }
-
-
     public long userid(long userid, long couponId){
         return eventMapper.userid(userid, couponId);
     }
@@ -78,5 +76,6 @@ public class EventService {
         // eventMapper.usercoupon 메서드 호출하여 데이터 삽입
         eventMapper.usercoupon(userId, couponId, startDateTime, endDateTime);
     }
+
 
 }
