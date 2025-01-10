@@ -215,17 +215,41 @@
 <!--main js file end-->
 
 <script th:inline="javascript">
-    (function() {
-        // 현재 상태를 history에 추가
-        history.pushState(null, null, location.href);
+    document.addEventListener('DOMContentLoaded', function () {
+        // 타이머 표시 요소 생성
+        const timerElement = document.createElement('div');
+        timerElement.id = 'timer';
+        timerElement.style.position = 'fixed';
+        timerElement.style.top = '10px';
+        timerElement.style.right = '10px';
+        timerElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        timerElement.style.color = 'white';
+        timerElement.style.padding = '10px';
+        timerElement.style.borderRadius = '5px';
+        timerElement.style.zIndex = '1000';
+        document.body.appendChild(timerElement);
 
-        // 뒤로가기 버튼 감지
-        window.addEventListener('popstate', function(event) {
-            // 뒤로가기 버튼 클릭 시 다시 현재 페이지로 이동
-            history.pushState(null, null, location.href);
-            alert("뒤로가기가 비활성화되어 있습니다."); // 사용자에게 알림 (선택 사항)
-        });
-    })();
+        let timerDuration = 10 * 60; // 10분 (초 단위)
+        const updateTimer = () => {
+            const minutes = Math.floor(timerDuration / 60);
+            const seconds = timerDuration % 60;
+            timerElement.textContent = `남은 시간: ${minutes}분 ${seconds < 10 ? '0' : ''}${seconds}초`;
+        };
+
+        const timerInterval = setInterval(() => {
+            if (timerDuration <= 0) {
+                clearInterval(timerInterval);
+                alert("결제 시간이 초과되었습니다. 메인 페이지로 이동합니다.");
+                window.location.href = '/'; // 타이머 종료 시 리디렉션
+            } else {
+                timerDuration--;
+                updateTimer();
+            }
+        }, 1000);
+
+        // 타이머 초기화
+        updateTimer();
+    });
 
     // Isotope 예시 (유지)
     function protfolioIsotope() {

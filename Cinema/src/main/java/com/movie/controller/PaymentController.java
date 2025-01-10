@@ -56,7 +56,7 @@ public class PaymentController {
 
 
     @PostMapping("/proceed")
-    public String bookingProceed(@RequestParam("selectedSeatIds") String selectedSeatId, Model model, @RequestParam("scheduleId") long scheduleId, @ModelAttribute("sessionUser") SessionUser sessionUser) {
+    public String bookingProceed(@RequestParam("selectedSeatIds") String selectedSeatId, Model model, @RequestParam("scheduleId") long scheduleId, @ModelAttribute("sessionUser") SessionUser sessionUser, HttpSession session) {
 
         if (sessionUser != null) {
             // 문자열을 Long 배열로 변환
@@ -71,6 +71,11 @@ public class PaymentController {
             List<Seats> seats = seatService.bookingSeats(seatIds);
             Schedules schedule = scheduleService.getSchedule(scheduleId);
             MovieDTO movie = movieDetailService.getMovieDetail(schedule.getMovieId());
+
+            session.setAttribute("BookingSeats", seats);
+            String sessionId = session.getId();
+            seatService.storeSessionSeats(sessionId, seatIds);
+            seatService.setSessionExpiration(sessionId, 600000);
 
             int totalPrice = 0;
 
@@ -163,7 +168,13 @@ public class PaymentController {
             System.out.println("serverCalculatedPrice = " + serverCalculatedPrice);
             return response;
         } else {
-            seatService.paymentStates(seatsId);
+            String sessionId = session.getId();
+
+            seatService.paymentStates(seatsId, sessionId);
+
+            if(session.getAttribute("BookingSeats") != null) {
+                session.removeAttribute("BookingSeats");
+            }
 
             Bookings bookings = (couponId != null) ?
                     bookingService.insertBooking(sessionUser.getId(), scheduleId, couponId, serverCalculatedPrice) :
@@ -194,7 +205,6 @@ public class PaymentController {
             session.setAttribute("movie", movie);
 
             response.put("result", result);
-            System.out.println(result);
 
             return response;
         }
