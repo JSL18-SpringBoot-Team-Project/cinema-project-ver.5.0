@@ -20,7 +20,16 @@ public class MovieService {
     }
 
     public List<Movies> movieManageList() {
-        return movieMapper.movieManageList();
+
+        List<Movies> movies = movieMapper.movieManageList();
+
+        for (Movies movie : movies) {
+            if(movie.getTitle().length() > 15) {
+                movie.setTitle(movie.getTitle().substring(0, 15) + "…");
+            }
+        }
+
+        return movies;
     }
 
     public Movies movieInfo(long id) {
@@ -77,5 +86,9 @@ public class MovieService {
 
     public List<Movies> searchMoviesByTitle(String title) {
         return movieMapper.searchMoviesByTitle(title);
+    }
+
+    public void updateMovieAudience(long id) {
+        movieMapper.updateMovieAudience(id);
     }
 }

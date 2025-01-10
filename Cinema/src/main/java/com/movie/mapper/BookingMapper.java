@@ -26,4 +26,8 @@ public interface BookingMapper {
     // 사용자 ID를 기반으로 취소 내역 조회
     List<Bookings> getCancelList(@Param("userId") Long userId);
 
+    long getTodaySale();
+
+    long getTotalSale();
+
 }
