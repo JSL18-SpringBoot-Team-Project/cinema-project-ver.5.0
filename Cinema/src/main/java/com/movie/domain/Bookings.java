@@ -16,8 +16,6 @@ public class Bookings {
     private Long couponId;
     private Long price;
     private Long state;
-
-    private List<Long> seatId;
     private String title;
-
+    private List<Long> seatId;
 }

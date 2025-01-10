@@ -19,6 +19,7 @@ public class MovieSearchController {
     @GetMapping("/api/movies/search")
     @ResponseBody
     public List<Movies> searchMovies(@RequestParam("title") String title) {
+
         return movieService.searchMoviesByTitle(title);
     }
 }

@@ -145,6 +145,12 @@ public class UserService {
     }
 
 
+    public boolean isEmailRegisteredWithProvider(String email, String provider) {
+        return userMapper.existsByEmailAndProvider(email, provider);
+    }
 
-
+    public void updatePassword(String email, String newPassword) {
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        userMapper.updatePassword2(email, hashedPassword);
+    }
 }
