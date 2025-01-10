@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,7 @@ public class MyPageController {
 //        // 동적 콘텐츠 경로 추가
 //        model.addAttribute("content", "mypage/index");
 //        // 페이지 제목 추가
-//        model.addAttribute("title", "マイページ");
+//        model.addAttribute("title", "MY | マイページ");
 //
 //        // 레이아웃으로 반환
 //        return "mypage/layout/base";
@@ -92,7 +94,7 @@ public class MyPageController {
         model.addAttribute("cancelList", cancelList);
         // 동적 콘텐츠 경로 추가
         model.addAttribute("content", "mypage/booking/booking_list");
-        model.addAttribute("title", "예매내역");
+        model.addAttribute("title", "MY | 예매내역");
 
         return "mypage/layout/base";
     }
@@ -110,8 +112,7 @@ public class MyPageController {
 
         // 동적 콘텐츠 경로 추가
         model.addAttribute("content", "mypage/coupon/coupon");
-        // 페이지 제목 추가
-        model.addAttribute("title", "쿠폰");
+        model.addAttribute("title", "MY | 쿠폰");
 
         return "mypage/layout/base";
     }
@@ -128,70 +129,29 @@ public class MyPageController {
         return "redirect:/mypage/coupon";
     }
 
-    @Autowired
-    public MyPageController(InquiryService inquiryService) {
-        this.inquiryService = inquiryService;
-    }
-
 
     // 문의 내역 페이지
-    @GetMapping("/mypage/inquiry/inquiry_list")
+    @GetMapping("/InquiryList")
     public String inquiryList(@RequestParam(value = "status", defaultValue = "all") String status,
                               @RequestParam(value = "keyword", required = false) String keyword,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                               Model model) {
 
-        // 서비스 호출하여 문의 목록 및 페이징 처리
-        PagingDTO<Inquiries> inquiries = inquiryService.getPagedInquiries(status, page, pageSize);
+        PagingDTO<Inquiries> inquiries = inquiryService.getPagedInquiries(status, page, pageSize); // 서비스 호출하여 문의 목록 및 페이징 처리
 
-        // 모델에 데이터 추가
         model.addAttribute("inquiryList", inquiries.getContent());
         model.addAttribute("paging", inquiries);
         model.addAttribute("status", status);
         model.addAttribute("keyword", keyword);
+        // 동적 컨텐츠 경로
+        model.addAttribute("content", "mypage/inquiry/inquiry_list");
+        model.addAttribute("title", "MY | 문의내역");
 
-        return "mypage/inquiry/inquiry_list";
+        return "mypage/layout/base";
     }
 
-    /**
-     * 문의 등록 페이지 이동
-     */
-    @GetMapping("/inquiry_form")
-    public String inquiryForm(Model model) {
-        model.addAttribute("pageTitle", "문의하기");
-        return "mypage/inquiry/inquiry_form";
-    }
-
-    /**
-     * 문의 등록 처리
-     */
-    @PostMapping("/submit")
-    public String submitInquiry(@ModelAttribute Inquiries inquiries) {
-        inquiryService.insertInquiry(inquiries);
-        return "redirect:/mypage/inquiry/list";
-    }
-
-    /**
-     * 특정 사용자 문의 내역 조회
-     */
-    @GetMapping("/user/{userId}")
-    public String inquiriesByUserId(
-            @PathVariable("userId") long userId,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            Model model) {
-
-        List<Inquiries> inquiries = inquiryService.getInquiriesByUserId(userId);
-        model.addAttribute("inquiries", inquiries);
-        model.addAttribute("userId", userId);
-
-        return "mypage/inquiry/user_inquiry_list"; // 사용자 문의 내역 화면
-    }
-
-    /**
-     * 에러 처리 예제
-     */
+    // 에러 처리 예제
     @ExceptionHandler(Exception.class)
     public String handleError(Exception ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
@@ -207,7 +167,11 @@ public class MyPageController {
             // OAuth 사용자는 비밀번호 인증 없이 바로 이동
             return "redirect:/mypage/profile";
         }
-        return "mypage/user/pw_verify";
+
+        // 동적 콘텐츠 경로 추가
+        model.addAttribute("content", "mypage/user/pw_verify");
+        model.addAttribute("title", "MY | 비밀번호 확인");
+        return "mypage/layout/base";
     }
 
     // 비밀번호 인증 처리
@@ -222,7 +186,8 @@ public class MyPageController {
 
         if (!userService.verifyPassword(userId, password)) {
             model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-            return "mypage/user/pw_verify"; // 비밀번호 불일치 시 다시 입력 페이지로 이동
+            model.addAttribute("content", "mypage/user/pw_verify");
+            return "mypage/layout/base"; // 비밀번호 불일치 시 다시 입력 페이지로 이동
         }
 
         return "redirect:/mypage/profile"; // 인증 성공 -> 회원정보 수정 페이지로 이동
@@ -238,13 +203,24 @@ public class MyPageController {
             throw new IllegalArgumentException("사용자 정보를 찾을 수 없습니다.");
         }
 
+        // 마지막 비밀번호 변경일 계산
+        LocalDateTime lastPasswordChange = user.getLastPasswordChange();
+        long sinceLastPasswordChange = lastPasswordChange != null ?
+                ChronoUnit.DAYS.between(lastPasswordChange, LocalDateTime.now()) : 1;
+
         // 수정 가능 여부 설정
         boolean isEditable = sessionUser.getSocialProvider() == null || sessionUser.getSocialProvider() == SocialProvider.NONE;
 
         // 사용자 정보 모델에 추가
         model.addAttribute("user", user);
         model.addAttribute("isEditable", isEditable); // 수정 가능 여부
-        return "mypage/user/user_edit"; // 회원정보 수정 페이지 렌더링
+        model.addAttribute("sinceLastPasswordChange", sinceLastPasswordChange); // 마지막 비밀번호 변경일
+
+        // 동적 콘텐츠 경로 추가
+        model.addAttribute("content", "mypage/user/user_edit");
+        model.addAttribute("title", "MY | 회원정보 수정");
+
+        return "mypage/layout/base"; // 회원정보 수정 페이지 렌더링
     }
 
     // 회원정보 수정 처리

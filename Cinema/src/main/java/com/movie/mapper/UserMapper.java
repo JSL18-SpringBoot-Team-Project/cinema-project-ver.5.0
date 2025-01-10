@@ -47,7 +47,7 @@ public interface UserMapper {
     String getPassword(long userId);
 
     // 비밀번호 업데이트
-    @Update("UPDATE users SET password = #{password}, updated_at = now() WHERE id = #{id}")
+    @Update("UPDATE users SET password = #{password}, last_password_change = now(), updated_at = now() WHERE id = #{id}")
     void updatePassword(User user);
 
     // 사용자 정보 수정
