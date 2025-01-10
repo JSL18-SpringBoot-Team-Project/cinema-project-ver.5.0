@@ -1,5 +1,13 @@
 <div th:fragment="content">
+  <!-- Location Bar -->
+  <div class="location-bar d-flex align-items-center">
+    <span class="me-2">Home</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>회원정보수정</span>
+  </div>
+
   <div class="content-box">
+  <div class="container mt-5">
     <h2 class="mb-4 fw-bold">회원정보수정</h2>
     <p>회원정보를 수정하시려면 비밀번호를 입력하셔야 합니다.</p>
 
@@ -29,5 +37,6 @@
         <button type="submit" class="btn btn-primary">비밀번호 확인</button>
       </div>
     </form>
+  </div>
   </div>
 </div>

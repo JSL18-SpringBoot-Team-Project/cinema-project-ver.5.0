@@ -13,24 +13,24 @@
     </div>
 
     <!-- Filter Section -->
-    <div class="row g-3 align-items-center mb-4">
-      <!-- Select Button -->
+    <form th:action="@{/mypage/inquiries}" method="get" class="row g-3 align-items-center mb-4">
+      <!-- Status Filter -->
       <div class="col-md-3">
-        <select class="form-select" th:name="status" th:value="${status}">
+        <select class="form-select" name="status" th:value="${status}">
           <option value="all" th:selected="${status == 'all'}">全体</option>
-          <option value="unanswered" th:selected="${status == 'unanswered'}">未返答</option>
-          <option value="answered" th:selected="${status == 'answered'}">回答完了</option>
+          <option value="unanswered" th:selected="${status == 'PENDING'}">未返答</option>
+          <option value="answered" th:selected="${status == 'ANSWERED'}">回答完了</option>
         </select>
       </div>
       <!-- Search Input -->
       <div class="col-md-6">
-        <input type="text" class="form-control" th:name="keyword" th:placeholder="検索ワードを入力してください" th:value="${keyword}" />
+        <input type="text" class="form-control" name="keyword" placeholder="検索ワードを入力してください" th:value="${keyword}" />
       </div>
       <!-- Search Button -->
       <div class="col-md-3 d-flex justify-content-end">
         <button class="btn btn-primary" type="submit">検索</button>
       </div>
-    </div>
+    </form>
 
     <!-- Inquiry Table -->
     <div class="table-responsive">
@@ -39,21 +39,23 @@
         <tr>
           <th scope="col">番号</th>
           <th scope="col">タイプ</th>
-          <th scope="col">題目</th>
+          <th scope="col">内容</th>
           <th scope="col">回答状態</th>
           <th scope="col">登録日</th>
         </tr>
         </thead>
         <tbody>
+        <!-- 데이터 출력 -->
         <tr th:each="inquiry : ${inquiryList}">
           <td th:text="${inquiry.id}"></td>
-          <td th:text="${inquiry.type}"></td>
-          <td th:text="${inquiry.subject}"></td>
+          <td th:text="${inquiry.inquiryType}"></td>
+          <td th:text="${inquiry.shortContent}"></td> <!-- 20자 이내 내용 출력 -->
           <td>
-            <span th:classappend="${inquiry.status == 'unanswered'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'unanswered' ? '未返答' : '回答完了'}"></span>
+            <span th:classappend="${inquiry.status == 'PENDING'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'PENDING' ? '未返答' : '回答完了'}"></span>
           </td>
-          <td th:text="${inquiry.registrationDate}"></td>
+          <td th:text="${inquiry.createdAt}"></td>
         </tr>
+        <!-- 데이터가 없을 경우 -->
         <tr th:if="${#lists.isEmpty(inquiryList)}">
           <td colspan="5" class="text-center">問い合わせのデータがありません。</td>
         </tr>

@@ -24,7 +24,8 @@ public class User {
     private Role role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime lastPasswordChange; // 추가 필드
 
-//    private List<MemberCoupon> coupons;
+    //    private List<MemberCoupon> coupons;
     private List<UserCoupon> coupons;
 }

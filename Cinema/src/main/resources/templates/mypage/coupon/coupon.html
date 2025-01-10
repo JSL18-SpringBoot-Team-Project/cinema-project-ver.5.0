@@ -22,7 +22,7 @@
     <!-- 총 쿠폰 개수 -->
     <div class="row align-items-center mb-4">
       <div class="col-md-6">
-        <h5 class="mb-0">計 <span id="couponCount" class="text-primary" th:text="${couponList.size()}">0</span> 枚</h5>
+<!--        <h5 class="mb-0">計 <span id="couponCount" class="text-primary" th:text="${couponList.size()}">0</span> 枚</h5>-->
       </div>
       <div class="col-md-6 text-end">
         <select class="form-select w-auto d-inline-block">
@@ -45,14 +45,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="coupon : ${couponList}">
-          <td th:text="${coupon.couponTitle}"></td>
-          <td th:text="${coupon.couponStartDate} ~ ${coupon.couponEndDate}"></td>
-          <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用完了' : '期限満了')}"></td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(couponList)}">
-          <td colspan="3" class="text-center">クーポン情報がありません。</td>
-        </tr>
+<!--        <tr th:each="coupon : ${couponList}">-->
+<!--          <td th:text="${coupon.couponTitle}"></td>-->
+<!--          <td th:text="${coupon.couponStartDate} ~ ${coupon.couponEndDate}"></td>-->
+<!--          <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用完了' : '期限満了')}"></td>-->
+<!--        </tr>-->
+<!--        <tr th:if="${#lists.isEmpty(couponList)}">-->
+<!--          <td colspan="3" class="text-center">クーポン情報がありません。</td>-->
+<!--        </tr>-->
         </tbody>
       </table>
     </div>

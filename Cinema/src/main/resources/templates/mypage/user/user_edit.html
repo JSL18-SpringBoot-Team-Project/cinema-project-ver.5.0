@@ -1,41 +1,97 @@
 <div th:fragment="content">
-  <div class="content-box">
+    <!-- Location Bar -->
+    <div class="location-bar d-flex align-items-center">
+        <span class="me-2">Home</span>
+        <i class="bi bi-chevron-right me-2"></i>
+        <span>マイページ</span>
+        <i class="bi bi-chevron-right me-2"></i>
+        <span>個人情報修正</span>
+    </div>
+
     <h2 class="mb-4">個人情報修正</h2>
-    <form th:action="@{/mypage/update_user}" method="post">
-      <!-- 사용자 ID -->
-      <div class="mb-3">
-        <label for="userId" class="form-label">ユーザーID</label>
-        <input type="text" id="userId" class="form-control" th:value="${user.id}" />
+  <!-- 성공 메시지 -->
+  <div class="alert alert-success" role="alert" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+  <!-- 에러 메시지 -->
+  <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+  <form th:action="@{/mypage/update_user}" method="post">
+    <!-- 이름 -->
+    <div class="mb-3">
+      <label for="name" class="form-label">名前</label>
+      <input type="text" id="name" name="name" class="form-control" th:value="${user.name}" th:disabled="${!isEditable}" />
+    </div>
+
+    <!-- メール -->
+    <div class="mb-3">
+      <label for="email" class="form-label">メール</label>
+      <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" th:disabled="${!isEditable}" />
+    </div>
+
+    <!-- 電話番号 -->
+    <div class="mb-3">
+      <label for="phone" class="form-label">電話番号</label>
+      <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" th:disabled="${!isEditable}" />
+    </div>
+
+    <!-- 생년월일 -->
+    <div class="mb-3">
+      <label for="birth" class="form-label">生年月日</label>
+      <input type="date" id="birth" name="birth" class="form-control" th:value="${user.birth}" th:disabled="${!isEditable}" />
+    </div>
+
+    <!-- 수정 불가 메시지 -->
+    <div class="alert alert-info mt-4" th:if="${!isEditable}">
+      このアカウントはOAuthで登録されているため、情報の修正はできません。
+    </div>
+
+      <!-- 비밀번호 변경 버튼 -->
+      <div class="row mb-3" th:if="${isEditable}">
+        <label class="col-sm-2 col-form-label form-label-required">パスワード</label>
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">パスワード変更</button>
+          <small class="text-muted d-block mt-1" th:text="'마지막 비밀번호 변경: ' + ${sinceLastPasswordChange} + '일전에 함'"></small>
+        </div>
       </div>
 
-      <!-- 이름 -->
-      <div class="mb-3">
-        <label for="name" class="form-label">名前</label>
-        <input type="text" id="name" name="name" class="form-control" th:value="${user.name}" required />
-      </div>
-
-      <!-- メール -->
-      <div class="mb-3">
-        <label for="email" class="form-label">メール</label>
-        <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required />
-      </div>
-
-      <!-- 電話番号 -->
-      <div class="mb-3">
-        <label for="phone" class="form-label">電話番号</label>
-        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" />
-      </div>
-
-      <!-- 생년월일 -->
-      <div class="mb-3">
-        <label for="birth" class="form-label">生年月日</label>
-        <input type="date" id="birth" name="birth" class="form-control" th:value="${user.birth}" />
+      <!-- 비밀번호 변경 모달 -->
+      <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true" th:if="${isEditable}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="passwordChangeModalLabel">パスワード変更</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:action="@{/mypage/updatePassword}" method="post">
+                <!-- 현재 비밀번호 -->
+                <div class="mb-3">
+                  <label for="currentPassword" class="form-label">現在のパスワード</label>
+                  <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="現在のパスワードを入力" required />
+                </div>
+                <!-- 새 비밀번호 -->
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">新しいパスワード</label>
+                  <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="新しいパスワードを入力" required />
+                  <small class="form-text text-muted">※ 英文、数字、特殊文字中2つ以上を組み合わせ10文字以上入力してください。</small>
+                </div>
+                <!-- 새 비밀번호 확인 -->
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">新しいパスワードの再入力</label>
+                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="新しいパスワードを再入力" required />
+                  <small class="form-text text-muted">※ パスワード確認のため、もう一度入力してください。</small>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                  <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
 
       <button type="submit" class="btn btn-primary">保存</button>
-    </form>
-  </div>
+  </form>
 </div>
 
-
-</div>

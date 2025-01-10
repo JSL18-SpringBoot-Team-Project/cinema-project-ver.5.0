@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.movie.mapper.BookingMapper">
+
     <!-- 예매 등록 -->
     <insert id="insertBookingWithCoupon" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bookings (user_id, schedule_id, coupon_id, price)
@@ -15,53 +16,73 @@
         VALUES (#{userId}, #{scheduleId}, #{price})
     </insert>
 
+    <resultMap id="bookingResultMap" type="Bookings">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="scheduleId" column="schedule_id" />
+        <result property="couponId" column="coupon_id" />
+        <result property="price" column="price" />
+        <result property="bookingTimestamp" column="booking_timestamp" />
+        <result property="cancelTimestamp" column="cancel_timestamp" />
+        <result property="state" column="state" />
+        <collection property="seatId" ofType="java.lang.Long">
+            <result column="seat_id" />
+        </collection>
+        <collection property="title" ofType="java.lang.String">
+            <result column="title" />
+        </collection>
+    </resultMap>
+
     <!-- 예매 내역 조회 -->
-    <select id="getBookingsByUserId" resultType="map">
+    <select id="getBookingList" resultMap="bookingResultMap">
         SELECT
-            b.timestamp,
-            m.title,
+            b.booking_timestamp AS bookingDate,
+            m.title AS title,
             CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
-            b.price,
-        GROUP_CONCAT(seat.seat_row, seat.seat_column) AS seats
+            b.price AS bookingPrice,
+            GROUP_CONCAT(seat.seat_row, seat.seat_column) AS seats
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
         JOIN tickets t ON b.id = t.booking_id
         JOIN seats seat ON t.seat_id = seat.id
         WHERE b.user_id = #{userId}
-        GROUP BY b.id;
-        <if test="type != null and type != 'all'">
-            AND <choose>
-            <when test="type == 'current'">s.watch_date &gt;= CURRENT_DATE</when>
-            <when test="type == 'past'">s.watch_date &lt; CURRENT_DATE</when>
-        </choose>
-        </if>
-        <if test="startDate != null and endDate != null">
-            AND DATE(b.timestamp) BETWEEN #{startDate} AND #{endDate}
-        </if>
+        GROUP BY b.id
+        ORDER BY b.booking_timestamp DESC;
+    </select>
+
+    <select id="searchBookingByTitle" parameterType="map" resultMap="bookingResultMap">
+        SELECT
+            b.booking_timestamp AS bookingDate,
+            m.title AS title,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price AS bookingPrice,
+            GROUP_CONCAT(seat.seat_row, seat.seat_column) AS seats
+        FROM bookings b
+        JOIN schedules s ON b.schedule_id = s.id
+        JOIN movies m ON s.movie_id = m.id
+        JOIN tickets t ON b.id = t.booking_id
+        JOIN seats seat ON t.seat_id = seat.id
+        WHERE b.user_id = #{userId}
+        AND m.title LIKE CONCAT('%', #{title}, '%')
+        GROUP BY b.id
+        ORDER BY b.booking_timestamp DESC;
     </select>
 
     <!-- 예매 취소 내역 조회 -->
-    <select id="getCancellationList" resultType="map">
+    <select id="getCancelList" resultMap="bookingResultMap">
         SELECT
-        b.cancel_date AS cancelDate,                  -- 취소 날짜
-        m.title AS movieName,                         -- 영화 제목
-        CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime, -- 상영일시
-        b.price AS canceledPrice                      -- 취소 금액
+            b.cancel_timestamp AS cancelTimeStamp,
+            m.title AS movieName,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price AS cancelPrice
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
         WHERE b.user_id = #{userId}
-        AND b.status = 'CANCELED';
+        AND b.state = 1
+        ORDER BY b.cancel_timestamp DESC;
     </select>
 
-
-    <!-- 사용 가능한 날짜 조회 -->
-    <select id="getAvailableDates" resultType="String">
-        SELECT DISTINCT DATE(timestamp) AS date
-        FROM bookings
-        WHERE user_id = #{userId}
-        ORDER BY date DESC
-    </select>
 
 </mapper>
