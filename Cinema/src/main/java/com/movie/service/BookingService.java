@@ -70,4 +70,8 @@ public class BookingService {
         return bookingMapper.getCancelList(userId);
     }
 
+    public long getTodaySale() {
+        return bookingMapper.getTodaySale();
+    }
+
 }
