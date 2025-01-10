@@ -55,5 +55,10 @@ public interface UserMapper {
             "AND NOT EXISTS (SELECT 1 FROM users WHERE email = #{email} AND id != #{id})")
     void updateUser(User user);
 
+    @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email} AND social_provider = #{provider}")
+    boolean existsByEmailAndProvider(String email, String provider);
+
+    @Update("UPDATE users SET password = #{password}, updated_at = NOW() WHERE email = #{email}")
+    void updatePassword2(@Param("email") String email, @Param("password") String password);
 
 }

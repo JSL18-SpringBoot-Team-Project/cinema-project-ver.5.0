@@ -45,8 +45,7 @@ if (button) {
         })
             .then(response => {
                 if (response.status === 401) {
-                    alert('로그인이 필요합니다.');
-                    window.location.href = '/login'; // 로그인 페이지로 리디렉션
+                    alert('ログインが必要です。');
                     return null;
                 }
                 if (!response.ok) {
@@ -69,7 +68,7 @@ if (button) {
             })
             .catch(error => {
                 console.error('네트워크 오류:', error);
-                alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+                alert('ネットワークエラーが発生しました。もう一度お試しください。');
                 window.location.href = '/index'; // 네트워크 오류 시에도 인덱스로 리디렉션
             });
     });
