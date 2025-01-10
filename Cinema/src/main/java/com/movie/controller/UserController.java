@@ -136,4 +136,44 @@ public class UserController {
         return "redirect:/";
     }
 
+    @PostMapping("/send-reset-code")
+    @ResponseBody
+    public ResponseEntity<?> sendResetCode(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+
+        if (!userService.isEmailRegisteredWithProvider(email, "NONE")) {
+            return ResponseEntity.badRequest().body("登録されていないメールアドレスです。");
+        }
+
+        emailService.sendVerificationCode(email);
+        return ResponseEntity.ok("認証コードが送信されました。");
+    }
+
+    @PostMapping("/verify-reset-code")
+    @ResponseBody
+    public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String code = payload.get("code");
+
+        if (!emailService.verifyCode(email, code)) {
+            return ResponseEntity.badRequest().body("認証コードが無効です。");
+        }
+
+        return ResponseEntity.ok("認証が成功しました。");
+    }
+
+    @PostMapping("/reset-password")
+    @ResponseBody
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String newPassword = payload.get("newPassword");
+
+        if (!validationUtil.isValidPassword(newPassword)) {
+            return ResponseEntity.badRequest().body("無効なパスワード形式です。");
+        }
+
+        userService.updatePassword(email, newPassword);
+        return ResponseEntity.ok("パスワードが更新されました。");
+    }
+
 }

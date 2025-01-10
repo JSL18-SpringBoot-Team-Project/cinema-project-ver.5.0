@@ -12,23 +12,19 @@ import java.util.Map;
 @Mapper
 public interface BookingMapper {
 
+    // 쿠폰과 함께 예매
     public void insertBookingWithCoupon(Bookings bookings);
 
+    // 쿠폰 없이 예매
     public void insertBooking(Bookings bookings);
 
-    // 예매내역 조회
-    List<Map<String, Object>> getBookingsByUserId(@Param("userId") long userId,
-                                                  @Param("type") String type,
-                                                  @Param("startDate") String startDate,
-                                                  @Param("endDate") String endDate);
+    // 사용자 ID를 기반으로 예매 내역 조회
+    List<Bookings> getBookingList(@Param("userId") Long userId);
 
-    List<Map<String, Object>> getBookingsByUserId(@Param("userId") long userId);
+    List<Bookings> searchBookingsByTitle(@Param("userId") long userId, @Param("title") String title);
 
-    // 예매취소 내역 조회
-    List<Map<String, Object>> getCancellationList(@Param("userId") long userId);
-
-    // 날짜 선택
-    List<Map<String, Object>> getDateOptions(@Param("userId") long userId);
+    // 사용자 ID를 기반으로 취소 내역 조회
+    List<Bookings> getCancelList(@Param("userId") Long userId);
 
     long getTodaySale();
 

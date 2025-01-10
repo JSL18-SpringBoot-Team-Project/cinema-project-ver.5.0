@@ -11,7 +11,7 @@ body {
   color: white;
   left: 50px;
   top: 60%;
-  transform: translateY(-50%); /* 화면 중앙에 위치 */
+  transform: translateY(-90%); /* 화면 중앙에 위치 */
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;

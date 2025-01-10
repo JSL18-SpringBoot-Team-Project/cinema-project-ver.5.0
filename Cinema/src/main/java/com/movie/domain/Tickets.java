@@ -6,6 +6,7 @@ import lombok.Data;
 public class Tickets {
 
     private Long id;
+    private Long ticketStatus;
     private Long seatId;
     private Long bookingId;
     private String paymentId;

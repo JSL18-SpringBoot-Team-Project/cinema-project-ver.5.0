@@ -3,6 +3,7 @@ package com.movie.domain;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class Bookings {
@@ -15,5 +16,6 @@ public class Bookings {
     private Long couponId;
     private Long price;
     private Long state;
-
+    private String title;
+    private List<Long> seatId;
 }

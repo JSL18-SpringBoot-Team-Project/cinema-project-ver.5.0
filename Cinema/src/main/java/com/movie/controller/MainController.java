@@ -4,6 +4,7 @@ import com.movie.domain.Events;
 import com.movie.domain.Inquiries;
 import com.movie.domain.Movies;
 import com.movie.domain.SessionUser;
+import com.movie.service.EmailService;
 import com.movie.service.EventService;
 import com.movie.service.InquiryService;
 import com.movie.service.MovieService;
@@ -29,6 +30,9 @@ public class MainController {
 	@Autowired
 	private EventService eventService;
 
+	@Autowired
+	private EmailService emailService;
+
 	@GetMapping({"", "/", "/index"})
 	public String index(Model model) {
 		List<Movies> upcoming = movieService.upcomingMovie();
@@ -48,7 +52,6 @@ public class MainController {
 
 	@GetMapping("/contact")
 	public String contact(Model model, @ModelAttribute("sessionUser") SessionUser sessionUser) {
-
 		if (sessionUser != null) {
 			model.addAttribute("name", sessionUser.getName());
 			model.addAttribute("email", sessionUser.getEmail());
@@ -58,13 +61,15 @@ public class MainController {
 			return "redirect:/";
 		}
 		return "layout/base";
-
 	}
 
 	@PostMapping("/contact")
 	public String sendContact(@ModelAttribute("sessionUser") SessionUser sessionUser, @ModelAttribute Inquiries inquiry, Model model) {
 		System.out.println("sendContact 들어옴");
-			model.addAttribute("email", sessionUser.getEmail());
+		if (sessionUser == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("email", sessionUser.getEmail());
 		if(inquiry.getContent().trim().isEmpty() || inquiry.getInquiry_type() == null) {
 			model.addAttribute("error", "全ての値を入力してください。");
 		} else {
@@ -72,14 +77,15 @@ public class MainController {
 				inquiry.setUser_id(sessionUser.getId());
 				inquiry.setEmail(sessionUser.getEmail());
 				inquiryService.insertInquiry(inquiry);
+				emailService.sendContactEmail(sessionUser.getEmail(), inquiry.getContent());
 				model.addAttribute("success", "お問い合わせが正常に送信されました。");
 			} catch (Exception e) {
-			model.addAttribute("email", sessionUser.getEmail());
+				model.addAttribute("email", sessionUser.getEmail());
 				model.addAttribute("error", "エラーが発生しました。");
 			}
 		}
-			model.addAttribute("title", "お問い合わせ");
-			model.addAttribute("content", "main/contact");
-			return "layout/base";
+		model.addAttribute("title", "お問い合わせ");
+		model.addAttribute("content", "main/contact");
+		return "layout/base";
 	}
 }

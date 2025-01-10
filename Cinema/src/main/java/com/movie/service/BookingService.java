@@ -55,45 +55,19 @@ public class BookingService {
         return bookings;
     }
 
-
-    /**
-     * 예매 내역 조회 (기본값 처리 포함)
-     *
-     * @param userId 사용자 ID
-     * @param type 예매 타입
-     *             current : 현재 이후 상영 예정 예매 내역
-     *             past : 상영 종료 이후 예매 내역
-     *             all : 모든
-     * @param startDate 조회 시작 날짜
-     * @param endDate 조회 종료 날짜
-     */
-    public List<Map<String, Object>> getBookingsByUserId(long userId, String type, String startDate, String endDate) {
-        // 기본값 처리
-        type = (type == null || type.isEmpty()) ? "all" : type; // type이 null이거나 비어있으면 "all"로 설정. 그렇지 않으면 전달받은 type 사용.
-        startDate = (startDate == null || startDate.isEmpty()) ? "2000-01-01" : startDate; // startDate가 null이거나 비어있으면 기본값인 "2000-01-01"로 설정.
-        endDate = (endDate == null || endDate.isEmpty()) ? LocalDate.now().toString() : endDate; // endDate가 null이거나 비어있으면 현재 날짜로 설정.
-
-        return bookingMapper.getBookingsByUserId(userId, type, startDate, endDate);
+    // 사용자 ID를 기반으로 예매 내역 조회
+    public List<Bookings> getBookingList(long userId) {
+        return bookingMapper.getBookingList(userId);
     }
 
-    /**
-     * 예매 내역 조회 (기본값 포함, 전체 내역)
-     *
-     * @param userId 사용자 ID
-     * @return 예매 내역 리스트
-     */
-    public List<Map<String, Object>> getBookingsByUserId(long userId) {
-        return getBookingsByUserId(userId, "all", "2000-01-01", LocalDate.now().toString());
+    // 영화 제목 필터링
+    public List<Bookings> searchBookingsByTitle(long userId, String title) {
+        return bookingMapper.searchBookingsByTitle(userId, title);
     }
 
-    /**
-     * 취소 내역 조회
-     *
-     * @param userId 사용자 ID
-     * @return 취소 내역 리스트
-     */
-    public List<Map<String, Object>> getCancellationList(long userId) {
-        return bookingMapper.getCancellationList(userId);
+    // 사용자 ID를 기반으로 취소 내역 조회
+    public List<Bookings> getCancelList(long userId) {
+        return bookingMapper.getCancelList(userId);
     }
 
     public long getTodaySale() {
