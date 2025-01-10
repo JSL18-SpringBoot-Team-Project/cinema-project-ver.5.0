@@ -24,5 +24,8 @@ public interface SeatMapper {
     @Update("UPDATE seats SET state = 1 WHERE id = #{id}")
     public long paymentStates(long id);
 
+    @Update("UPDATE seats SET state = 0 WHERE id = #{id}")
+    public long resetStates(long id);
+
     public ScreenScheduleSeatDto getScreenScheduleByScheduleId(long scheduleId);
 }
