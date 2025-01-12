@@ -29,13 +29,10 @@ public class SeatSessionHandler {
 
                 if (seatIds != null && seatIds.length > 0) {
                     seatService.resetStates(seatIds);
-                    System.out.println("Session expired: " + sessionId + ", Reset seats: " + List.of(seatIds));
                 }
 
                 seatService.resetSession(sessionId);
-                System.out.println("Session cleaned: " + sessionId);
             } catch (Exception e) {
-                System.err.println("Error processing expired session: " + sessionId);
                 e.printStackTrace();
             }
         }

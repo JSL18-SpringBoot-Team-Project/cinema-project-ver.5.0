@@ -164,8 +164,6 @@ public class PaymentController {
         if(serverCalculatedPrice != clientPaidAmount) {
             result = "fail";
             response.put("result", result);
-            System.out.println("clientPaidAmount = " + clientPaidAmount);
-            System.out.println("serverCalculatedPrice = " + serverCalculatedPrice);
             return response;
         } else {
             String sessionId = session.getId();

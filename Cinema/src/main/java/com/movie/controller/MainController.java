@@ -65,7 +65,6 @@ public class MainController {
 
 	@PostMapping("/contact")
 	public String sendContact(@ModelAttribute("sessionUser") SessionUser sessionUser, @ModelAttribute Inquiries inquiry, Model model) {
-		System.out.println("sendContact 들어옴");
 		if (sessionUser == null) {
 			return "redirect:/";
 		}

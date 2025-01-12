@@ -396,7 +396,7 @@ public class AdminController {
             e.printStackTrace();
             return "redirect:/admin/event/create";
         }
-        System.out.println("이벤트 이미지 경로: " + events.getEventImg());
+
         long result = eventService.insertEvent(events);
 
         if (result > 0) {
