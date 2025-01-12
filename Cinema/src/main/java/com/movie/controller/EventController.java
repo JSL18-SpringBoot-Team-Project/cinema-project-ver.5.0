@@ -64,19 +64,16 @@ public class EventController {
 
 		if (sessionUser == null) {
 			response.put("status", "unauthorized");
-			response.put("message", "로그인 하십시오.");
+			response.put("message", "ログインしてください。");
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 		}
 
 		try {
 			Integer userId = sessionUser.getId();
-			System.out.println("로그인한 사용자 ID: " + userId);
-			System.out.println("쿠폰 아이디: " + couponId);
 
 			// 이미 쿠폰을 받았는지 확인
 			long existingCouponCount = eventService.userid(userId, couponId);
 			if (existingCouponCount > 0) {
-				System.out.println("중복된 쿠폰: 사용자 ID " + userId + ", 쿠폰 ID " + couponId);
 				response.put("status", "duplicate");
 				response.put("message", "このクーポンはすでに受け取っています。");
 				return ResponseEntity.ok(response);

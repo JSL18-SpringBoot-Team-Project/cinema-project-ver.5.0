@@ -58,7 +58,6 @@ public class UserController {
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> payload, HttpSession session) {
         String email = payload.get("email");
         String code = payload.get("code");
-        System.out.println(code);
         if (!validationUtil.isValidEmail(email) || !validationUtil.isValidCode(code)) {
             return ResponseEntity.badRequest().body("無効なデータです。");
         }

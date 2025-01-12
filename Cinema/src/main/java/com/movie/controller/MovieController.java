@@ -25,13 +25,8 @@ public class MovieController {
 
     @GetMapping("/detail")
     public String movie(Model model, @RequestParam("id") long id){
-        System.out.println("id: " + id);
-
 
         MovieDTO movie = movieDetailService.getMovieDetail(id);
-        System.out.println("content넘어옴: " + movie.getMovieDetails().getContent());
-        System.out.println("anjfrkfy"+movie.getMovieDetails().getActor());
-
 
         model.addAttribute("movie", movie.getMovies());
         model.addAttribute("detail", movie.getMovieDetails());

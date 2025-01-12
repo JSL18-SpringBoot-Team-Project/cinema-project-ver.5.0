@@ -79,20 +79,28 @@ public class BookingController {
     }
 
     @PostMapping("/checkSeatState")
-    public ResponseEntity<Map<String, String>> checkSeatState(@RequestBody List<Long> seatIds) {
-        for (long id : seatIds) {
-            System.out.println("id = " + id);
-        }
-        long result = seatService.checkSeatState(seatIds);
-        System.out.println(result);
+    public ResponseEntity<Map<String, String>> checkSeatState(@RequestBody List<Long> seatIds, @ModelAttribute("sessionUser") SessionUser sessionUser) {
+
         Map<String, String> response = new HashMap<>();
-        if (result == 0) {
-            response.put("state", "possible");
+
+        if (sessionUser == null) {
+            response.put("state", "notLogin");
+            return ResponseEntity.ok(response);
+
         } else {
-            response.put("state", "impossible");
+            for (long id : seatIds) {
+                System.out.println("id = " + id);
+            }
+            long result = seatService.checkSeatState(seatIds);
+
+            if (result == 0) {
+                response.put("state", "possible");
+            } else {
+                response.put("state", "impossible");
+            }
+            return ResponseEntity.ok(response);
         }
 
-        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/paymentInfo")
