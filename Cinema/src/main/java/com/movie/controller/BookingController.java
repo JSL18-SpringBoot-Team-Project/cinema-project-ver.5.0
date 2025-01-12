@@ -84,7 +84,6 @@ public class BookingController {
             System.out.println("id = " + id);
         }
         long result = seatService.checkSeatState(seatIds);
-        System.out.println(result);
         Map<String, String> response = new HashMap<>();
         if (result == 0) {
             response.put("state", "possible");

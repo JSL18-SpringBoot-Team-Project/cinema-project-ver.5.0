@@ -71,7 +71,7 @@
         sch.end_time,
         scr.screen_name,
         scr.screen_type
-        ORDER BY sch.watch_date, sch.start_time;
+        ORDER BY sch.watch_date, scr.id, sch.start_time;
     </select>
 
 
