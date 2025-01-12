@@ -7,11 +7,11 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="prs_title_heading_wrapper">
-                        <h2>Movie Booking</h2>
+                        <h2>映画予約</h2>
                         <ul>
-                            <li><a th:href="@{/}">Home</a>
+                            <li><a th:href="@{/}">ホーム</a>
                             </li>
-                            <li>&nbsp;&nbsp; >&nbsp;&nbsp; Movie Booking</li>
+                            <li>&nbsp;&nbsp; >&nbsp;&nbsp; 映画予約</li>
                         </ul>
                     </div>
                 </div>
@@ -48,8 +48,8 @@
                                         </li>
                                         <li data-animation="animated fadeInUp" class="">
                                             <i class="far fa-clock"></i>
-                                            <span th:text="${movie.runningTime / 60}">0</span> hrs
-                                            <span th:text="${movie.runningTime % 60}">0</span> mins
+                                            <span th:text="${movie.runningTime / 60}">0</span> 時
+                                            <span th:text="${movie.runningTime % 60}">0</span> 分
                                         </li>
                                     </ul>
                                 </div>
@@ -111,11 +111,6 @@
                                                     <div class="st_calen_asc_tecket_time_select">
                                                         <ul>
                                                             <li>
-                                                            <span>
-                                                                <h4 th:text="${#numbers.formatDecimal(sch.seatPrice, 1, 'COMMA', 2, 'POINT')}"></h4>
-                                                                <p class="asc_pera1">Executive</p>
-                                                                <p class="asc_pera2">Filling Fast</p>
-                                                            </span>
                                                                 <a th:href="@{|/booking/seat?scheduleId=${sch.scheduleId}|}"
                                                                    th:text="${#temporals.format(sch.startTime, 'HH:mm')}">
                                                                 </a>
@@ -137,7 +132,7 @@
                         <div class="prs_mcc_left_side_wrapper">
 
                             <div class="prs_mcc_event_title_wrapper" style="margin-top:0px;">
-                                <h2>Top Events</h2>
+                                <h2>最近のイベント</h2>
                                 <img src="images/content/movie_category/event_img.jpg" alt="event_img">
                             </div>
                         </div>

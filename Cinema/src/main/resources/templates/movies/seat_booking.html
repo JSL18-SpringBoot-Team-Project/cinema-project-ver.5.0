@@ -42,7 +42,7 @@
                     <div class="st_bt_top_back_btn st_bt_top_back_btn_seatl float_left"><a
                             th:href="@{/booking/schedule(movieId = ${movie.id})}"><i
                             class="fas fa-long-arrow-alt-left"></i>
-                        &nbsp;Back</a>
+                        後ろ</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -66,7 +66,7 @@
                     <div class="st_seatlay_btn float_left">
                         <button type="submit" id="proceedButton"
                                 style="float: left; width: 150px; height: 35px; text-align: center; line-height: 35px; background: #614aee; border: 1px solid transparent; border-radius: 5px; text-transform: uppercase; font-size: 14px; color: #fff; letter-spacing: 1px; margin-right: 30px; margin-top: 10px;">
-                            Proceed to Pay
+                            決済
                         </button>
                     </div>
                 </div>
@@ -171,12 +171,16 @@
 
                     // 폼 제출
                     document.getElementById("seat").submit();
+                } else if (response.state === "notLogin") {
+                    alert("ログインしてください。");
+
+                    window.location.href = "/";
                 } else {
-                    alert("이미 선택된 좌석이 있습니다."); // 일부 좌석이 이미 선택된 경우
+                    alert("誰かが決済中の座席です。"); // 일부 좌석이 이미 선택된 경우
                 }
             },
             error: function() {
-                alert("좌석 상태를 확인하는 데 오류가 발생했습니다.");
+                alert("座席の調子を確認中エラーが発生しました。");
             }
         });
     };

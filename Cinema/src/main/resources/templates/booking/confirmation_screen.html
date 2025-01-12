@@ -44,14 +44,14 @@
 					<div class="col-md-12">
 						<div class="st_bcc_heading_wrapper float_left">
 							<i class="fa fa-check-circle"></i>
-							<h3>Payment of <span th:text="${payment.totalAmount}">
-							</span> Complete successful</h3>
+							<h3>お支払い金額　<span th:text="${payment.totalAmount}"><br>
+							</span>お支払い成功</h3>
 						</div>
 					</div>
 					<div class="col-md-12">
 						<div class="st_bcc_ticket_boxes_wrapper float_left">
 							<div class="st_bcc_tecket_top_hesder float_left">
-								<p>Your Booking is Confirmed!</p>
+								<p>お支払い内容確認</p>
 								<span th:text="'Payment ID ' + ${payment.id}"></span>
 							</div>
 							<div class="st_bcc_tecket_bottom_hesder float_left">
@@ -82,14 +82,14 @@
 									</div>
 								</div>
 								<div class="st_bcc_tecket_bottom_left_price_wrapper">
-									<h4>Total Amount</h4>
+									<h4>お支払い金額</h4>
 									<h5 th:text="${payment.totalAmount}"></h5>
 								</div>
 							</div>
 						</div>
 						<div class="st_bcc_ticket_boxes_bottom_wrapper float_left">
 							<ul>
-								<li><a th:href="@{/}">HOME</a></li>
+								<li><a th:href="@{/}">ホーム</a></li>
 							</ul>
 						</div>
 					</div>

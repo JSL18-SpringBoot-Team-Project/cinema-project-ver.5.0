@@ -2,7 +2,7 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>決済</title>
+    <title>お支払い</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="description" content="Movie Pro"/>
     <meta name="keywords" content="Movie Pro"/>
@@ -50,7 +50,7 @@
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                 <div class="st_bt_top_back_btn float_left">
                     <a th:href="@{/}">
-                        <i class="fas fa-long-arrow-alt-left"></i> &nbsp;Back
+                        <i class="fas fa-long-arrow-alt-left"></i> &nbsp;戻る
                     </a>
                 </div>
             </div>
@@ -80,25 +80,25 @@
                             <div class="st_dtts_ineer_box float_left">
                                 <ul>
                                     <li>
-                                        <span class="dtts1">Date</span>
+                                        <span class="dtts1">日付</span>
                                         <span class="dtts2" th:text="${#temporals.format(schedule.watchDate, 'yyyy/MM/dd')}"></span>
                                     </li>
                                     <li>
-                                        <span class="dtts1">Time</span>
+                                        <span class="dtts1">時間</span>
                                         <span class="dtts2" th:text="${#temporals.format(schedule.startTime, 'HH:mm')}"></span>
                                     </li>
                                     <li>
-                                        <span class="dtts1">Theater</span>
-                                        <span class="dtts2" th:text="${schedule.screenId == 1 ? '2D' : (schedule.screenId == 2 ? '3D' : (schedule.screenId == 3 ? '4DX' : (schedule.screenId == 4 ? 'IMAX' : 'Unknown')))}"></span>
+                                        <span class="dtts1">上映館</span>
+                                        <span class="dtts2" th:text="${schedule.screenId == 1 ? '2D' : (schedule.screenId == 2 ? '3D' : (schedule.screenId == 3 ? '4DX' : (schedule.screenId == 4 ? 'IMAX' : '不明')))}"></span>
                                     </li>
                                     <li>
-                                        <span class="dtts1">Seat</span>
+                                        <span class="dtts1">座席</span>
                                         <span class="dtts2">
                                             <span th:each="seat, iterStat : ${seats}">
                                                 <span th:text="${seat.seatColumn} + ${seat.seatRow}"></span>
                                                 <span th:if="${!iterStat.last}">, </span>
                                             </span>
-                                            ( <span th:text="${#lists.size(seats)}">0</span> Tickets )
+                                            (<span th:text="${#lists.size(seats)}">0</span> 席)
                                         </span>
                                     </li>
                                 </ul>
@@ -107,7 +107,7 @@
                         <div class="col-md-12">
                             <div class="st_cherity_section float_left">
                                 <div class="st_cherity_img float_left">
-                                    <img th:src="@{'/poster/' + ${detail.movieImg}}" alt="img">
+                                    <img th:src="@{'/poster/' + ${detail.movieImg}}" alt="ポスター">
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                     <div class="col-md-12">
                         <div class="st_dtts_bs_wrapper float_left">
                             <div class="st_dtts_bs_heading float_left">
-                                <p>Booking summary</p>
+                                <p>お支払い情報</p>
                             </div>
                             <div class="st_dtts_sb_ul">
                                 <div class="left-section">
@@ -130,7 +130,7 @@
                                         <span th:if="${!iterStat.last}">, </span>
                                     </span>
                                     <br>
-                                    ( <span th:text="${#lists.size(seats)}"></span> Tickets )
+                                    ( <span th:text="${#lists.size(seats)}"></span> 席 )
                                 </div>
 
                                 <!-- 오른쪽 섹션: 총 금액 -->
@@ -140,13 +140,13 @@
 
                                 <div>
                                     <select id="user-coupon" name="coupon" class="coupon-select">
-                                        <option value="">--Select Coupon--</option>
+                                        <option value="">--クーポン選択--</option>
                                         <option th:each="userCoupon : ${user.coupons}"
                                                 th:if="${userCoupon.coupons != null}"
                                                 th:value="${userCoupon.coupons.id}"
                                                 th:data-coupon-type="${userCoupon.coupons.couponType}"
                                                 th:data-coupon-price="${userCoupon.coupons.couponPrice}"
-                                                th:text="|${userCoupon.coupons.couponTitle} - ${userCoupon.coupons.couponPrice}${userCoupon.coupons.couponType == 'P' ? '%' : '円'}|">
+                                                th:text="|${userCoupon.coupons.couponTitle} - ${userCoupon.coupons.couponPrice}${userCoupon.coupons.couponType == 'P' ? '%' : 'ウォン'}|">
                                         </option>
                                     </select>
                                 </div>
@@ -154,11 +154,11 @@
 
                             <div class="st_dtts_sb_h2 float_left">
                                 <h3>
-                                    Sub total
+                                    合計
                                     <span th:text="${totalPrice}" id="subtotal"></span>
                                 </h3>
-                                <h3>Sale <span id="sale"></span></h3>
-                                <h5>Payable Amount
+                                <h3>割引 <span id="sale"></span></h3>
+                                <h5>お支払い金額
                                     <span id="payableAmount" th:text="${totalPrice}"></span>
                                 </h5>
                             </div>
@@ -171,7 +171,7 @@
                             <button type="button"
                                     style="font-size:16px; color:#ffffff; text-align:center; background:#333545; height:100%; width:100%; border:0px;"
                                     onclick="requestPay()">
-                                Proceed to Pay
+                                お支払い
                             </button>
                         </div>
                     </div>
@@ -233,13 +233,13 @@
         const updateTimer = () => {
             const minutes = Math.floor(timerDuration / 60);
             const seconds = timerDuration % 60;
-            timerElement.textContent = `남은 시간: ${minutes}분 ${seconds < 10 ? '0' : ''}${seconds}초`;
+            timerElement.textContent = `残りの時間: ${minutes}分${seconds < 10 ? '0' : ''}${seconds}秒`;
         };
 
         const timerInterval = setInterval(() => {
             if (timerDuration <= 0) {
                 clearInterval(timerInterval);
-                alert("결제 시간이 초과되었습니다. 메인 페이지로 이동합니다.");
+                alert("残りの時間を超えました。ホームに移動します。");
                 window.location.href = '/'; // 타이머 종료 시 리디렉션
             } else {
                 timerDuration--;
@@ -361,15 +361,10 @@
         };
 
         try {
-            console.log("Request Options:", requestOptions);
-            console.log("Redirect URL:", requestOptions.redirectUrl);
 
             PortOne.requestPayment(requestOptions)
                 .then((response) => {
-                    console.log("결제 요청 성공:", response);
-
                     if (response.code === undefined && response.paymentId) {
-                        console.log("AJAX 요청 시작");
                         // AJAX 요청 실행
                         $.ajax({
                             url: "/payment/pay",
@@ -389,26 +384,26 @@
                                 if(response.result === "success") {
                                     window.location.href = redirectUrl; // AJAX 요청 성공 후 리디렉션
                                 } else {
-                                    alert("決済失敗");
+                                    alert("お支払い失敗");
                                     return;
                                 }
                             },
                             error: function (xhr, status, error) {
-                                console.error("결제 요청 중 오류:", error);
-                                alert("결제 처리 중 오류가 발생했습니다.");
+                                console.error("お支払い中エラー発生:", error);
+                                alert("お支払い中エラーが発生しました。");
                             }
                         });
                     } else {
-                        console.error("결제 성공 상태 아님:", response);
+                        console.error("お支払い失敗", response);
                     }
                 })
                 .catch((error) => {
-                    console.error("결제 요청 실패:", error);
-                    alert("결제 요청에 실패했습니다.");
+                    console.error("お支払い失敗:", error);
+                    alert("お支払いが失敗しました。");
                 });
 
         } catch (error) {
-            console.error("PortOne 호출 오류:", error);
+            console.error("PortOne呼び出しエラー:", error);
         }
     }
 </script>
