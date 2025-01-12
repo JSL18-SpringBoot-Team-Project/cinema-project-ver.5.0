@@ -64,7 +64,7 @@ public class EventController {
 
 		if (sessionUser == null) {
 			response.put("status", "unauthorized");
-			response.put("message", "로그인 하십시오.");
+			response.put("message", "ログインしてください。");
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 		}
 
