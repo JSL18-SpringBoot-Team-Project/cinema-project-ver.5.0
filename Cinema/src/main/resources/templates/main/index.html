@@ -24,7 +24,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102142054.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102142054.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 3 -->
@@ -47,7 +47,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102144900.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102144900.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 6 -->
@@ -70,7 +70,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102153633.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102153633.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 9 -->
@@ -93,7 +93,7 @@
                         data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6=""
                         data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102160926.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102160926.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 12 -->
@@ -116,7 +116,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102162501.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102162501.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 15 -->
@@ -139,7 +139,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102163537.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102163537.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 18 -->
@@ -162,7 +162,7 @@
                         data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7=""
                         data-param8="" data-param9="" data-param10="" data-description="">
                         <!-- MAIN IMAGE -->
-                        <img th:src="@{poster/2025/01/02/20250102165046.jpg}" alt="" data-bgposition="center center"
+                        <img th:src="@{/images/poster/2025/01/02/20250102165046.jpg}" alt="" data-bgposition="center center"
                              data-bgfit="contain" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
                         <!-- LAYERS -->
                         <!-- LAYER NR. 21 -->
@@ -210,7 +210,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" th:each="movie : ${upcoming}">
                                         <div class="prs_upcom_movie_box_wrapper">
                                             <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{'/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
+                                                <img th:src="@{'/images' + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
@@ -239,7 +239,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" th:each="movie : ${upcomingSoon}">
                                         <div class="prs_upcom_movie_box_wrapper">
                                             <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{'/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
+                                                <img th:src="@{/images + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
@@ -266,7 +266,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" th:each="movie : ${recentlyEnded}">
                                         <div class="prs_upcom_movie_box_wrapper">
                                             <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{'/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
+                                                <img th:src="@{/images + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
@@ -307,7 +307,7 @@
                             <div th:each="event : ${event}" class="item prs_feature_slider_item_wrapper">
                                 <div class="prs_feature_img_box_wrapper">
                                     <div class="prs_feature_img" style="max-height:200px; min-height:200px;">
-                                        <a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/event/' + ${event.eventImg}}" th:alt="${event.eventTitle}"></a>
+                                        <a th:href="@{/event/view(id=${event.id})}"><img th:src="@{/images + '/event/' + ${event.eventImg}}" th:alt="${event.eventTitle}"></a>
                                         <div class="prs_ft_btn_wrapper">
                                             >
                                         </div>

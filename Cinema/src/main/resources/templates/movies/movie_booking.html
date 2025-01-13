@@ -27,7 +27,7 @@
                     <div class="col-md-12">
                         <div class="st_video_slider_inner_wrapper float_left">
                             <div class="st_video_slider_overlay">
-                                <img th:src="@{'/poster/' + ${detail.movieImg}}" style="width:100%; height:100%;">
+                                <img th:src="@{/images + '/poster/' + ${detail.movieImg}}" style="width:100%; height:100%;">
                             </div>
                             <div class="st_video_slide_sec float_left">
                                 <a rel="external" th:href="${detail.trailer}" title="title" data-popup="iframe">

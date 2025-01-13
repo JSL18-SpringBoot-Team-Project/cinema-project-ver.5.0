@@ -6,7 +6,7 @@
 				<div class="hs_blog_slider_img_wrapper prs_event_single_slider_wrapper">
 					<div class="owl-carousel owl-theme" style="width: 100% !important; height: auto !important; max-height: 500px !important; display: block;">
 						<div th:each="slider : ${start}" class="item">
-							<img th:src="@{'/event/' + ${slider.eventImg}}" alt="">
+							<img th:src="@{/images + '/event/' + ${slider.eventImg}}" alt="">
 						</div>
 					</div>
 				</div>
@@ -45,7 +45,7 @@
 								<!-- 이벤트 데이터 반복 -->
 								<div th:each="event : ${start}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
 									<div class="prs_es_tabs_event_sche_img_wrapper" style="width: 270px;">
-										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style="height: 150px; border-radius: 10px;"></a>
+										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{/images + '/event/' + ${event.eventImg}}" alt="event_img" style="height: 150px; border-radius: 10px;"></a>
 									</div>
 									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
 										<h2><a th:href="@{/event/view(id=${event.id})}"
@@ -61,7 +61,7 @@
 								<!-- 지난 이벤트 데이터 반복 -->
 								<div th:each="event : ${end}" class="prs_es_tabs_event_sche_main_box_wrapper" style="margin: 10px;">
 									<div class="prs_es_tabs_event_sche_img_wrapper" style="width:270px;">
-										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/event/' + ${event.eventImg}}" alt="event_img" style=" height: 150px; border-radius: 10px;"></a>
+										<a th:href="@{/event/view(id=${event.id})}"><img th:src="@{/images + '/event/' + ${event.eventImg}}" alt="event_img" style=" height: 150px; border-radius: 10px;"></a>
 									</div>
 									<div class="prs_es_tabs_event_box_img_cont_wrapper" style="width: 100%;">
 										<h2><a th:href="@{/event/view(id=${event.id})}"

@@ -56,7 +56,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/movie/create")
+    @GetMapping("movie/create")
     public String movieCreate(Model model) {
 
         model.addAttribute("content", "admin/movie/movie_create");
@@ -67,10 +67,10 @@ public class AdminController {
         model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
         model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
 
-        return "/admin/layout/admin_base";
+        return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/create")
+    @PostMapping("movie/create")
     public String insertMovie(@ModelAttribute Movies movies, @RequestParam("poster_img") MultipartFile poster_img) {
         try {
             if (!poster_img.isEmpty()) {
@@ -93,7 +93,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/movie/detail")
+    @GetMapping("movie/detail")
     public String movieDetail(long movieId, Model model) {
 
         Movies movies = movieService.movieInfo(movieId);
@@ -110,7 +110,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/detail")
+    @PostMapping("movie/detail")
     public String movieDetail(MovieDetails movieDetails, MultipartFile movie_img) {
 
         try {
@@ -135,7 +135,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/movie/list")
+    @GetMapping("movie/list")
     public String movieManageList(Model model) {
 
         List<Movies> movies = movieService.movieManageList();
@@ -152,7 +152,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/movie/set")
+    @GetMapping("movie/set")
     public String movieSet(@RequestParam("id") long id, Model model) {
 
         Movies movies = movieService.movieInfo(id);
@@ -171,7 +171,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/set")
+    @PostMapping("movie/set")
     public String scheduleSet(@ModelAttribute MovieSchedulesWrapper schedulesWrapper) {
 
         List<Schedules> schedules = schedulesWrapper.getSchedules();
@@ -182,7 +182,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/movie/update")
+    @GetMapping("movie/update")
     public String movieManage(@RequestParam("id") long id, Model model) {
 
         Movies movie = movieService.movieInfo(id);
@@ -199,7 +199,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/update")
+    @PostMapping("movie/update")
 
     public String movieUpdate(Movies movies, MultipartFile poster_img) {
 
