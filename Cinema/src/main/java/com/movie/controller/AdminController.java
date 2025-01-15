@@ -35,7 +35,7 @@ public class AdminController {
     private final InquiryService inquiryService;
     private final DateUtil dateUtil;
 
-    @GetMapping({"", "/"})
+    @GetMapping("")
     public String admin(Model model) {
 
         long todaySale = bookingService.getTodaySale();
@@ -56,7 +56,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/movie/create")
+    @GetMapping("movie/create")
     public String movieCreate(Model model) {
 
         model.addAttribute("content", "admin/movie/movie_create");
@@ -67,10 +67,10 @@ public class AdminController {
         model.addAttribute("inquiriesNotAnswerList", inquiriesNotAnswerList);
         model.addAttribute("inquiriesNotAnswerCount", inquiriesNotAnswerCount);
 
-        return "/admin/layout/admin_base";
+        return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/create")
+    @PostMapping("movie/create")
     public String insertMovie(@ModelAttribute Movies movies, @RequestParam("poster_img") MultipartFile poster_img) {
         try {
             if (!poster_img.isEmpty()) {
@@ -93,7 +93,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/movie/detail")
+    @GetMapping("movie/detail")
     public String movieDetail(long movieId, Model model) {
 
         Movies movies = movieService.movieInfo(movieId);
@@ -110,7 +110,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/detail")
+    @PostMapping("movie/detail")
     public String movieDetail(MovieDetails movieDetails, MultipartFile movie_img) {
 
         try {
@@ -135,7 +135,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/movie/list")
+    @GetMapping("movie/list")
     public String movieManageList(Model model) {
 
         List<Movies> movies = movieService.movieManageList();
@@ -152,7 +152,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/movie/set")
+    @GetMapping("movie/set")
     public String movieSet(@RequestParam("id") long id, Model model) {
 
         Movies movies = movieService.movieInfo(id);
@@ -171,7 +171,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/set")
+    @PostMapping("movie/set")
     public String scheduleSet(@ModelAttribute MovieSchedulesWrapper schedulesWrapper) {
 
         List<Schedules> schedules = schedulesWrapper.getSchedules();
@@ -182,7 +182,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/movie/update")
+    @GetMapping("movie/update")
     public String movieManage(@RequestParam("id") long id, Model model) {
 
         Movies movie = movieService.movieInfo(id);
@@ -199,7 +199,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/update")
+    @PostMapping("movie/update")
 
     public String movieUpdate(Movies movies, MultipartFile poster_img) {
 
@@ -224,7 +224,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/movie/detailUpdate")
+    @GetMapping("movie/detailUpdate")
     public String movieDetailUpdate(long id, Model model) {
 
         MovieDTO movie = movieDetailService.getMovieDetail(id);
@@ -242,7 +242,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/movie/detailUpdate")
+    @PostMapping("movie/detailUpdate")
     public String movieDetailUpdate(MovieDetails movieDetails, MultipartFile movie_img) {
 
         try {
@@ -267,7 +267,7 @@ public class AdminController {
 
     }
 
-    @PostMapping("/movie/delete")
+    @PostMapping("movie/delete")
     @ResponseBody
     public String deleteMovie(@RequestParam("id") long id) {
 
@@ -280,7 +280,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/coupon/create")
+    @GetMapping("coupon/create")
     public String couponCreate(Model model) {
 
         model.addAttribute("content", "admin/coupon/coupon_create");
@@ -294,7 +294,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/coupon/create")
+    @PostMapping("coupon/create")
     public String insertCoupon(Coupons coupons) {
 
         long result = couponService.insertCoupon(coupons);
@@ -306,7 +306,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/coupon/list")
+    @GetMapping("coupon/list")
     public String couponList(Model model) {
 
         List<Coupons> coupons = couponService.couponList();
@@ -323,7 +323,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/coupon/update")
+    @GetMapping("coupon/update")
     public String couponManage(@RequestParam("id") long id, Model model) {
 
         Coupons coupon = couponService.couponDetail(id);
@@ -340,7 +340,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/coupon/update")
+    @PostMapping("coupon/update")
     public String updateCoupon(Coupons coupons) {
 
         long result = couponService.updateCoupon(coupons);
@@ -352,7 +352,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/coupon/delete")
+    @PostMapping("coupon/delete")
     @ResponseBody
     public String deleteCoupon(@RequestParam("id") long id) {
 
@@ -365,7 +365,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/event/create")
+    @GetMapping("event/create")
     public String eventCreate(Model model) {
 
         List<Coupons> coupons = couponService.couponList();
@@ -382,7 +382,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/event/create")
+    @PostMapping("event/create")
     public String insertEvent(@ModelAttribute Events events, @RequestParam("event_img") MultipartFile event_img) {
 
         try {
@@ -407,7 +407,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/event/list")
+    @GetMapping("event/list")
     public String eventList(Model model) {
 
         List<Events> events = eventService.eventManageList();
@@ -424,7 +424,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @GetMapping("/event/update")
+    @GetMapping("event/update")
     public String eventDetail(@RequestParam("id") long id, Model model) {
 
         Events events = eventService.eventDetail(id);
@@ -443,7 +443,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/event/update")
+    @PostMapping("event/update")
     public String updateEvent(Events events, MultipartFile event_img) {
 
         try {
@@ -471,7 +471,7 @@ public class AdminController {
 
     }
 
-    @PostMapping("/event/delete")
+    @PostMapping("event/delete")
     @ResponseBody
     public String deleteEvent(@RequestParam("id") long id) {
 
@@ -485,7 +485,7 @@ public class AdminController {
 
     }
 
-    @GetMapping("/users")
+    @GetMapping("users")
     public String users(Model model) {
 
         List<User> users = userService.getUserList();
@@ -502,7 +502,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/users/delete")
+    @PostMapping("users/delete")
     @ResponseBody
     public String deleteUser(@RequestParam("id") long id) {
 
@@ -515,7 +515,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/qna")
+    @GetMapping("qna")
     public String qna(@RequestParam(value = "inquiry_type", required = false) String inquiryType,
                       @RequestParam(value = "page", defaultValue = "1") int page,
                       Model model) {
@@ -544,7 +544,7 @@ public class AdminController {
         return "admin/layout/admin_base";
     }
 
-    @PostMapping("/qna/answer")
+    @PostMapping("qna/answer")
     @ResponseBody
     public ResponseEntity<String> answerInquiry(@RequestBody Map<String, String> payload) {
         try {
@@ -562,7 +562,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/payment")
+    @GetMapping("payment")
     public String paymentList(Model model) {
 
         List<PaymentDetail> paymentList = paymentService.getPaymentList();

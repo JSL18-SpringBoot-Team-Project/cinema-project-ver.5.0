@@ -26,7 +26,7 @@ public class EventController {
 
 	private final EventService eventService;
 
-	@GetMapping("/")
+	@GetMapping("list")
 	public String eventSingle(Model model) {
 		List<Events> eventStart = eventService.eventStart();
 		List<Events> eventEnd = eventService.eventEnd();
@@ -38,7 +38,7 @@ public class EventController {
 		return "layout/base";
 	}
 
-	@GetMapping("/view")
+	@GetMapping("view")
 	public String eventCategory(Model model, @RequestParam("id") long id) {
 		// 이벤트 세부 정보를 가져옴
 		Events eventview = eventService.eventDetail(id);
@@ -55,7 +55,7 @@ public class EventController {
 		return "layout/base";
 	}
 
-	@PostMapping("/assign")
+	@PostMapping("assign")
 	public ResponseEntity<Map<String, Object>> assignCoupon(
 			@RequestParam("couponId") long couponId,
 			SessionUser sessionUser) {

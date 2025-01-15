@@ -79,4 +79,8 @@ public class EventService {
         eventMapper.usercoupon(userId, couponId, startDateTime, endDateTime);
     }
 
+    public Events recentEvent() {
+        return eventMapper.recentEvent();
+    }
+
 }

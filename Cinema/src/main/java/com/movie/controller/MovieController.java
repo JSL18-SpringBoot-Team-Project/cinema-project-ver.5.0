@@ -23,7 +23,7 @@ public class MovieController {
     @Autowired
     private MovieDetailService movieDetailService;
 
-    @GetMapping("/detail")
+    @GetMapping("detail")
     public String movie(Model model, @RequestParam("id") long id){
 
         MovieDTO movie = movieDetailService.getMovieDetail(id);
@@ -36,7 +36,7 @@ public class MovieController {
         return "layout/base";
     }
 
-    @GetMapping({"/", "/list"})
+    @GetMapping("list")
     public String movieView(Model model) {
         model.addAttribute("title", "映画リスト");
         model.addAttribute("content", "movies/movie_list");
