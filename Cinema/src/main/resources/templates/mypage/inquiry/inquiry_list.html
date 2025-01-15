@@ -47,7 +47,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="inquiry : ${inquiryList}">
+        <tr th:each="inquiry : ${inquiryList.content}">
           <td th:text="${inquiry.id}"></td>
           <td th:text="${inquiry.inquiryType}"></td>
           <td th:text="${inquiry.shortContent}"></td> <!-- 20자 이내 내용 출력 -->

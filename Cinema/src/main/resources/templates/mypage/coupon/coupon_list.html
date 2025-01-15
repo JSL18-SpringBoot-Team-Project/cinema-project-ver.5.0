@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="coupon : ${couponList}">
+        <tr th:each="coupon : ${couponList.content}">
           <td th:text="${coupon.couponTitle}"></td>
           <td th:text="${coupon.couponStartDate} + ' ~ ' + ${coupon.couponEndDate}"></td>
           <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用済み' : '期限切れ')}"></td>

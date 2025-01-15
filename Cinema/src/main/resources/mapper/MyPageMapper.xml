@@ -4,50 +4,68 @@
 
 <mapper namespace="com.movie.mapper.MyPageMapper">
 
-    <resultMap id="bookingResultMap" type="Bookings">
+    <resultMap id="bookingResultMap" type="com.movie.domain.Bookings">
         <result property="id" column="id" />
         <result property="userId" column="user_id" />
         <result property="scheduleId" column="schedule_id" />
-        <result property="couponId" column="coupon_id" />
-        <result property="price" column="price" />
         <result property="bookingTimestamp" column="booking_timestamp" />
         <result property="cancelTimestamp" column="cancel_timestamp" />
+        <result property="couponId" column="coupon_id" />
+        <result property="price" column="price" />
         <result property="state" column="state" />
         <result property="title" column="title" />
-        <collection property="seats" javaType="List" ofType="Seats" column="schedule_id"
-                    select="com.movie.mapper.SeatMapper.getSeatsByBookingId" />
+        <result property="watchDate" column="watch_date" />
+        <result property="startTime" column="start_time" />
+        <result property="endTime" column="end_time" />
+        <result property="orderName" column="order_name" />
     </resultMap>
+
 
     <select id="getBookingList" resultMap="bookingResultMap">
         SELECT
-            b.id AS id,
-            b.booking_timestamp AS bookingDate,
-            m.title AS title,
-            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
-            b.price AS bookingPrice
+        b.id AS id,
+        b.user_id AS userId,
+        b.schedule_id AS scheduleId,
+        b.booking_timestamp AS bookingTimestamp,
+        b.cancel_timestamp AS cancelTimestamp,
+        b.coupon_id AS couponId,
+        b.price AS price,
+        b.state AS state,
+        m.title AS title,
+        s.watch_date AS watchDate,
+        s.start_time AS startTime,
+        s.end_time AS endTime,
+        p.order_name AS seatNumber
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
-        JOIN tickets t ON b.id = t.booking_id
-        JOIN seats se ON t.seat_id = se.id
+        JOIN payment p ON b.id = p.booking_id
         WHERE b.user_id = #{userId}
         GROUP BY b.id
         ORDER BY b.booking_timestamp DESC
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
+
     <select id="searchBookingByTitle" resultMap="bookingResultMap">
         SELECT
-            b.id AS id,
-            b.booking_timestamp AS bookingDate,
-            m.title AS title,
-            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
-            b.price AS bookingPrice
+        b.id AS id,
+        b.user_id AS userId,
+        b.schedule_id AS scheduleId,
+        b.booking_timestamp AS bookingTimestamp,
+        b.cancel_timestamp AS cancelTimestamp,
+        b.coupon_id AS couponId,
+        b.price AS price,
+        b.state AS state,
+        m.title AS title,
+        s.watch_date AS watchDate,
+        s.start_time AS startTime,
+        s.end_time AS endTime,
+        p.order_name AS seatNumber
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
-        JOIN tickets t ON b.id = t.booking_id
-        JOIN seats se ON t.seat_id = se.id
+        JOIN payment p ON b.id = p.booking_id
         WHERE b.user_id = #{userId}
         AND m.title LIKE CONCAT('%', #{title}, '%')
         GROUP BY b.id
@@ -55,22 +73,33 @@
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
+
     <select id="getCancelList" resultMap="bookingResultMap">
         SELECT
-            b.id AS id,
-            b.cancel_timestamp AS cancelTimeStamp,
-            m.title AS movieName,
-            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
-            b.price AS cancelPrice
+        b.id AS id,
+        b.user_id AS userId,
+        b.schedule_id AS scheduleId,
+        b.booking_timestamp AS bookingTimestamp,
+        b.cancel_timestamp AS cancelTimestamp,
+        b.coupon_id AS couponId,
+        b.price AS price,
+        b.state AS state,
+        m.title AS title,
+        s.watch_date AS watchDate,
+        s.start_time AS startTime,
+        s.end_time AS endTime,
+        p.order_name AS seatNumber
         FROM bookings b
         JOIN schedules s ON b.schedule_id = s.id
         JOIN movies m ON s.movie_id = m.id
+        JOIN payment p ON b.id = p.booking_id
         WHERE b.user_id = #{userId}
         AND b.state = 1
         GROUP BY b.id
         ORDER BY b.cancel_timestamp DESC
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
+
 
     <select id="getTotalBookingCount" parameterType="long" resultType="long">
         SELECT COUNT(*) FROM bookings WHERE user_id = #{userId};

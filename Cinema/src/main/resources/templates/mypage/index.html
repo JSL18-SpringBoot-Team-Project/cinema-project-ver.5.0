@@ -49,12 +49,11 @@
                         </thead>
                         <tbody>
                         <!-- 동적 데이터로 예매 내역 표시 -->
-                        <tr th:each="booking : ${bookingList}">
-                            <td th:text="${booking.bookingDate}"></td>
-                            <td th:text="${booking.movieTitle}"></td>
-                            <td th:text="${booking.screeningDateTime}"></td>
-                            <!-- 좌석 번호를 콤마로 구분하여 출력 -->
-                            <td th:text="${#strings.arrayJoin(booking.seatNumbers.toArray(), ', ')}"></td>
+                        <tr th:each="booking : ${bookingList.content}">
+                            <td th:text="${booking.bookingTimestamp}"></td>
+                            <td th:text="${booking.title}"></td>
+                            <td th:text="${booking.scheduleId}"></td>
+                            <td th:text="${booking.seatNumber}"></td>
                             <td th:text="${booking.price}"></td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(bookingList)}">

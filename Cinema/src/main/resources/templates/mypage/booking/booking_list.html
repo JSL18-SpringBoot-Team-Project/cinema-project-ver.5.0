@@ -47,8 +47,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="booking : ${bookingList}">
-                  <td th:text="${booking.timestamp}"></td>
+                <tr th:each="booking : ${bookingList.content}">
+                  <td th:text="${booking.bookingTimestamp}"></td>
                   <td th:text="${booking.title}"></td>
                   <td th:text="${booking.screeningDateTime}"></td>
                   <td th:text="${booking.seats.join(', ')}"></td>

@@ -31,6 +31,10 @@ public class MyPageService {
             List<Bookings> bookings = myPageMapper.getBookingList(userId, pageSize, offset);
             long totalCount = myPageMapper.getTotalBookingCount(userId);
 
+            if (bookings == null || bookings.isEmpty()) {
+                return new PagingDTO<>(List.of(), page, 0, 0, pageSize); // 빈 리스트 반환
+            }
+
             return pagingService.createPaging(bookings, totalCount, page, pageSize);
         } catch (Exception e) {
             throw new RuntimeException("예매 내역을 조회하는 중 오류가 발생했습니다.", e);
@@ -43,6 +47,10 @@ public class MyPageService {
             int offset = (page - 1) * pageSize; // OFFSET 계산
             List<Bookings> bookings = myPageMapper.getBookingListByTitle(userId, title, pageSize, offset);
             long totalCount = myPageMapper.getTotalBookingCount(userId); // 제목에 따른 카운트는 필요하면 별도 쿼리 작성
+
+            if (bookings == null || bookings.isEmpty()) {
+                return new PagingDTO<>(List.of(), page, 0, 0, pageSize); // 빈 리스트 반환
+            }
 
             return pagingService.createPaging(bookings, totalCount, page, pageSize);
         } catch (Exception e) {

@@ -179,7 +179,6 @@ public class MyPageController {
     }
 
     // 비밀번호 인증 처리
-
     @PostMapping("/verifying")
     public String verifyPassword(@RequestParam("password") String password,
                                  @SessionAttribute(name = "sessionUser", required = false) SessionUser sessionUser,
