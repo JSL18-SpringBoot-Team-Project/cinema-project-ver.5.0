@@ -13,13 +13,13 @@
     </div>
 
     <!-- Filter Section -->
-    <form th:action="@{/mypage/inquiries}" method="get" class="row g-3 align-items-center mb-4">
+    <form th:action="@{/mypage/inquiry/list}" method="get" class="row g-3 align-items-center mb-4">
       <!-- Status Filter -->
       <div class="col-md-3">
         <select class="form-select" name="status" th:value="${status}">
-          <option value="all" th:selected="${status == 'all'}">全体</option>
-          <option value="unanswered" th:selected="${status == 'PENDING'}">未返答</option>
-          <option value="answered" th:selected="${status == 'ANSWERED'}">回答完了</option>
+          <option value="all" th:selected="${status == 'all'}">전체</option>
+          <option value="unanswered" th:selected="${status == 'PENDING'}">미답변</option>
+          <option value="answered" th:selected="${status == 'ANSWERED'}">답변완료</option>
         </select>
       </div>
       <!-- Search Input -->
@@ -45,7 +45,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- 데이터 출력 -->
         <tr th:each="inquiry : ${inquiryList}">
           <td th:text="${inquiry.id}"></td>
           <td th:text="${inquiry.inquiryType}"></td>

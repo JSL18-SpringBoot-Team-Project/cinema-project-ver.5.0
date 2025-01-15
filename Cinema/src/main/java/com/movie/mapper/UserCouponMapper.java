@@ -21,6 +21,4 @@ public interface UserCouponMapper {
     @Select("select count(coupon_id) from user_coupon where user_id = #{userId} and coupon_id = 1")
     public Integer selectCouponState(long userId);
 
-    int getCouponCountByUserId(long userId);
-
 }

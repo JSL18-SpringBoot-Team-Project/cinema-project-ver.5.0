@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class Bookings {
@@ -17,5 +18,7 @@ public class Bookings {
     private Long price;
     private Long state;
     private String title;
-    private List<Long> seatId;
+
+    private List<Seats> seats; // 좌석 정보 리스트
+
 }

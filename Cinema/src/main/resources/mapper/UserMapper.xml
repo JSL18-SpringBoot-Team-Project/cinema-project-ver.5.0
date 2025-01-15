@@ -5,6 +5,4 @@
 
 <mapper namespace="com.movie.mapper.UserMapper">
 
-
-
 </mapper>

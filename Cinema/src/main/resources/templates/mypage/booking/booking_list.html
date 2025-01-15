@@ -70,7 +70,6 @@
                     <th scope="col">예매날짜</th>
                     <th scope="col">영화명</th>
                     <th scope="col">상영일시</th>
-                    <th scope="col">좌석번호</th>
                     <th scope="col">예매금액</th>
                   </tr>
                 </thead>
@@ -98,8 +97,8 @@
   const API_BASE_URL = '/api/bookings';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 페이지 로드 시 기본 예매내역 로드
-    fetchData(`${API_BASE_URL}/initial`, updateBookingTable, '예매 내역을 불러오는 중 문제가 발생했습니다.');
+  // 검색 및 데이터 로드는 컨트롤러를 통해 서버에서 처리
+  console.log('페이지가 로드되었습니다.');
   });
 
   function searchBookings() {

@@ -26,9 +26,8 @@ public interface CouponMapper {
     @Delete("DELETE FROM coupons WHERE id = #{id}")
     long deleteCoupon(long id);
 
-    List<Map<String, Object>> getCouponListByUserId(long userId);
-
     Integer checkCouponCodeValid(long couponCode);
 
     void registerCoupon(Map<String, Object> params);
+
 }

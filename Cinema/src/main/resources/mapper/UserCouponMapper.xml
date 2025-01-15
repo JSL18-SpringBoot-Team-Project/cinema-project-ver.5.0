@@ -19,30 +19,4 @@
         </association>
     </resultMap>
 
-    <!-- 유저의 쿠폰 리스트 조회 -->
-    <select id="getUserCouponsByUserId" resultMap="UserCouponResultMap" parameterType="long">
-        SELECT
-        uc.user_id,
-        uc.coupon_id,
-        uc.coupon_start_date,
-        uc.coupon_end_date,
-        uc.state,
-        c.id AS c_id,
-        c.coupon_title,
-        c.coupon_type,
-        c.coupon_price
-        FROM user_coupon uc
-        JOIN coupons c ON uc.coupon_id = c.id
-        WHERE uc.user_id = #{userId} and uc.state = 0
-    </select>
-
-    <!-- 쿠폰 개수 조회 -->
-    <select id="getCouponCountByUserId" resultType="int">
-        SELECT COUNT(*)
-        FROM user_coupon
-        WHERE user_id = #{userId} AND state = 0;
-    </select>
-
-
-
 </mapper>
