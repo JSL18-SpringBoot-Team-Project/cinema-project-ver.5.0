@@ -138,7 +138,7 @@
         const checkboxes = document.querySelectorAll('input[name="cb"]:checked');
 
         if (checkboxes.length === 0) {
-            alert("좌석을 하나 이상 선택해야 합니다.");
+            alert("一つ以上の座席を選んでください。");
             return; // 좌석 선택이 없을 경우 함수 종료
         }
 
@@ -158,7 +158,6 @@
             data: JSON.stringify(selectedSeats), // 선택된 좌석 ID 배열을 JSON 문자열로 변환
             success: function(response) {
                 if (response.state === "possible") { // 모든 좌석이 사용 가능할 경우
-                    console.log("possible");
 
                     // 선택된 좌석 ID를 폼에 숨겨진 입력 필드로 추가
                     const seatIdInput = document.createElement("input");
@@ -189,7 +188,6 @@
     function parseLong(value) {
         const parsed = Number(value);
         if (isNaN(parsed)) {
-            console.error("유효하지 않은 좌석 ID:", value);
             return null;
         }
         return parsed;

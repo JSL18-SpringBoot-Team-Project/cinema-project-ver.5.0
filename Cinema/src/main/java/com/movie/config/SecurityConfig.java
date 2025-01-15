@@ -47,11 +47,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/index", "/contact", "/mypage/**", "/admin/**", "/event/**", "/poster/**", "/user/**", "/css/**", "/images/**", "/js/**", "/fonts/**", "/api/**", "/test/**", "/booking/**", "/movie/**").permitAll()
-//                        개발 끝나고 requestMatchers 나누자
-//                        .requestMatchers("/contact").hasRole("USER")
-//                        .requestMatchers("/mypage/**").hasRole("USER")
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/", "/index", "/event/**", "/poster/**", "/user/**", "/css/**", "/images/**", "/js/**", "/fonts/**", "/api/**", "/test/**", "/movie/**", "/booking/**").permitAll()
+                        .requestMatchers("/contact").hasRole("USER")
+                        .requestMatchers("/mypage/**").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

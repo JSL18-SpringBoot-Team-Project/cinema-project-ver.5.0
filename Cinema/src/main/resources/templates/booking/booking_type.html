@@ -107,7 +107,7 @@
                         <div class="col-md-12">
                             <div class="st_cherity_section float_left">
                                 <div class="st_cherity_img float_left">
-                                    <img th:src="@{'/poster/' + ${detail.movieImg}}" alt="ポスター">
+                                    <img th:src="@{'/images' + '/poster/' + ${detail.movieImg}}" alt="ポスター">
                                 </div>
                             </div>
                         </div>
@@ -233,13 +233,13 @@
         const updateTimer = () => {
             const minutes = Math.floor(timerDuration / 60);
             const seconds = timerDuration % 60;
-            timerElement.textContent = `残りの時間: ${minutes}分${seconds < 10 ? '0' : ''}${seconds}秒`;
+            timerElement.textContent = `残り時間: ${minutes}分${seconds < 10 ? '0' : ''}${seconds}秒`;
         };
 
         const timerInterval = setInterval(() => {
             if (timerDuration <= 0) {
                 clearInterval(timerInterval);
-                alert("残りの時間を超えました。ホームに移動します。");
+                alert("残り時間を超えました。ホームに移動します。");
                 window.location.href = '/'; // 타이머 종료 시 리디렉션
             } else {
                 timerDuration--;
