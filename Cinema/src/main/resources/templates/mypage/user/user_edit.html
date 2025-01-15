@@ -1,7 +1,7 @@
 <div th:fragment="content">
     <!-- Location Bar -->
     <div class="location-bar d-flex align-items-center">
-        <span class="me-2">Home</span>
+        <span class="me-2">ホーム</span>
         <i class="bi bi-chevron-right me-2"></i>
         <span>マイページ</span>
         <i class="bi bi-chevron-right me-2"></i>
@@ -10,14 +10,14 @@
 
     <div class="content-box">
         <h2 class="mb-4">個人情報修正</h2>
-        <!-- 성공 메시지 -->
+        <!-- 成功メッセージ -->
         <div class="alert alert-success" role="alert" th:if="${successMessage}" th:text="${successMessage}"></div>
 
-        <!-- 에러 메시지 -->
+        <!-- エラーメッセージ -->
         <div class="alert alert-danger" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
         <form th:action="@{/mypage/update_user}" method="post">
-            <!-- 이름 -->
+            <!-- 名前 -->
             <div class="mb-3">
                 <label for="name" class="form-label">名前</label>
                 <input type="text" id="name" name="name" class="form-control" th:value="${user.name}"
@@ -38,19 +38,19 @@
                        th:disabled="${!isEditable}"/>
             </div>
 
-            <!-- 생년월일 -->
+            <!-- 生年月日 -->
             <div class="mb-3">
                 <label for="birth" class="form-label">生年月日</label>
                 <input type="date" id="birth" name="birth" class="form-control" th:value="${user.birth}"
                        th:disabled="${!isEditable}"/>
             </div>
 
-            <!-- 수정 불가 메시지 -->
+            <!-- 編集不可メッセージ -->
             <div class="alert alert-info mt-4" th:if="${!isEditable}">
-                소셜 연동 계정은 수정 불가합니다.
+                ソーシャル連携アカウントは修正できません。
             </div>
 
-            <!-- 비밀번호 변경 버튼 -->
+            <!-- パスワード変更ボタン -->
             <div class="row mb-3" th:if="${isEditable}">
                 <label class="col-sm-2 col-form-label form-label-required">パスワード</label>
                 <div class="col-sm-6">
@@ -58,11 +58,11 @@
                             data-bs-target="#passwordChangeModal">パスワード変更
                     </button>
                     <small class="text-muted d-block mt-1"
-                           th:text="'마지막 비밀번호 변경은 ' + ${sinceLastPasswordChange} + '일 전입니다.'"></small>
+                           th:text="'最後のパスワード変更は ' + ${sinceLastPasswordChange} + '日前です。'"></small>
                 </div>
             </div>
 
-            <!-- 비밀번호 변경 모달 -->
+            <!-- パスワード変更モーダル -->
             <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel"
                  aria-hidden="true" th:if="${isEditable}">
                 <div class="modal-dialog">
@@ -73,13 +73,13 @@
                         </div>
                         <div class="modal-body">
                             <form th:action="@{/mypage/updatePassword}" method="post">
-                                <!-- 현재 비밀번호 -->
+                                <!-- 現在のパスワード -->
                                 <div class="mb-3">
                                     <label for="currentPassword" class="form-label">現在のパスワード</label>
                                     <input type="password" class="form-control" id="currentPassword"
                                            name="currentPassword" placeholder="現在のパスワードを入力" required/>
                                 </div>
-                                <!-- 새 비밀번호 -->
+                                <!-- 新しいパスワード -->
                                 <div class="mb-3">
                                     <label for="newPassword" class="form-label">新しいパスワード</label>
                                     <input type="password" class="form-control" id="newPassword" name="newPassword"
@@ -87,7 +87,7 @@
                                     <small class="form-text text-muted">※
                                         英文、数字、特殊文字中2つ以上を組み合わせ10文字以上入力してください。</small>
                                 </div>
-                                <!-- 새 비밀번호 확인 -->
+                                <!-- 新しいパスワードの再入力 -->
                                 <div class="mb-3">
                                     <label for="confirmPassword" class="form-label">新しいパスワードの再入力</label>
                                     <input type="password" class="form-control" id="confirmPassword"
@@ -110,4 +110,3 @@
         </form>
     </div>
 </div>
-

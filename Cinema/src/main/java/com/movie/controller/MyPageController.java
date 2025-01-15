@@ -57,7 +57,7 @@ public class MyPageController {
         model.addAttribute("bookingList", bookingList);
 
         // 문의 내역 (샘플 데이터)
-        var inquiryList = myPageService.(userId, "all", null);
+        var inquiryList = myPageService.getInquiries(userId, "all", null);
         model.addAttribute("inquiryList", inquiryList);
 
         // 동적 콘텐츠 경로 추가
@@ -87,7 +87,7 @@ public class MyPageController {
         // 예매 내역 조회 (영화 제목 여부에 따라 다르게 처리)
         PagingDTO<Bookings> bookingList;
         if (title != null && !title.trim().isEmpty()) {
-            bookingList = myPageService.searchBookingsByTitle(userId, title, lastBookingTimestamp, page, pageSize); // 검색된 예매 내역
+            bookingList = myPageService.getBookingListByTitle(userId, title, page, pageSize); // 검색된 예매 내역
         } else {
             bookingList = myPageService.getBookingList(userId, page, pageSize); // 전체 예매 내역
         }
@@ -110,7 +110,7 @@ public class MyPageController {
     // 쿠폰 페이지
     @GetMapping("/coupon/list")
     public String coupon(SessionUser sessionUser,
-                         @RequestParam(defaultValue = "all") String filter,
+                         @RequestParam(required = false, defaultValue = "all") String filter,
                          Model model) {
 
         if (sessionUser == null) {
@@ -127,7 +127,7 @@ public class MyPageController {
         model.addAttribute("couponList", couponList);
         model.addAttribute("filter", filter);
         // 동적 콘텐츠 경로 추가
-        model.addAttribute("content", "mypage/coupon/coupon");
+        model.addAttribute("content", "mypage/coupon/coupon_list");
         model.addAttribute("title", "MY | 쿠폰");
 
         return "mypage/layout/base";
@@ -137,7 +137,7 @@ public class MyPageController {
     // 문의 내역 페이지
     @GetMapping("/inquiry/list")
     public String inquiryList(SessionUser sessionUser,
-                              @RequestParam(required = false) String status,
+                              @RequestParam(defaultValue = "all") String status,
                               @RequestParam(required = false) String keyword,
                               Model model) {
         if (sessionUser == null) {
@@ -146,7 +146,6 @@ public class MyPageController {
 
         int userId = sessionUser.getId();
 
-        // Service 호출
         List<Inquiries> inquiryList = myPageService.getInquiries(userId, status, keyword);
 
         model.addAttribute("inquiryList", inquiryList);
@@ -163,7 +162,10 @@ public class MyPageController {
     // 비밀번호 인증 페이지
     @GetMapping("/pw_verify")
     public String showPasswordVerifyPage(SessionUser sessionUser, Model model) {
-        // 세션에 OAuth 사용자 정보 확인
+        if (sessionUser == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
         if (sessionUser.getSocialProvider() != null && sessionUser.getSocialProvider() != SocialProvider.NONE) {
             // OAuth 사용자는 비밀번호 인증 없이 바로 이동
             return "redirect:/mypage/profile";
@@ -177,18 +179,27 @@ public class MyPageController {
 
     // 비밀번호 인증 처리
     @PostMapping("/verifying")
-    public String verifyPassword(@RequestParam("password") String password, SessionUser sessionUser, Model model) {
+    public String verifyPassword(@RequestParam("password") String password,
+                                 @SessionAttribute(name = "sessionUser", required = false) SessionUser sessionUser,
+                                 Model model) {
+        if (sessionUser == null) {
+            throw new IllegalStateException("ログインが必要です。");
+        }
+
         long userId = sessionUser.getId();
-        User user = userService.getUserInfo(sessionUser.getId());
 
         if (sessionUser.getSocialProvider() != null && sessionUser.getSocialProvider() != SocialProvider.NONE) {
             return "redirect:/mypage/profile"; // OAuth 사용자라면 비밀번호 확인 없이 회원정보 수정 페이지로 이동
         }
 
-        if (!userService.verifyPassword(userId, password)) {
-            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+        // 비밀번호 확인
+        boolean isPasswordValid = userService.verifyPassword(userId, password);
+        if (!isPasswordValid) {
+            // 에러 메시지 및 다시 입력 페이지 설정
+            model.addAttribute("error", "パスワードが一致しません。");
             model.addAttribute("content", "mypage/user/pw_verify");
-            return "mypage/layout/base"; // 비밀번호 불일치 시 다시 입력 페이지로 이동
+            model.addAttribute("title", "비밀번호 확인");
+            return "mypage/layout/base"; // 비밀번호 불일치 시 다시 렌더링
         }
 
         return "redirect:/mypage/profile"; // 인증 성공 -> 회원정보 수정 페이지로 이동
@@ -243,7 +254,7 @@ public class MyPageController {
 
         // 사용자 정보 업데이트
         try {
-            userService.updateUserInfo(user);
+            userService.updateUser(user);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다.");
             return "redirect:/mypage/profile";

@@ -31,12 +31,10 @@
         JOIN tickets t ON b.id = t.booking_id
         JOIN seats se ON t.seat_id = se.id
         WHERE b.user_id = #{userId}
-        AND (#{lastBookingTimestamp} IS NULL OR b.booking_timestamp < #{lastBookingTimestamp})
         GROUP BY b.id
         ORDER BY b.booking_timestamp DESC
-        LIMIT #{pageSize};
+        LIMIT #{pageSize} OFFSET #{offset};
     </select>
-
 
     <select id="searchBookingByTitle" resultMap="bookingResultMap">
         SELECT
@@ -51,13 +49,11 @@
         JOIN tickets t ON b.id = t.booking_id
         JOIN seats se ON t.seat_id = se.id
         WHERE b.user_id = #{userId}
-        AND (#{title} IS NULL OR m.title LIKE CONCAT('%', #{title}, '%'))
-        AND (#{lastBookingTimestamp} IS NULL OR b.booking_timestamp < #{lastBookingTimestamp})
+        AND m.title LIKE CONCAT('%', #{title}, '%')
         GROUP BY b.id
         ORDER BY b.booking_timestamp DESC
-        LIMIT #{pageSize};
+        LIMIT #{pageSize} OFFSET #{offset};
     </select>
-
 
     <select id="getCancelList" resultMap="bookingResultMap">
         SELECT
@@ -71,17 +67,16 @@
         JOIN movies m ON s.movie_id = m.id
         WHERE b.user_id = #{userId}
         AND b.state = 1
-        AND (#{lastCancelTimestamp} IS NULL OR b.cancel_timestamp < #{lastCancelTimestamp})
         GROUP BY b.id
         ORDER BY b.cancel_timestamp DESC
-        LIMIT #{pageSize};
+        LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
-    <select id="getTotalBookingCount" parameterType="map" resultType="int">
+    <select id="getTotalBookingCount" parameterType="long" resultType="long">
         SELECT COUNT(*) FROM bookings WHERE user_id = #{userId};
     </select>
 
-    <select id="getTotalCancelCount" parameterType="map" resultType="int">
+    <select id="getTotalCancelCount" parameterType="long" resultType="long">
         SELECT COUNT(*) FROM bookings WHERE user_id = #{userId} AND state = 1;
     </select>
 
@@ -140,15 +135,14 @@
         </if>
     </select>
 
-
     <!-- Inquiry 테이블 조회 -->
     <select id="getInquiries" resultType="com.movie.domain.Inquiries">
         SELECT
-        i.id,
-        i.inquiry_type AS inquiryType,
-        LEFT(i.content, 20) AS shortContent, -- 내용의 앞 20자만 반환
-        i.status,
-        DATE(i.created_at) AS createdAt
+            i.id,
+            i.inquiry_type AS inquiryType,
+            LEFT(i.content, 20) AS shortContent,
+            i.status,
+            DATE(i.created_at) AS createdAt
         FROM inquiries i
         WHERE i.user_id = #{userId}
         <if test="status != null and status != 'all'">

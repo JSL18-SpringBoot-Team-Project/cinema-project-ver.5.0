@@ -1,19 +1,17 @@
 <div th:fragment="content">
     <!-- Location Bar -->
     <div class="location-bar d-flex align-items-center">
-        <span class="me-2">Home</span>
+        <span class="me-2">ホーム</span>
         <i class="bi bi-chevron-right me-2"></i>
-        <span>マイパージ</span>
+        <span>マイページ</span>
     </div>
 
     <div class="content-box">
-        <!-- 상단 섹션 -->
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center">
                 <div class="ms-3">
                     <h3 class="mb-1">こんにちは !</h3>
-                    <!-- 사용자 이름을 동적으로 표시 -->
-                    <p class="mb-0" th:text="${userName} + 'さま'"></p>
+                    <p class="mb-0" th:text="${userName} + 'さん'"></p>
                 </div>
             </div>
         </div>
@@ -21,7 +19,7 @@
         <!-- 티켓 -->
         <div class="card">
             <div class="card-header">
-                예매/쿠폰
+                映画予約／クーポン
             </div>
             <div class="card-body">
                 <ul class="list-unstyled">
@@ -35,18 +33,18 @@
         <!-- 예매 내역 -->
         <div class="card">
             <div class="card-header">
-                최근 예매 내역
+                最近の予約履歴
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">예매날짜</th>
-                            <th scope="col">영화명</th>
-                            <th scope="col">상영일시</th>
-                            <th scope="col">좌석번호</th>
-                            <th scope="col">예매금액</th>
+                            <th scope="col">予約日</th>
+                            <th scope="col">映画タイトル</th>
+                            <th scope="col">上映日時</th>
+                            <th scope="col">座席番号</th>
+                            <th scope="col">予約金額</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -60,7 +58,7 @@
                             <td th:text="${booking.price}"></td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(bookingList)}">
-                            <td colspan="4" class="text-center">予約履歴がありません．．</td>
+                            <td colspan="4" class="text-center">予約履歴がありません。</td>
                         </tr>
                         </tbody>
                     </table>
@@ -71,7 +69,7 @@
         <!-- 문의 내역 -->
         <div class="card">
             <div class="card-header">
-                問い合わせ
+                問い合わせ履歴
             </div>
             <div class="card-body">
                 <div class="table-responsive">

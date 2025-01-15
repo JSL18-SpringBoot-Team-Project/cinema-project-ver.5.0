@@ -94,26 +94,26 @@ public class UserService {
         return passwordEncoder.matches(password, hashedPassword);
     }
 
-    // 회원정보 수정
-    public void updateUserInfo(User user) {
-        userMapper.updateSocialUser(user);
-    }
+//    // 회원정보 수정
+//    public void updateUserInfo(User user) {
+//        userMapper.updateSocialUser(user);
+//    }
 
     // 비밀번호 변경 (기존 비밀번호 제한)
     public void changePassword(long userId, String currentPassword, String newPassword) {
         User user = userMapper.getUserInfo(userId);
         if (user == null) {
-            throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
+            throw new IllegalArgumentException("ユーザーが存在しません。");
         }
 
         // 현재 비밀번호 확인
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("現在のパスワードが一致しません。");
         }
 
         // 새 비밀번호가 기존 비밀번호와 동일한지 확인
         if (passwordEncoder.matches(newPassword, user.getPassword())) {
-            throw new IllegalArgumentException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
+            throw new IllegalArgumentException("新しいパスワードは現在のパスワードと同じにすることはできません。");
         }
 
         // 새 비밀번호 암호화 및 저장
@@ -139,7 +139,7 @@ public class UserService {
     // 사용자 정보 수정 메서드
     public void updateUser(User user) {
         if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("유효한 사용자 정보가 필요합니다.");
+            throw new IllegalArgumentException("有効なユーザー情報が必要です。");
         }
         userMapper.updateUser(user);
     }

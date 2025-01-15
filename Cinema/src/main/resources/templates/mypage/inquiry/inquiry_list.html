@@ -1,7 +1,9 @@
 <div th:fragment="content">
   <!-- Location Bar -->
   <div class="location-bar d-flex align-items-center">
-    <span class="me-2">Home</span>
+    <span class="me-2">ホーム</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>マイペーじ</span>
     <i class="bi bi-chevron-right me-2"></i>
     <span>問い合わせ</span>
   </div>
@@ -17,9 +19,9 @@
       <!-- Status Filter -->
       <div class="col-md-3">
         <select class="form-select" name="status" th:value="${status}">
-          <option value="all" th:selected="${status == 'all'}">전체</option>
-          <option value="unanswered" th:selected="${status == 'PENDING'}">미답변</option>
-          <option value="answered" th:selected="${status == 'ANSWERED'}">답변완료</option>
+          <option value="all" th:selected="${status == 'all'}">すべて</option>
+          <option value="unanswered" th:selected="${status == 'PENDING'}">未返答</option>
+          <option value="answered" th:selected="${status == 'ANSWERED'}">回答完了</option>
         </select>
       </div>
       <!-- Search Input -->
@@ -40,7 +42,7 @@
           <th scope="col">番号</th>
           <th scope="col">タイプ</th>
           <th scope="col">内容</th>
-          <th scope="col">回答状態</th>
+          <th scope="col">回答状況</th>
           <th scope="col">登録日</th>
         </tr>
         </thead>
@@ -54,7 +56,7 @@
           </td>
           <td th:text="${inquiry.createdAt}"></td>
         </tr>
-        <!-- 데이터가 없을 경우 -->
+        <!-- 데이터 없을 경우 -->
         <tr th:if="${#lists.isEmpty(inquiryList)}">
           <td colspan="5" class="text-center">問い合わせのデータがありません。</td>
         </tr>

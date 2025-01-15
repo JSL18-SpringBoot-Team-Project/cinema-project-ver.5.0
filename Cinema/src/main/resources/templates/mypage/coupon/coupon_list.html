@@ -2,9 +2,9 @@
 
   <!-- Location Bar -->
   <div th:fragment="location-bar" class="location-bar d-flex align-items-center">
-    <span class="me-2">Home</span>
+    <span class="me-2">ホーム</span>
     <i class="bi bi-chevron-right me-2"></i>
-    <span>ナイのメガボックス</span>
+    <span>マイペーじ</span>
     <i class="bi bi-chevron-right me-2"></i>
     <span>クーポン</span>
   </div>
@@ -12,48 +12,48 @@
   <div class="content-box">
     <h2 class="mb-4">クーポン</h2>
 
-    <!-- 쿠폰 설명 -->
+    <!-- クーポン説明 -->
     <div class="row mb-4">
       <div class="col-md-6">
-        <p>영화 예매 시 사용 가능합니다.</p>
-        <p>쿠폰은 이벤트 페이지에서 수령 받을 수 있습니다.</p>
-        <p>쿠폰 사용 기간 이후에는 자동으로 만료 상태로 전환됩니다.</p>
+        <p>映画の予約時に使用できます。</p>
+        <p>クーポンはイベントページで受け取ることができます。</p>
+        <p>クーポンの使用期限が過ぎると自動的に無効状態になります。</p>
       </div>
     </div>
 
-    <!-- 총 쿠폰 개수 및 필터 -->
+    <!-- 総クーポン枚数とフィルター -->
     <div class="row align-items-center mb-4">
       <div class="col-md-6">
         <h5 class="mb-0">計 <span id="couponCount" class="text-primary" th:text="${couponCount}"></span> 枚</h5>
       </div>
       <div class="col-md-6 text-end">
         <form th:action="@{/coupon/list}" method="get" class="d-inline-block">
-          <!-- 필터 옵션 -->
+          <!-- フィルターオプション -->
           <select name="filter" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
-            <option value="all" th:selected="${filter == 'all'}">전체</option>
-            <option value="usable" th:selected="${filter == 'usable'}">사용가능</option>
-            <option value="used" th:selected="${filter == 'used'}">사용완료</option>
-            <option value="expired" th:selected="${filter == 'expired'}">기한만료</option>
+            <option value="all" th:selected="${filter == 'all'}">すべて</option>
+            <option value="usable" th:selected="${filter == 'usable'}">使用可能</option>
+            <option value="used" th:selected="${filter == 'used'}">使用済み</option>
+            <option value="expired" th:selected="${filter == 'expired'}">期限切れ</option>
           </select>
         </form>
       </div>
     </div>
 
-    <!-- 쿠폰 테이블 -->
+    <!-- クーポンテーブル -->
     <div class="table-responsive">
       <table class="table table-striped" id="couponTable">
         <thead>
         <tr>
-          <th scope="col">쿠폰명</th>
-          <th scope="col">사용기간</th>
-          <th scope="col">사용상태</th>
+          <th scope="col">クーポン名</th>
+          <th scope="col">使用期間</th>
+          <th scope="col">使用状況</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="coupon : ${couponList}">
           <td th:text="${coupon.couponTitle}"></td>
-          <td th:text="${coupon.couponStartDate} ~ ${coupon.couponEndDate}"></td>
-          <td th:text="${coupon.state == 0 ? '사용가능' : (coupon.state == 1 ? '사용완료' : '기한만료')}"></td>
+          <td th:text="${coupon.couponStartDate} + ' ~ ' + ${coupon.couponEndDate}"></td>
+          <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用済み' : '期限切れ')}"></td>
         </tr>
         <tr th:if="${#lists.isEmpty(couponList)}">
           <td colspan="3" class="text-center">クーポン情報がありません。</td>

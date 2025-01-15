@@ -19,7 +19,7 @@ public interface MyPageMapper {
                                   @Param("offset") int offset);
 
     // 사용자 ID와 영화 제목을 기반으로 예매 내역 조회
-    List<Bookings> searchBookingsByTitle(@Param("userId") long userId,
+    List<Bookings> getBookingListByTitle(@Param("userId") long userId,
                                          @Param("title") String title,
                                          @Param("pageSize") int pageSize,
                                          @Param("offset") int offset);
@@ -30,17 +30,18 @@ public interface MyPageMapper {
                                  @Param("offset") int offset);
 
     // 총 예매 내역 수 조회
-    int getTotalBookingCount(@Param("userId") long userId);
+    long getTotalBookingCount(@Param("userId") long userId);
+
+    // 영화 제목으로 총 예매 내역 수 조회
+    long getTotalSearchBookingCount(@Param("userId") long userId, @Param("title") String title);
 
     // 총 취소 내역 수 조회
-    int getTotalCancelCount(@Param("userId") long userId);
+    long getTotalCancelCount(@Param("userId") long userId);
 
     // 사용자 보유 예매 티켓 조회
-    @Select("SELECT COUNT(*) FROM tickets WHERE user_id = #{userId}")
     int getTicketCount(@Param("userId") long userId);
 
     // 사용자 보유 쿠폰 개수 조회
-    @Select("SELECT COUNT(*) FROM user_coupons WHERE user_id = #{userId} AND state = 1")
     int getCouponCount(@Param("userId") long userId);
 
     // 사용자 쿠폰 리스트 조회
@@ -53,10 +54,4 @@ public interface MyPageMapper {
             @Param("keyword") String keyword
     );
 
-
-    List<Bookings> getBookingList(Map<String, Object> params);
-
-    List<Bookings> searchBookingsByTitle(Map<String, Object> params);
-
-    List<Bookings> getCancelList(Map<String, Object> params);
 }
