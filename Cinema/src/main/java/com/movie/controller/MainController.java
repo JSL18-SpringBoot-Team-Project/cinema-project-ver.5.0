@@ -50,7 +50,7 @@ public class MainController {
 		return "layout/base";
 	}
 
-	@GetMapping("/contact")
+	@GetMapping("contact")
 	public String contact(Model model, @ModelAttribute("sessionUser") SessionUser sessionUser) {
 		if (sessionUser != null) {
 			model.addAttribute("name", sessionUser.getName());
@@ -63,9 +63,8 @@ public class MainController {
 		return "layout/base";
 	}
 
-	@PostMapping("/contact")
+	@PostMapping("contact")
 	public String sendContact(@ModelAttribute("sessionUser") SessionUser sessionUser, @ModelAttribute Inquiries inquiry, Model model) {
-		System.out.println("sendContact 들어옴");
 		if (sessionUser == null) {
 			return "redirect:/";
 		}

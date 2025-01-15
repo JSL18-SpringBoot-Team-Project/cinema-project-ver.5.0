@@ -23,15 +23,10 @@ public class MovieController {
     @Autowired
     private MovieDetailService movieDetailService;
 
-    @GetMapping("/detail")
+    @GetMapping("detail")
     public String movie(Model model, @RequestParam("id") long id){
-        System.out.println("id: " + id);
-
 
         MovieDTO movie = movieDetailService.getMovieDetail(id);
-        System.out.println("content넘어옴: " + movie.getMovieDetails().getContent());
-        System.out.println("anjfrkfy"+movie.getMovieDetails().getActor());
-
 
         model.addAttribute("movie", movie.getMovies());
         model.addAttribute("detail", movie.getMovieDetails());
@@ -41,7 +36,7 @@ public class MovieController {
         return "layout/base";
     }
 
-    @GetMapping({"/", "/list"})
+    @GetMapping("list")
     public String movieView(Model model) {
         model.addAttribute("title", "映画リスト");
         model.addAttribute("content", "movies/movie_list");

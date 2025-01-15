@@ -1,17 +1,26 @@
 <section th:fragment="content">
+
     <!-- prs title wrapper Start -->
-    <div class="prs_title_main_sec_wrapper">
+    <div class="prs_title_main_sec_wrapper" style="background: none; background-repeat: no-repeat;
+    background-position: center 0;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    float: left;
+    position: relative;
+    padding-top: 75px;
+    text-align: center;">
         <div class="prs_title_img_overlay">
         </div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="prs_title_heading_wrapper">
-                        <h2>Movie Booking</h2>
+                        <h2>映画予約</h2>
                         <ul>
-                            <li><a th:href="@{/}">Home</a>
+                            <li><a th:href="@{/}">ホーム</a>
                             </li>
-                            <li>&nbsp;&nbsp; >&nbsp;&nbsp; Movie Booking</li>
+                            <li>&nbsp;&nbsp; >&nbsp;&nbsp; 映画予約</li>
                         </ul>
                     </div>
                 </div>
@@ -27,7 +36,7 @@
                     <div class="col-md-12">
                         <div class="st_video_slider_inner_wrapper float_left">
                             <div class="st_video_slider_overlay">
-                                <img th:src="@{'/poster/' + ${detail.movieImg}}" style="width:100%; height:100%;">
+                                <img th:src="@{'/images' + '/poster/' + ${detail.movieImg}}" style="width:100%; height:100%;">
                             </div>
                             <div class="st_video_slide_sec float_left">
                                 <a rel="external" th:href="${detail.trailer}" title="title" data-popup="iframe">
@@ -48,8 +57,8 @@
                                         </li>
                                         <li data-animation="animated fadeInUp" class="">
                                             <i class="far fa-clock"></i>
-                                            <span th:text="${movie.runningTime / 60}">0</span> hrs
-                                            <span th:text="${movie.runningTime % 60}">0</span> mins
+                                            <span th:text="${movie.runningTime / 60}">0</span> 時
+                                            <span th:text="${movie.runningTime % 60}">0</span> 分
                                         </li>
                                     </ul>
                                 </div>
@@ -96,35 +105,35 @@
                                              th:classappend="${stat.index == 0} ? ' active' : ''">
 
                                             <div class="st_calender_contant_main_wrapper float_left">
-                                                <div class="st_calender_row_cont st_calender_row_cont2 float_left"
-                                                     th:each="sch : ${schedules}"
-                                                     th:if="${sch.watchDate} == ${date}">
+                                                <div th:if="${schedules == null || #lists.isEmpty(schedules)}">
+                                                    <p>この映画は上映が終わったか、上映スケジュールが存在しません。</p>
+                                                </div>
+                                                <div th:if="${schedules != null && !#lists.isEmpty(schedules)}">
+                                                    <div class="st_calender_row_cont st_calender_row_cont2 float_left"
+                                                         th:each="sch : ${schedules}"
+                                                         th:if="${sch.watchDate} == ${date}">
 
-                                                    <!-- 상영관 정보 -->
-                                                    <div class="st_calender_asc">
-                                                        <div class="st_calen_asc_heart_cont">
-                                                            <h2 th:text="${sch.screenName}"></h2>
+                                                        <!-- 상영관 정보 -->
+                                                        <div class="st_calender_asc">
+                                                            <div class="st_calen_asc_heart_cont">
+                                                                <h2 th:text="${sch.screenName}"></h2>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 시간 & 가격 정보 -->
+                                                        <div class="st_calen_asc_tecket_time_select">
+                                                            <ul>
+                                                                <li>
+                                                                    <a th:href="@{|/booking/seat?scheduleId=${sch.scheduleId}|}"
+                                                                       th:text="${#temporals.format(sch.startTime, 'HH:mm')}">
+                                                                    </a>
+                                                                </li>
+                                                                <!-- 추가적인 스케줄 항목들 -->
+                                                            </ul>
                                                         </div>
                                                     </div>
-
-                                                    <!-- 시간 & 가격 정보 -->
-                                                    <div class="st_calen_asc_tecket_time_select">
-                                                        <ul>
-                                                            <li>
-                                                            <span>
-                                                                <h4 th:text="${#numbers.formatDecimal(sch.seatPrice, 1, 'COMMA', 2, 'POINT')}"></h4>
-                                                                <p class="asc_pera1">Executive</p>
-                                                                <p class="asc_pera2">Filling Fast</p>
-                                                            </span>
-                                                                <a th:href="@{|/booking/seat?scheduleId=${sch.scheduleId}|}"
-                                                                   th:text="${#temporals.format(sch.startTime, 'HH:mm')}">
-                                                                </a>
-                                                            </li>
-                                                            <!-- 추가적인 스케줄 항목들 -->
-                                                        </ul>
-                                                    </div>
+                                                    <!-- 추가적인 상영관 정보들 -->
                                                 </div>
-                                                <!-- 추가적인 상영관 정보들 -->
                                             </div>
                                         </div>
                                         <!-- 추가적인 탭 콘텐츠들 -->
@@ -137,8 +146,8 @@
                         <div class="prs_mcc_left_side_wrapper">
 
                             <div class="prs_mcc_event_title_wrapper" style="margin-top:0px;">
-                                <h2>Top Events</h2>
-                                <img src="images/content/movie_category/event_img.jpg" alt="event_img">
+                                <h2>最近のイベント</h2>
+                                <a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/images' + '/event/' + ${event.eventImg}}" th:alt="${event.eventTitle}"></a>
                             </div>
                         </div>
                     </div>

@@ -71,7 +71,7 @@ public class MyPageController {
 
 
     // 예매 내역 페이지
-    @GetMapping("/booking/list")
+    @GetMapping("booking/list")
     public String bookingList(SessionUser sessionUser,
                               @RequestParam(required = false) String title, // 검색 조건
                               @RequestParam(defaultValue = "1") int page,   // 기본 페이지 번호
@@ -108,6 +108,7 @@ public class MyPageController {
 
 
     // 쿠폰 페이지
+
     @GetMapping("/coupon/list")
     public String coupon(SessionUser sessionUser,
                          @RequestParam(required = false, defaultValue = "all") String filter,
@@ -160,7 +161,7 @@ public class MyPageController {
 
 
     // 비밀번호 인증 페이지
-    @GetMapping("/pw_verify")
+    @GetMapping("pw_verify")
     public String showPasswordVerifyPage(SessionUser sessionUser, Model model) {
         if (sessionUser == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
@@ -178,6 +179,7 @@ public class MyPageController {
     }
 
     // 비밀번호 인증 처리
+
     @PostMapping("/verifying")
     public String verifyPassword(@RequestParam("password") String password,
                                  @SessionAttribute(name = "sessionUser", required = false) SessionUser sessionUser,
@@ -206,7 +208,7 @@ public class MyPageController {
     }
 
     // 회원정보 수정 페이지
-    @GetMapping("/profile")
+    @GetMapping("profile")
     public String showProfilePage(SessionUser sessionUser, Model model) {
         long userId = sessionUser.getId();
         User user = userService.getUserInfo(sessionUser.getId());
@@ -236,7 +238,7 @@ public class MyPageController {
     }
 
     // 회원정보 수정 처리
-    @PostMapping("/update_user")
+    @PostMapping("update_user")
     public String updateUser(@ModelAttribute User user, HttpSession session, RedirectAttributes redirectAttributes) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("USER");
         // 세션 사용자와 요청 사용자 ID 검증
@@ -280,7 +282,7 @@ public class MyPageController {
         }
     }
 
-    @PostMapping("/updatePassword")
+    @PostMapping("updatePassword")
     public String updatePassword(@RequestParam("currentPassword") String currentPassword,
                                  @RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmPassword") String confirmPassword,

@@ -25,8 +25,9 @@ public class BookingController {
     private final MovieDetailService movieDetailService;
     private final UserService userService;
     private final BookingService bookingService;
+    private final EventService eventService;
 
-    @GetMapping("/schedule")
+    @GetMapping("schedule")
     public String movieScheduleList(long movieId, Model model) {
 
         List<ScreenScheduleSeatDto> schedules = scheduleService.movieSchedulesList(movieId);
@@ -49,6 +50,8 @@ public class BookingController {
                 .filter(availableFormats::contains)
                 .collect(Collectors.toList());
 
+        Events event = eventService.recentEvent();
+
         model.addAttribute("content", "movies/movie_booking");
         model.addAttribute("title", "スケジュール");
         model.addAttribute("schedules", schedules);
@@ -56,12 +59,13 @@ public class BookingController {
         model.addAttribute("detail", movieDetails.getMovieDetails());
         model.addAttribute("dates", dates);
         model.addAttribute("formats", formats);
+        model.addAttribute("event", event);
 
         return "layout/base";
 
     }
 
-    @GetMapping("/seat")
+    @GetMapping("seat")
     public String getSeat(long scheduleId, Model model) {
         ScreenScheduleSeatDto seats = seatService.getSeat(scheduleId);
         Movies movies = movieService.movieInfo(seats.getMovieId());
@@ -78,24 +82,32 @@ public class BookingController {
         return "movies/seat_booking";
     }
 
-    @PostMapping("/checkSeatState")
-    public ResponseEntity<Map<String, String>> checkSeatState(@RequestBody List<Long> seatIds) {
-        for (long id : seatIds) {
-            System.out.println("id = " + id);
-        }
-        long result = seatService.checkSeatState(seatIds);
-        System.out.println(result);
+    @PostMapping("checkSeatState")
+    public ResponseEntity<Map<String, String>> checkSeatState(@RequestBody List<Long> seatIds, @ModelAttribute("sessionUser") SessionUser sessionUser) {
+
         Map<String, String> response = new HashMap<>();
-        if (result == 0) {
-            response.put("state", "possible");
+
+        if (sessionUser == null) {
+            response.put("state", "notLogin");
+            return ResponseEntity.ok(response);
+
         } else {
-            response.put("state", "impossible");
+            for (long id : seatIds) {
+                System.out.println("id = " + id);
+            }
+            long result = seatService.checkSeatState(seatIds);
+
+            if (result == 0) {
+                response.put("state", "possible");
+            } else {
+                response.put("state", "impossible");
+            }
+            return ResponseEntity.ok(response);
         }
 
-        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/paymentInfo")
+    @GetMapping("paymentInfo")
     public String paymentInfo(Model model, HttpSession session) {
 
         // 세션에서 데이터 가져오기

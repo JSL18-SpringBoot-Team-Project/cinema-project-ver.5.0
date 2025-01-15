@@ -47,7 +47,7 @@
                                 <ul class="dl-menu">
                                     <li class="parent"><a th:href="@{/}">ホーム</a></li>
                                     <li class="parent megamenu"><a th:href="@{/movie/list}">映画</a></li>
-                                    <li class="parent"><a th:href="@{/event/}">イベント</a></li>
+                                    <li class="parent"><a th:href="@{/event/list}">イベント</a></li>
                                     <li class="parent" sec:authorize="isAuthenticated()"><a th:href="@{/contact}">お問い合わせ</a></li>
                                 </ul>
                             </div>
@@ -215,55 +215,55 @@
                             <input type="text" id="movie-search" placeholder="映画を検索してください。">
                             <div id="modal-body">
                                 <div id="main-movie">
-                                    <img id="main-movie-image" src="/poster/2025/01/02/20250102141643.jpg" alt="대표 이미지">
+                                    <img id="main-movie-image" src="/images/poster/2025/01/02/20250102141643.jpg" alt="代表のイメージ">
                                 </div>
                                 <div id="popular-movies">
                                     <h3 style="text-align: center; margin-bottom: 16px;">最新映画ランキング</h3>
                                     <ul id="movie-list">
                                         <li>
                                             <a th:href="@{/movie/detail(id=${2})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102141643.jpg')">1　はたらく細胞</a>
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102141643.jpg')">1　はたらく細胞</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${3})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102144542.jpg')">2　モアナと伝説の海2</a>
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102144542.jpg')">2　モアナと伝説の海2</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${4})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102153136.jpg')">3　ライオン・キング：ムファサ</a>
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102153136.jpg')">3　ライオン・キング：ムファサ</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${5})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102155633.jpg')">4　劇場版
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102155633.jpg')">4　劇場版
                                                 忍たま乱太郎 ドクタケ忍者隊...</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${6})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102161405.jpg')">5　劇場版ドクターX</a>
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102161405.jpg')">5　劇場版ドクターX</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${7})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102163243.jpg')">6　聖☆おにいさん
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102163243.jpg')">6　聖☆おにいさん
                                                 THE MOVIE～ホーリ...</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${8})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102164547.jpg')">7　映画「ふしぎ駄菓子屋
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102164547.jpg')">7　映画「ふしぎ駄菓子屋
                                                 銭天堂」</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${10})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102170058.jpg')">8　【推しの子】-The
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102170058.jpg')">8　【推しの子】-The
                                                 Final Act-</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${11})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102171814.jpg')">9　ソニック
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102171814.jpg')">9　ソニック
                                                 × シャドウ TOKYO MISSION</a>
                                         </li>
                                         <li>
                                             <a th:href="@{/movie/detail(id=${12})}"
-                                               onmouseover="updateMainMovie('/poster/2025/01/02/20250102172753.jpg')">10　勝ち切る覚悟～日本一までの79日～</a>
+                                               onmouseover="updateMainMovie('/images/poster/2025/01/02/20250102172753.jpg')">10　勝ち切る覚悟～日本一までの79日～</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -317,7 +317,7 @@
                                       document.body.classList.remove('no-scroll');
 
                                       // 메인 이미지 초기화
-                                      mainMovieImage.src = '/poster/2025/01/02/20250102141643.jpg';
+                                      mainMovieImage.src = '/images/poster/2025/01/02/20250102141643.jpg';
                                   }
 
                                   document.getElementById('movie-search').addEventListener('input', function () {
@@ -345,7 +345,7 @@
 
                         movieContainer.innerHTML = `
                             <div style="flex: 1; text-align: center;">
-                                <img src="/poster/${movie.posterImg}" alt="${movie.title}" style="width: 260px; height: 300px; border-radius: 10px;">
+                                <img src="/images/poster/${movie.posterImg}" alt="${movie.title}" style="width: 260px; height: 300px; border-radius: 10px;">
                             </div>
                             <div style="flex: 2; margin-left: 10px;">
                                 <div>

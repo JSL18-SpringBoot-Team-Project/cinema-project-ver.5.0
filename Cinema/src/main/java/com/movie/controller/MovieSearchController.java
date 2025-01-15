@@ -16,7 +16,7 @@ public class MovieSearchController {
 
     private final MovieService movieService;
 
-    @GetMapping("/api/movies/search")
+    @GetMapping("api/movies/search")
     @ResponseBody
     public List<Movies> searchMovies(@RequestParam("title") String title) {
 

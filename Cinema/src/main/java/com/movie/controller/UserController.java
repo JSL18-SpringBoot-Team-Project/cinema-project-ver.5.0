@@ -29,7 +29,7 @@ public class UserController {
 
     private final Map<String, Boolean> verifiedEmails = new HashMap<>();
 
-    @PostMapping("/checkemail")
+    @PostMapping("checkemail")
     @ResponseBody
     public Map<String, Object> checkEmail(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
@@ -42,7 +42,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/sendcode")
+    @PostMapping("sendcode")
     @ResponseBody
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
@@ -53,12 +53,11 @@ public class UserController {
         return ResponseEntity.ok("認証コードが送信されました。");
     }
 
-    @PostMapping("/verifycode")
+    @PostMapping("verifycode")
     @ResponseBody
     public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> payload, HttpSession session) {
         String email = payload.get("email");
         String code = payload.get("code");
-        System.out.println(code);
         if (!validationUtil.isValidEmail(email) || !validationUtil.isValidCode(code)) {
             return ResponseEntity.badRequest().body("無効なデータです。");
         }
@@ -73,7 +72,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/signup")
+    @GetMapping("signup")
     public String signup(HttpSession session, Model model) {
         String email = (String) session.getAttribute("verifiedEmail");
         Long expiryTime = (Long) session.getAttribute("verifiedEmailExpiry");
@@ -91,7 +90,7 @@ public class UserController {
         return "layout/base";
     }
 
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public String signup(User user, HttpSession session, Model model) {
         String sessionEmail = (String) session.getAttribute("verifiedEmail");
         boolean hasErrors = false;
@@ -136,7 +135,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/send-reset-code")
+    @PostMapping("send-reset-code")
     @ResponseBody
     public ResponseEntity<?> sendResetCode(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
@@ -149,7 +148,7 @@ public class UserController {
         return ResponseEntity.ok("認証コードが送信されました。");
     }
 
-    @PostMapping("/verify-reset-code")
+    @PostMapping("verify-reset-code")
     @ResponseBody
     public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
@@ -162,7 +161,7 @@ public class UserController {
         return ResponseEntity.ok("認証が成功しました。");
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("reset-password")
     @ResponseBody
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");

@@ -45,6 +45,9 @@ public interface EventMapper {
                     @Param("startDateTime") LocalDateTime startDateTime,
                     @Param("endDateTime") LocalDateTime endDateTime);
 
+    @Select("SELECT * FROM events ORDER BY id LIMIT 1")
+    public Events recentEvent();
+
 }
 
 
