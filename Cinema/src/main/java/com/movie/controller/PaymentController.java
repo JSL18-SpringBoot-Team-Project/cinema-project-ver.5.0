@@ -55,7 +55,7 @@ public class PaymentController {
     private String channelKey;
 
 
-    @PostMapping("/proceed")
+    @PostMapping("proceed")
     public String bookingProceed(@RequestParam("selectedSeatIds") String selectedSeatId, Model model, @RequestParam("scheduleId") long scheduleId, @ModelAttribute("sessionUser") SessionUser sessionUser, HttpSession session) {
 
         if (sessionUser != null) {
@@ -125,7 +125,7 @@ public class PaymentController {
      * 4) tickets 테이블에 (seat_id, booking_id) 정보 삽입
      * 5) 완료 페이지로 이동 or JSON 응답
      */
-    @PostMapping("/pay")
+    @PostMapping("pay")
     @ResponseBody
     public Map<String, Object> pay(
             @RequestBody Map<String, Object> payload,  // JSON 데이터를 Map으로 수신

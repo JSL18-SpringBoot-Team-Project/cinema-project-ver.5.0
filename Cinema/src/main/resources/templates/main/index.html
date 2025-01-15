@@ -7,6 +7,11 @@
         .prs_upcom_movie_content_box {
             height: 106px;
         }
+        .owl-carousel .owl-item img {
+    display: block;
+    width: 100%;
+    height: 365px;
+}
 
     </style>
     <div class="prs_main_slider_wrapper">
@@ -239,7 +244,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" th:each="movie : ${upcomingSoon}">
                                         <div class="prs_upcom_movie_box_wrapper">
                                             <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
+                                                <img th:src="@{'/images' + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
@@ -266,7 +271,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" th:each="movie : ${recentlyEnded}">
                                         <div class="prs_upcom_movie_box_wrapper">
                                             <div class="prs_upcom_movie_img_box">
-                                                <img th:src="@{/images + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
+                                                <img th:src="@{'/images' + '/poster/' + ${movie.posterImg}}" th:alt="${movie.title}" />
                                                 <div class="prs_upcom_movie_img_overlay"></div>
                                                 <div class="prs_upcom_movie_img_btn_wrapper">
                                                     <ul>
@@ -307,7 +312,7 @@
                             <div th:each="event : ${event}" class="item prs_feature_slider_item_wrapper">
                                 <div class="prs_feature_img_box_wrapper">
                                     <div class="prs_feature_img" style="max-height:200px; min-height:200px;">
-                                        <a th:href="@{/event/view(id=${event.id})}"><img th:src="@{/images + '/event/' + ${event.eventImg}}" th:alt="${event.eventTitle}"></a>
+                                        <a th:href="@{/event/view(id=${event.id})}"><img th:src="@{'/images' + '/event/' + ${event.eventImg}}" th:alt="${event.eventTitle}"></a>
                                         <div class="prs_ft_btn_wrapper">
                                             >
                                         </div>
@@ -331,7 +336,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
     // 슬라이드와 링크를 매핑
-    let local = "http://localhost:8085/movie/detail?id=";
+    let local = "http://ec2-3-34-118-117.ap-northeast-2.compute.amazonaws.com:8085/movie/detail?id=";
     let slideLinks = {
         "rs-145": local + "2",
         "rs-146": local + "3",

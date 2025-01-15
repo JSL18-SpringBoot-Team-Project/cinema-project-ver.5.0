@@ -58,7 +58,7 @@
 								<div class="st_bcc_tecket_bottom_left_wrapper">
 									<div class="st_bcc_tecket_bottom_inner_left">
 										<div class="st_bcc_teckt_bot_inner_img">
-											<img th:src="@{/images + '/poster/' + ${movie.posterImg}}" alt="Poster" style="width:85px; height:127px;">
+											<img th:src="@{'/images' + '/poster/' + ${movie.posterImg}}" alt="Poster" style="width:85px; height:127px;">
 										</div>
 										<div class="st_bcc_teckt_bot_inner_img_cont">
 											<h4 th:text="${movie.title}"></h4>
