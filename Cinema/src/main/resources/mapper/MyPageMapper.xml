@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.mapper.MyPageMapper">
+
+    <resultMap id="bookingResultMap" type="Bookings">
+        <result property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="scheduleId" column="schedule_id" />
+        <result property="couponId" column="coupon_id" />
+        <result property="price" column="price" />
+        <result property="bookingTimestamp" column="booking_timestamp" />
+        <result property="cancelTimestamp" column="cancel_timestamp" />
+        <result property="state" column="state" />
+        <result property="title" column="title" />
+        <collection property="seats" javaType="List" ofType="Seats" column="schedule_id"
+                    select="com.movie.mapper.SeatMapper.getSeatsByBookingId" />
+    </resultMap>
+
+    <select id="getBookingList" resultMap="bookingResultMap">
+        SELECT
+            b.id AS id,
+            b.booking_timestamp AS bookingDate,
+            m.title AS title,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price AS bookingPrice
+        FROM bookings b
+        JOIN schedules s ON b.schedule_id = s.id
+        JOIN movies m ON s.movie_id = m.id
+        JOIN tickets t ON b.id = t.booking_id
+        JOIN seats se ON t.seat_id = se.id
+        WHERE b.user_id = #{userId}
+        GROUP BY b.id
+        ORDER BY b.booking_timestamp DESC
+        LIMIT #{pageSize} OFFSET #{offset};
+    </select>
+
+    <select id="searchBookingByTitle" resultMap="bookingResultMap">
+        SELECT
+            b.id AS id,
+            b.booking_timestamp AS bookingDate,
+            m.title AS title,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price AS bookingPrice
+        FROM bookings b
+        JOIN schedules s ON b.schedule_id = s.id
+        JOIN movies m ON s.movie_id = m.id
+        JOIN tickets t ON b.id = t.booking_id
+        JOIN seats se ON t.seat_id = se.id
+        WHERE b.user_id = #{userId}
+        AND m.title LIKE CONCAT('%', #{title}, '%')
+        GROUP BY b.id
+        ORDER BY b.booking_timestamp DESC
+        LIMIT #{pageSize} OFFSET #{offset};
+    </select>
+
+    <select id="getCancelList" resultMap="bookingResultMap">
+        SELECT
+            b.id AS id,
+            b.cancel_timestamp AS cancelTimeStamp,
+            m.title AS movieName,
+            CONCAT(s.watch_date, ' ', s.start_time) AS screeningDateTime,
+            b.price AS cancelPrice
+        FROM bookings b
+        JOIN schedules s ON b.schedule_id = s.id
+        JOIN movies m ON s.movie_id = m.id
+        WHERE b.user_id = #{userId}
+        AND b.state = 1
+        GROUP BY b.id
+        ORDER BY b.cancel_timestamp DESC
+        LIMIT #{pageSize} OFFSET #{offset};
+    </select>
+
+    <select id="getTotalBookingCount" parameterType="long" resultType="long">
+        SELECT COUNT(*) FROM bookings WHERE user_id = #{userId};
+    </select>
+
+    <select id="getTotalCancelCount" parameterType="long" resultType="long">
+        SELECT COUNT(*) FROM bookings WHERE user_id = #{userId} AND state = 1;
+    </select>
+
+    <!-- 유저 쿠폰 개수 조회 -->
+    <select id="getCouponCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM user_coupon
+        WHERE user_id = #{userId} AND state = 0;
+    </select>
+
+    <!-- 유저 예매 티켓 개수 조회 -->
+    <select id="getTicketCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM tickets
+        WHERE user_id = #{userId};
+    </select>
+
+    <!-- userCoupon ResultMap 설정 -->
+    <resultMap id="userCouponResultMap" type="com.movie.domain.UserCoupon">
+        <id property="userId" column="user_id" />
+        <id property="couponId" column="coupon_id" />
+        <result property="couponStartDate" column="coupon_start_date" />
+        <result property="couponEndDate" column="coupon_end_date" />
+        <result property="state" column="state" />
+        <association property="coupons" javaType="com.movie.domain.Coupons">
+            <id property="id" column="coupons.id" />
+            <result property="couponTitle" column="coupons.couponTitle" />
+            <result property="couponType" column="coupons.couponType" />
+            <result property="couponPrice" column="coupons.couponPrice" />
+        </association>
+    </resultMap>
+
+    <!-- 사용자 쿠폰 리스트 조회 -->
+    <select id="getUserCouponList" resultMap="userCouponResultMap">
+        SELECT
+            uc.user_id AS userId,
+            uc.coupon_id AS couponId,
+            uc.coupon_start_date AS couponStartDate,
+            uc.coupon_end_date AS couponEndDate,
+            uc.state AS state,
+            c.id AS coupons.id,
+            c.coupon_title AS coupons.couponTitle,
+            c.coupon_type AS coupons.couponType,
+            c.coupon_price AS coupons.couponPrice
+        FROM user_coupon uc
+        JOIN coupons c ON uc.coupon_id = c.id
+        WHERE uc.user_id = #{userId}
+        <if test="filter == 'usable'">
+            AND uc.state = 0
+        </if>
+        <if test="filter == 'used'">
+            AND uc.state = 1
+        </if>
+        <if test="filter == 'expired'">
+            AND NOW() > uc.coupon_end_date
+        </if>
+    </select>
+
+    <!-- Inquiry 테이블 조회 -->
+    <select id="getInquiries" resultType="com.movie.domain.Inquiries">
+        SELECT
+            i.id,
+            i.inquiry_type AS inquiryType,
+            LEFT(i.content, 20) AS shortContent,
+            i.status,
+            DATE(i.created_at) AS createdAt
+        FROM inquiries i
+        WHERE i.user_id = #{userId}
+        <if test="status != null and status != 'all'">
+            AND i.status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND i.content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY i.created_at DESC
+    </select>
+
+</mapper>

@@ -1,23 +1,23 @@
 <div th:fragment="booking_list">
   <!-- Location Bar -->
   <div class="location-bar d-flex align-items-center">
-    <span class="me-2">Home</span>
+    <span class="me-2">ホーム</span>
     <i class="bi bi-chevron-right me-2"></i>
-    <span>나의 메가박스</span>
+    <span>マイペーじ</span>
     <i class="bi bi-chevron-right me-2"></i>
-    <span>예매내역</span>
+    <span>予約履歴</span>
   </div>
 
   <div class="content-box">
-    <h2 class="mb-4">예매내역</h2>
+    <h2 class="mb-4">予約履歴</h2>
 
-    <!-- 탭 콘텐츠 -->
+    <!-- タブコンテンツ -->
     <div class="tab-content" id="myTabContent">
-      <!-- 예매 -->
+      <!-- 予約 -->
       <div class="tab-pane fade show active" id="booking" role="tabpanel" aria-labelledby="booking-tab">
         <div class="card mt-4">
           <div class="card-body">
-            <!-- 영화 제목 검색 -->
+            <!-- 映画タイトル検索 -->
             <div class="row mb-3">
               <div class="col-md-6">
                 <form th:action="@{/booking/list}" method="get" class="d-flex">
@@ -25,65 +25,64 @@
                           type="text"
                           class="form-control"
                           name="title"
-                          placeholder="영화 제목을 입력하시오"
+                          placeholder="映画タイトルを入力してください"
                           th:value="${param.title}" />
-                  <button type="submit" class="btn btn-primary ms-2">조회</button>
+                  <button type="submit" class="btn btn-primary ms-2">検索</button>
                 </form>
               </div>
             </div>
 
 
-            <!-- 예매 내역 테이블 -->
-            <h5 class="card-title mt-4">예매내역</h5>
+            <!-- 予約履歴テーブル -->
+            <h5 class="card-title mt-4">予約履歴</h5>
             <div class="table-responsive">
               <table class="table table-striped" id="bookingTable">
                 <thead>
                 <tr>
-                  <th scope="col">예매날짜</th>
-                  <th scope="col">영화명</th>
-                  <th scope="col">상영일시</th>
-                  <th scope="col">좌석번호</th>
-                  <th scope="col">예매금액</th>
+                  <th scope="col">予約日</th>
+                  <th scope="col">映画名</th>
+                  <th scope="col">上映日時</th>
+                  <th scope="col">座席番号</th>
+                  <th scope="col">予約金額</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="booking : ${bookingList}">
-                    <td th:text="${booking.timestamp}"></td>
-                    <td th:text="${booking.title}"></td>
-                    <td th:text="${booking.screeningDateTime}"></td>
-                    <td th:text="${booking.seats.join(', ')}"></td>
-                    <td th:text="${booking.price.toLocaleString()} + '원'"></td>
+                  <td th:text="${booking.timestamp}"></td>
+                  <td th:text="${booking.title}"></td>
+                  <td th:text="${booking.screeningDateTime}"></td>
+                  <td th:text="${booking.seats.join(', ')}"></td>
+                  <td th:text="${booking.price.toLocaleString()} + '円'"></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(bookingList)}">
-                    <td colspan="5" class="text-center">예매내역이 없습니다.</td>
+                  <td colspan="5" class="text-center">予約履歴がありません。</td>
                 </tr>
                 </tbody>
               </table>
             </div>
 
-            <!-- 예매 취소 내역 -->
-            <h5 class="card-title mt-4">예매취소내역</h5>
+            <!-- 予約キャンセル履歴 -->
+            <h5 class="card-title mt-4">キャンセル履歴</h5>
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <th scope="col">예매날짜</th>
-                    <th scope="col">영화명</th>
-                    <th scope="col">상영일시</th>
-                    <th scope="col">좌석번호</th>
-                    <th scope="col">예매금액</th>
-                  </tr>
+                <tr>
+                  <th scope="col">キャンセル日</th>
+                  <th scope="col">映画名</th>
+                  <th scope="col">上映日時</th>
+                  <th scope="col">キャンセル金額</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="cancel : ${cancelList}">
-                    <td th:text="${cancel.cancelDateTime}"></td>
-                    <td th:text="${cancel.title}"></td>
-                    <td th:text="${cancel.screeningDateTime}"></td>
-                    <td th:text="${cancel.price}"></td>
-                  </tr>
-                  <tr th:if="${#lists.isEmpty(cancelList)}">
-                    <td colspan="4" class="text-center">취소내역이 없습니다.</td>
-                  </tr>
+                <tr th:each="cancel : ${cancelList}">
+                  <td th:text="${cancel.cancelDateTime}"></td>
+                  <td th:text="${cancel.title}"></td>
+                  <td th:text="${cancel.screeningDateTime}"></td>
+                  <td th:text="${cancel.price}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(cancelList)}">
+                  <td colspan="4" class="text-center">キャンセル履歴がありません。</td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -98,19 +97,19 @@
   const API_BASE_URL = '/api/bookings';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 페이지 로드 시 기본 예매내역 로드
-    fetchData(`${API_BASE_URL}/initial`, updateBookingTable, '예매 내역을 불러오는 중 문제가 발생했습니다.');
+    // ページロード完了時
+    console.log('ページがロードされました。');
   });
 
   function searchBookings() {
     const movieTitle = document.getElementById('movieSearch').value.trim();
 
     if (!movieTitle) {
-      alert('영화 제목을 입력하세요.');
+      alert('映画タイトルを入力してください。');
       return;
     }
 
-    fetchData(`${API_BASE_URL}/search?title=${encodeURIComponent(movieTitle)}`, updateBookingTable, '예매 내역을 가져오는 중 문제가 발생했습니다.');
+    fetchData(`${API_BASE_URL}/search?title=${encodeURIComponent(movieTitle)}`, updateBookingTable, '予約履歴を取得中にエラーが発生しました。');
   }
 
   function fetchData(url, onSuccess, errorMessage) {
@@ -130,10 +129,10 @@
 
   function updateBookingTable(data) {
     const tbody = document.querySelector('#bookingTable tbody');
-    tbody.innerHTML = ''; // 기존 내용을 초기화
+    tbody.innerHTML = ''; // 既存の内容をリセット
 
     if (!data || data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center">검색된 예매내역이 없습니다.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center">検索結果がありません。</td></tr>';
       return;
     }
 
@@ -144,7 +143,7 @@
           <td>${item.title}</td>
           <td>${item.screeningDateTime}</td>
           <td>${item.seats.join(', ')}</td>
-          <td>${item.price.toLocaleString()}원</td>
+          <td>${item.price.toLocaleString()}円</td>
         </tr>
       `;
       tbody.innerHTML += row;

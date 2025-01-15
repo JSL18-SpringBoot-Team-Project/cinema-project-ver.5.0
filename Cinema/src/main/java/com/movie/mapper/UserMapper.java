@@ -11,18 +11,22 @@ import java.util.Optional;
 @Mapper
 public interface UserMapper {
 
+    // 사용자 추가 (일반 사용자)
     @Insert("INSERT INTO users (email, password, name, phone, birth) " +
             "VALUES (#{email}, #{password}, #{name}, #{phone}, #{birth})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insertUser(User user);
 
+    // 소셜 사용자 추가
     @Insert("INSERT INTO users (email, name, social_id, social_provider, role, created_at, updated_at) " +
             "VALUES (#{email}, #{name}, #{socialId}, #{socialProvider}, #{role}, #{createdAt}, #{updatedAt})")
     void insertSocialUser(User user);
 
+    // 소셜 사용자 정보 업데이트
     @Update("UPDATE users SET social_id = #{socialId}, social_provider = #{socialProvider}, updated_at = #{updatedAt} WHERE email = #{email}")
     void updateSocialUser(User user);
 
+    // 이메일로 사용자 검색
     @Select("SELECT * FROM users WHERE email = #{email}")
     @Results({
             @Result(property = "role", column = "role", javaType = Role.class, typeHandler = com.movie.handler.EnumTypeHandler.class),
@@ -30,15 +34,19 @@ public interface UserMapper {
     })
     Optional<User> findByEmail(String email);
 
+    // 이메일 존재 여부 확인
     @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email}")
     boolean existsByEmail(String email);
 
+    // 사용자 정보 조회 (ID 기준)
     @Select("SELECT * FROM users WHERE id = #{userId}")
     public User getUserInfo(long userId);
 
+    // 사용자 리스트 조회
     @Select("SELECT * FROM users order by id")
     public List<User> getUserList();
 
+    // 사용자 삭제
     @Delete("DELETE FROM users where id = #{id}")
     public long deleteUser(long id);
 

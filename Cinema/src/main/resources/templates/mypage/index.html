@@ -1,21 +1,17 @@
 <div th:fragment="content">
     <!-- Location Bar -->
     <div class="location-bar d-flex align-items-center">
-        <span class="me-2">Home</span>
+        <span class="me-2">ホーム</span>
         <i class="bi bi-chevron-right me-2"></i>
-        <span>マイパージ</span>
+        <span>マイページ</span>
     </div>
 
     <div class="content-box">
-        <!-- 상단 섹션 -->
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center">
-                <!-- WELCOME 이미지와 사용자 이름 -->
-                <img src="https://img.megabox.co.kr/static/pc/images/2023/01/member_WELCOME_2.png" alt="WELCOME" class="rounded-circle" style="width: 100px" />
                 <div class="ms-3">
-                    <h4 class="mb-1">こんにちは !</h4>
-                    <!-- 사용자 이름을 동적으로 표시 -->
-                    <p class="mb-0" th:text="${userName} + 'さま'"></p>
+                    <h3 class="mb-1">こんにちは !</h3>
+                    <p class="mb-0" th:text="${userName} + 'さん'"></p>
                 </div>
             </div>
         </div>
@@ -23,7 +19,7 @@
         <!-- 티켓 -->
         <div class="card">
             <div class="card-header">
-                예매/쿠폰
+                映画予約／クーポン
             </div>
             <div class="card-body">
                 <ul class="list-unstyled">
@@ -37,18 +33,18 @@
         <!-- 예매 내역 -->
         <div class="card">
             <div class="card-header">
-                최근 예매 내역
+                最近の予約履歴
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">예매날짜</th>
-                            <th scope="col">영화명</th>
-                            <th scope="col">상영일시</th>
-                            <th scope="col">좌석번호</th>
-                            <th scope="col">예매금액</th>
+                            <th scope="col">予約日</th>
+                            <th scope="col">映画タイトル</th>
+                            <th scope="col">上映日時</th>
+                            <th scope="col">座席番号</th>
+                            <th scope="col">予約金額</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,11 +53,12 @@
                             <td th:text="${booking.bookingDate}"></td>
                             <td th:text="${booking.movieTitle}"></td>
                             <td th:text="${booking.screeningDateTime}"></td>
-                            <td th:text="${booking.seatNumber}"></td>
+                            <!-- 좌석 번호를 콤마로 구분하여 출력 -->
+                            <td th:text="${#strings.arrayJoin(booking.seatNumbers.toArray(), ', ')}"></td>
                             <td th:text="${booking.price}"></td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(bookingList)}">
-                            <td colspan="4" class="text-center">予約履歴がありません．．</td>
+                            <td colspan="4" class="text-center">予約履歴がありません。</td>
                         </tr>
                         </tbody>
                     </table>
@@ -72,7 +69,7 @@
         <!-- 문의 내역 -->
         <div class="card">
             <div class="card-header">
-                問い合わせ
+                問い合わせ履歴
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -81,22 +78,20 @@
                         <tr>
                             <th scope="col">番号</th>
                             <th scope="col">タイプ</th>
-                            <th scope="col">題目</th>
+                            <th scope="col">内容</th>
                             <th scope="col">回答状態</th>
                             <th scope="col">登録日</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- 동적 데이터로 문의 내역 표시 -->
                         <tr th:each="inquiry : ${inquiryList}">
-                            <td th:text="${inquiry.id}">1</td>
-                            <td th:text="${inquiry.type}">予約</td>
-                            <td th:text="${inquiry.subject}">予約に関する質問</td>
+                            <td th:text="${inquiry.id}"></td>
+                            <td th:text="${inquiry.inquiryType}"></td>
+                            <td th:text="${inquiry.shortContent}"></td> <!-- 20자 이내 내용 출력 -->
                             <td>
-                                <!-- 상태에 따라 배지 색상 변경 -->
-                                <span th:classappend="${inquiry.status == 'unanswered'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'unanswered' ? '未返答' : '回答完了'}"></span>
+                                <span th:classappend="${inquiry.status == 'PENDING'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'PENDING' ? '未返答' : '回答完了'}"></span>
                             </td>
-                            <td th:text="${inquiry.registrationDate}">2023-12-01</td>
+                            <td th:text="${inquiry.createdAt}"></td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(inquiryList)}">
                             <td colspan="5" class="text-center">問い合わせのデータがありません。</td>

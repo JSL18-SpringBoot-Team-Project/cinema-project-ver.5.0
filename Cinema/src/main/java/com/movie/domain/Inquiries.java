@@ -12,12 +12,16 @@ import java.time.LocalDateTime;
 public class Inquiries {
     private Integer id;
     private Integer user_id;
+
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Invalid email format")
     private String email;
+
     private InquiryType inquiry_type;
+
     @NotEmpty(message = "Content cannot be empty")
     private String content;
+
     private Status status;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
@@ -35,5 +39,13 @@ public class Inquiries {
     public enum Status {
         PENDING,
         ANSWERED
+    }
+
+    // Shortened content for displaying in the UI
+    public String getShortContent() {
+        if (content == null) {
+            return "";
+        }
+        return content.length() > 20 ? content.substring(0, 20) + "..." : content;
     }
 }

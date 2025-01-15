@@ -2,7 +2,9 @@ package com.movie.service;
 
 import com.movie.domain.Coupons;
 import com.movie.mapper.CouponMapper;
+import com.movie.mapper.UserCouponMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -35,10 +37,6 @@ public class CouponService {
         return couponMapper.deleteCoupon(id);
     }
 
-    public List<Map<String, Object>> getCouponListByUserId(long userId) {
-        return couponMapper.getCouponListByUserId(userId);
-    }
-
     public boolean isCouponCodeValid(long couponCode) {
         return couponMapper.checkCouponCodeValid(couponCode) != null;
     }
@@ -49,4 +47,5 @@ public class CouponService {
         params.put("couponId", couponCode);
         couponMapper.registerCoupon(params);
     }
+
 }
