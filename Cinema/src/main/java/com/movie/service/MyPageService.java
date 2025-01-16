@@ -36,41 +36,24 @@ public class MyPageService {
         };
     }
 
-    // 페이징 예매내역 조회 처리
-    public PagingDTO<Bookings> getBookingList(long userId, int page, int pageSize) {
-        try {
-            int offset = (page - 1) * pageSize; // OFFSET 계산
-            List<Bookings> bookings = myPageMapper.getBookingList(userId, pageSize, offset);
-            long totalCount = myPageMapper.getTotalBookingCount(userId);
+    // Index 예매내역 조회
+    public List<Bookings> indexBookingList(Long userId) {
+        return myPageMapper.indexBookingList(userId);
+    }
 
-            if (bookings == null || bookings.isEmpty()) {
-                return new PagingDTO<>(List.of(), page, 0, 0, pageSize); // 빈 리스트 반환
-            }
-
-            return pagingService.createPaging(bookings, totalCount, page, pageSize);
-        } catch (Exception e) {
-            throw new RuntimeException("예매 내역을 조회하는 중 오류가 발생했습니다.", e);
-        }
+    public List<Inquiries> indexInquiry(Integer userId) {
+        return myPageMapper.indexInquiry(userId);
     }
 
     // 영화 제목으로 페이징 예매내역 조회 처리
     public PagingDTO<Bookings> getBookingListByTitle(long userId, String title, int page, int pageSize) {
-        try {
-            int offset = (page - 1) * pageSize; // OFFSET 계산
-            List<Bookings> bookings = myPageMapper.getBookingListByTitle(userId, title, pageSize, offset);
-            long totalCount = myPageMapper.getTotalBookingCount(userId); // 제목에 따른 카운트는 필요하면 별도 쿼리 작성
-
-            if (bookings == null || bookings.isEmpty()) {
-                return new PagingDTO<>(List.of(), page, 0, 0, pageSize); // 빈 리스트 반환
-            }
-
-            return pagingService.createPaging(bookings, totalCount, page, pageSize);
-        } catch (Exception e) {
-            throw new RuntimeException("영화 제목으로 예매 내역을 조회하는 중 오류가 발생했습니다.", e);
-        }
+        int offset = (page - 1) * pageSize;
+        List<Bookings> bookings = myPageMapper.getBookingListByTitle(userId, title, pageSize, offset);
+        long totalCount = myPageMapper.getTotalSearchBookingCount(userId, title);
+        return pagingService.createPaging(bookings, totalCount, page, pageSize);
     }
-
     // 페이징 취소 내역 조회
+
     public PagingDTO<Bookings> getCancelList(long userId, int page, int pageSize) {
         try {
             int offset = (page - 1) * pageSize; // OFFSET 계산
@@ -90,8 +73,8 @@ public class MyPageService {
     public int getCouponCount(long userId) {
         return myPageMapper.getCouponCount(userId);
     }
-
     // 사용자 쿠폰 리스트 조회
+
     public List<UserCoupon> getUserCouponList(long userId, String filter) {
         // 기본값 설정: 필터가 null이거나 "all"이면 전체 조회
         if (filter == null || "all".equals(filter)) {
@@ -105,18 +88,12 @@ public class MyPageService {
         }
     }
 
-    // 사용자 문의 내역 조회
-    public List<Inquiries> getInquiries(long userId, String status, String keyword) {
-        // "all" 상태는 필터링 없이 처리
-        if ("all".equals(status)) {
-            status = null;
-        }
-
-        try {
-            return myPageMapper.getInquiries(userId, status, keyword);
-        } catch (Exception e) {
-            throw new RuntimeException("사용자 문의 리스트 조회 중 오류가 발생했습니다.", e);
-        }
+    // 페이징 문의내역 조회
+    public PagingDTO<Inquiries> getInquiries(long userId, String status, String keyword, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Inquiries> inquiries = myPageMapper.getInquiries(userId, status, keyword, pageSize, offset);
+        long totalCount = myPageMapper.getInquiryCount(userId, status, keyword);
+        return pagingService.createPaging(inquiries, totalCount, page, pageSize);
     }
 
     // 사용자 삭제

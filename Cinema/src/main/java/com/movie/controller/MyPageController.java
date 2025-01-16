@@ -1,6 +1,7 @@
 package com.movie.controller;
 
 import com.movie.domain.*;
+import com.movie.mapper.MyPageMapper;
 import com.movie.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class MyPageController {
 
         // sessionUser에서 로그인한 사용자 ID 가져오기
         long userId = sessionUser.getId().longValue();
-        String userName = sessionUser.getName(); // 사용자 이름
 
+        String userName = sessionUser.getName(); // 사용자 이름
         // 사용자 정보
         model.addAttribute("userName", userName);
 
@@ -54,17 +55,16 @@ public class MyPageController {
         model.addAttribute("ticketCount", ticketCount);
         model.addAttribute("couponCount", couponCount);
 
-        // 사용자 예매 내역
-        var bookingList = myPageService.getBookingList(userId, 1, 3);
+        // 예매 내역
+        List<Bookings> bookingList = myPageService.indexBookingList(userId);
         model.addAttribute("bookingList", bookingList);
 
-        // 문의 내역 (샘플 데이터)
-        var inquiryList = myPageService.getInquiries(userId, "all", null);
-        model.addAttribute("inquiryList", inquiryList);
+        // 문의 내역
+        List<Inquiries> inquiriesList = myPageService.indexInquiry(sessionUser.getId());
+        model.addAttribute("inquiryList", inquiriesList);
 
         // 동적 콘텐츠 경로 추가
         model.addAttribute("content", "mypage/index");
-        // 페이지 제목 추가
         model.addAttribute("title", "MY | マイページ");
 
         // 레이아웃으로 반환
@@ -72,41 +72,41 @@ public class MyPageController {
     }
 
 
-    // 예매 내역 페이지
-    @GetMapping("booking/list")
-    public String bookingList(SessionUser sessionUser,
-                              @RequestParam(required = false) String title, // 검색 조건
-                              @RequestParam(defaultValue = "1") int page,   // 기본 페이지 번호
-                              @RequestParam(defaultValue = "1") int cancelPage, // 취소 내역 기본 페이지 번호
-                              @RequestParam(defaultValue = "3") int pageSize, // 페이지당 항목 수
-                              Model model) {
-        if (sessionUser == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
-
-        long userId = sessionUser.getId();
-
-        // 예매 내역 조회 (영화 제목 여부에 따라 다르게 처리)
-        PagingDTO<Bookings> bookingList;
-        if (title != null && !title.trim().isEmpty()) {
-            bookingList = myPageService.getBookingListByTitle(userId, title, page, pageSize); // 검색된 예매 내역
-        } else {
-            bookingList = myPageService.getBookingList(userId, page, pageSize); // 전체 예매 내역
-        }
-
-        // 취소 내역 조회
-        PagingDTO<Bookings> cancelList = myPageService.getCancelList(userId, cancelPage, pageSize);
-
-        // 모델에 데이터 추가
-        model.addAttribute("bookingList", bookingList);
-        model.addAttribute("cancelList", cancelList);
-        model.addAttribute("currentTitle", title); // 검색 조건 유지
-        // 동적 콘텐츠 경로 추가
-        model.addAttribute("content", "mypage/booking/booking_list");
-        model.addAttribute("title", "MY | 예매내역");
-
-        return "mypage/layout/base";
-    }
+//    // 예매 내역 페이지
+//    @GetMapping("booking/list")
+//    public String bookingList(SessionUser sessionUser,
+//                              @RequestParam(required = false) String title, // 검색 조건
+//                              @RequestParam(defaultValue = "1") int page,   // 기본 페이지 번호
+//                              @RequestParam(defaultValue = "1") int cancelPage, // 취소 내역 기본 페이지 번호
+//                              @RequestParam(defaultValue = "3") int pageSize, // 페이지당 항목 수
+//                              Model model) {
+//        if (sessionUser == null) {
+//            throw new IllegalStateException("로그인이 필요합니다.");
+//        }
+//
+//        long userId = sessionUser.getId();
+//
+//        // 예매 내역 조회 (영화 제목 여부에 따라 다르게 처리)
+//        PagingDTO<Bookings> bookingList;
+//        if (title != null && !title.trim().isEmpty()) {
+//            bookingList = myPageService.getBookingListByTitle(userId, title, page, pageSize); // 검색된 예매 내역
+//        } else {
+//            bookingList = myPageService.indexBookingList(userId); // 전체 예매 내역
+//        }
+//
+//        // 취소 내역 조회
+//        PagingDTO<Bookings> cancelList = myPageService.getCancelList(userId, cancelPage, pageSize);
+//
+//        // 모델에 데이터 추가
+//        model.addAttribute("bookingList", bookingList);
+//        model.addAttribute("cancelList", cancelList);
+//        model.addAttribute("currentTitle", title); // 검색 조건 유지
+//        // 동적 콘텐츠 경로 추가
+//        model.addAttribute("content", "mypage/booking/booking_list");
+//        model.addAttribute("title", "MY | 예매내역");
+//
+//        return "mypage/layout/base";
+//    }
 
 
     // 쿠폰 페이지
@@ -139,6 +139,8 @@ public class MyPageController {
     // 문의 내역 페이지
     @GetMapping("/inquiry/list")
     public String inquiryList(SessionUser sessionUser,
+                              @RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "10") int pageSize,
                               @RequestParam(defaultValue = "all") String status,
                               @RequestParam(required = false) String keyword,
                               Model model) {
@@ -148,7 +150,7 @@ public class MyPageController {
 
         int userId = sessionUser.getId();
 
-        List<Inquiries> inquiryList = myPageService.getInquiries(userId, status, keyword);
+        PagingDTO<Inquiries> inquiryList = myPageService.getInquiries(userId, status, keyword, page, pageSize);
 
         model.addAttribute("inquiryList", inquiryList);
         model.addAttribute("status", status);
