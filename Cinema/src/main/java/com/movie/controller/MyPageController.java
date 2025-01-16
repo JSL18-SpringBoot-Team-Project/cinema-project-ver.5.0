@@ -129,12 +129,14 @@ public class MyPageController {
     // 문의 내역 페이지
     @GetMapping("/inquiry/list")
     public String inquiryList(SessionUser sessionUser,
+                              @RequestParam(value = "status", required = false, defaultValue = "all") String status,
+                              @RequestParam(value = "keyword", required = false) String keyword,
                               Model model) {
         if (sessionUser == null) {
             throw new IllegalStateException("ログインが必要です。");
         }
 
-        int userId = sessionUser.getId();
+        Integer userId = sessionUser.getId();
 
         // 문의 내역
         List<Inquiries> inquiriesList = myPageService.indexInquiry(sessionUser.getId());
@@ -146,6 +148,17 @@ public class MyPageController {
 
         return "mypage/layout/base";
     }
+
+    // 문의 삭제
+    @PostMapping("/inquiry/delete/{id}")
+    public String deleteInquiry(
+            @PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes) {
+        myPageService.deleteInquiry(id);
+        redirectAttributes.addAttribute("successMessage", "문의가 성공적으로 삭제되었습니다.");
+        return "redirect:/mypage/inquiry/list";
+    }
+
 
 
     // 비밀번호 인증 페이지
@@ -176,10 +189,6 @@ public class MyPageController {
         }
 
         long userId = sessionUser.getId();
-
-        if (sessionUser.getSocialProvider() != null && sessionUser.getSocialProvider() != SocialProvider.NONE) {
-            return "redirect:/mypage/profile"; // OAuth 사용자라면 비밀번호 확인 없이 회원정보 수정 페이지로 이동
-        }
 
         // 비밀번호 확인
         boolean isPasswordValid = myPageService.verifyPassword(userId, password);

@@ -4,7 +4,7 @@ body {
 }
 
 .text-primary {
-    color: #351f67; /* 주요 색상 */
+    color: #503396; /* 주요 색상 */
 }
 /* Sidebar 스타일 */
 .sidebar {
@@ -14,7 +14,7 @@ body {
   color: white;
   left: 50px;
   top: 60%;
-  transform: translateY(-90%); /* 화면 중앙에 위치 */
+  transform: translateY(-65%); /* 화면 중앙에 위치 */
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -54,11 +54,20 @@ body {
 /* Content-box 스타일 */
 .content-box {
   margin-top: 50px;
-  margin-left: 300px;
-  margin-right: 100px;
+  margin-left: 350px;
+  margin-right: 150px;
   border-radius: 10px;
   background-color: #ffffff;
   padding: 20px;
+}
+
+.content-box-user-edit-form {
+    margin-top: 80px;
+    margin-left: 700px;
+    margin-right: 500px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 20px;
 }
 
 /* Location Bar */
@@ -133,7 +142,7 @@ body {
   }
 }
 
-button, .btn {
+button, .btn, .btn btn-danger {
     writing-mode: horizontal-tb; /* 텍스트 방향을 가로로 설정 */
     transform: none; /* 텍스트 회전 제거 */
     text-align: center; /* 텍스트 가운데 정렬 */
@@ -159,8 +168,6 @@ button, .btn {
 .table tbody td {
     text-align: center !important; /* Bootstrap 기본 스타일 덮어쓰기 */
 }
-
-
 
 
 

@@ -1,0 +1,24 @@
+<div th:fragment="content">
+  <!-- Location Bar -->
+  <div class="location-bar d-flex align-items-center">
+    <span class="me-2">ホーム</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>マイペーじ</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>問い合わせ</span>
+    <i class="bi bi-chevron-right me-2"></i>
+    <span>修正</span>
+  </div>
+
+  <div class="content-box">
+    <h2 class="fw-bold mb-4">問い合わせ修正</h2>
+    <form th:action="@{/mypage/inquiry/edit}" method="post">
+      <div class="mb-3">
+        <label for="content" class="form-label">内容</label>
+        <textarea class="form-control" id="content" name="content" rows="5" th:text="${inquiry.content}"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">保存</button>
+      <a th:href="@{/mypage/inquiry/list}" class="btn btn-secondary">キャンセル</a>
+    </form>
+  </div>
+</div>

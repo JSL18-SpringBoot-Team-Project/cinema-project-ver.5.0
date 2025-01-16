@@ -43,6 +43,7 @@
           <th scope="col">内容</th>
           <th scope="col">回答状況</th>
           <th scope="col">登録日</th>
+          <th scope="col">詳細／削除</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,10 @@
             <span th:classappend="${inquiry.status.name() == 'PENDING'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status.name() == 'PENDING' ? '未答案' : '回答完了'}"></span>
           </td>
           <td th:text="${#temporals.format(inquiry.created_at, 'yy/MM/dd HH:mm:ss')}"></td>
+          <td>
+            <form th:action="@{/mypage/inquiry/delete/{id}(id=${inquiry.id})}" method="post" class="d-line"></form>
+              <button type="submit" class="btn btn-danger">削除</button>
+          </td>
         </tr>
         <!-- 데이터 없을 경우 -->
         <tr th:if="${#lists.isEmpty(inquiryList)}">

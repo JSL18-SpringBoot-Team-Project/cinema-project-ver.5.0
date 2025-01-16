@@ -46,6 +46,11 @@ public class MyPageService {
         return myPageMapper.indexInquiry(userId);
     }
 
+    // 문의 삭제
+    public void deleteInquiry(Integer id) {
+        myPageMapper.deleteInquiry(id);
+    }
+
     // 예매내역(영화 제목 검색)
     public List<Bookings> getBookingListByTitle(Long userId, String title) {
         String movieTitle = (title == null || title.trim().isEmpty()) ? null : title.trim();

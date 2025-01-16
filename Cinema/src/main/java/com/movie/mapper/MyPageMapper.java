@@ -7,7 +7,6 @@ import com.movie.domain.UserCoupon;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface MyPageMapper {
@@ -97,6 +96,10 @@ public interface MyPageMapper {
             @Result(property = "price", column = "price")
     })
     List<Bookings> getBookingListByTitle(@Param("userId") Long userId, @Param("title") String title);
+
+
+    @Delete("DELETE FROM inquiries WHERE id = #{id}")
+    void deleteInquiry(@Param("id") Integer id);;
 
     // 사용자 삭제
     @Delete("DELETE FROM users where id = #{id}")
