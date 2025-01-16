@@ -25,67 +25,80 @@
                           type="text"
                           class="form-control"
                           name="title"
-                          placeholder="映画タイトルを入力してください"
-                          th:value="${param.title}" />
+                          placeholder="映画タイトルを入力してください"/>
                   <button type="submit" class="btn btn-primary ms-2">検索</button>
                 </form>
               </div>
             </div>
 
-
             <!-- 予約履歴テーブル -->
-            <h5 class="card-title mt-4">予約履歴</h5>
-            <div class="table-responsive">
-              <table class="table table-striped" id="bookingTable">
-                <thead>
-                <tr>
-                  <th scope="col">予約日</th>
-                  <th scope="col">映画名</th>
-                  <th scope="col">上映日時</th>
-                  <th scope="col">座席番号</th>
-                  <th scope="col">予約金額</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="booking : ${bookingList.content}">
-                  <td th:text="${booking.bookingTimestamp}"></td>
-                  <td th:text="${booking.title}"></td>
-                  <td th:text="${booking.screeningDateTime}"></td>
-                  <td th:text="${booking.seats.join(', ')}"></td>
-                  <td th:text="${booking.price.toLocaleString()} + '円'"></td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(bookingList)}">
-                  <td colspan="5" class="text-center">予約履歴がありません。</td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="card">
+              <div class="card-header">
+                予約履歴
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table">
+                    <thead>
+                    <tr>
+                      <th scope="col">予約日</th>
+                      <th scope="col">映画タイトル</th>
+                      <th scope="col">上映日</th>
+                      <th scope="col">上映時間</th>
+                      <th scope="col">座席番号</th>
+                      <th scope="col">予約金額</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="booking : ${bookingList}">
+                      <td th:text="${booking.bookingTimestamp}"></td>
+                      <td th:text="${booking.title}"></td>
+                      <td th:text="${booking.watchDate}"></td>
+                      <td th:text="${booking.runningTime}"></td>
+                      <td th:text="${booking.seatNumber}"></td>
+                      <td th:text="${booking.price}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(bookingList)}">
+                      <td colspan="4" class="text-center">予約履歴がありません。</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
             <!-- 予約キャンセル履歴 -->
-            <h5 class="card-title mt-4">キャンセル履歴</h5>
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th scope="col">キャンセル日</th>
-                  <th scope="col">映画名</th>
-                  <th scope="col">上映日時</th>
-                  <th scope="col">キャンセル金額</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="cancel : ${cancelList}">
-                  <td th:text="${cancel.cancelDateTime}"></td>
-                  <td th:text="${cancel.title}"></td>
-                  <td th:text="${cancel.screeningDateTime}"></td>
-                  <td th:text="${cancel.price}"></td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(cancelList)}">
-                  <td colspan="4" class="text-center">キャンセル履歴がありません。</td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="card">
+              <div class="card-header">
+                キャンセル履歴
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table">
+                    <thead>
+                    <tr>
+                      <th scope="col">キャンセル日</th>
+                      <th scope="col">映画名</th>
+                      <th scope="col">上映日</th>
+                      <th scope="col">キャンセル金額</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cancel : ${cancelList}">
+                      <td th:text="${cancel.cancelDateTime}"></td>
+                      <td th:text="${cancel.title}"></td>
+                      <td th:text="${cancel.screeningDateTime}"></td>
+                      <td th:text="${cancel.price}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(cancelList)}">
+                      <td colspan="4" class="text-center">キャンセル履歴がありません。</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </div>

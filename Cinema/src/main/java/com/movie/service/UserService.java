@@ -85,66 +85,6 @@ public class UserService {
         return userMapper.deleteUser(id);
     }
 
-    // 비밀번호 확인
-    public boolean verifyPassword(long userId, String password) {
-        String hashedPassword = userMapper.getPassword(userId);
-        if (hashedPassword == null) {
-            return false;
-        }
-        return passwordEncoder.matches(password, hashedPassword);
-    }
-
-//    // 회원정보 수정
-//    public void updateUserInfo(User user) {
-//        userMapper.updateSocialUser(user);
-//    }
-
-    // 비밀번호 변경 (기존 비밀번호 제한)
-    public void changePassword(long userId, String currentPassword, String newPassword) {
-        User user = userMapper.getUserInfo(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("ユーザーが存在しません。");
-        }
-
-        // 현재 비밀번호 확인
-        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-            throw new IllegalArgumentException("現在のパスワードが一致しません。");
-        }
-
-        // 새 비밀번호가 기존 비밀번호와 동일한지 확인
-        if (passwordEncoder.matches(newPassword, user.getPassword())) {
-            throw new IllegalArgumentException("新しいパスワードは現在のパスワードと同じにすることはできません。");
-        }
-
-        // 새 비밀번호 암호화 및 저장
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userMapper.updatePassword(user);
-    }
-
-    // 비밀번호 복잡성 검증
-    private boolean isPasswordComplex(String password) {
-        if (password == null || password.length() < 10) {
-            return false;
-        }
-
-        int count = 0;
-        if (password.matches(".*[A-Za-z].*")) count++; // 영문 포함
-        if (password.matches(".*[0-9].*")) count++; // 숫자 포함
-        if (password.matches(".*[!@#$%^&*()_+=<>?/{}~`\\-].*")) count++; // 특수문자 포함
-
-        return count >= 2; // 최소 2가지 포함
-    }
-
-
-    // 사용자 정보 수정 메서드
-    public void updateUser(User user) {
-        if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("有効なユーザー情報が必要です。");
-        }
-        userMapper.updateUser(user);
-    }
-
-
     public boolean isEmailRegisteredWithProvider(String email, String provider) {
         return userMapper.existsByEmailAndProvider(email, provider);
     }

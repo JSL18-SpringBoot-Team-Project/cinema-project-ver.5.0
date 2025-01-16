@@ -20,60 +20,6 @@
         <result property="orderName" column="order_name" />
     </resultMap>
 
-
-    <select id="getBookingList" resultMap="bookingResultMap">
-        SELECT
-        b.id AS id,
-        b.user_id AS userId,
-        b.schedule_id AS scheduleId,
-        b.booking_timestamp AS bookingTimestamp,
-        b.cancel_timestamp AS cancelTimestamp,
-        b.coupon_id AS couponId,
-        b.price AS price,
-        b.state AS state,
-        m.title AS title,
-        s.watch_date AS watchDate,
-        s.start_time AS startTime,
-        s.end_time AS endTime,
-        p.order_name AS seatNumber
-        FROM bookings b
-        JOIN schedules s ON b.schedule_id = s.id
-        JOIN movies m ON s.movie_id = m.id
-        JOIN payment p ON b.id = p.booking_id
-        WHERE b.user_id = #{userId}
-        GROUP BY b.id
-        ORDER BY b.booking_timestamp DESC
-        LIMIT #{pageSize} OFFSET #{offset};
-    </select>
-
-
-    <select id="searchBookingByTitle" resultMap="bookingResultMap">
-        SELECT
-        b.id AS id,
-        b.user_id AS userId,
-        b.schedule_id AS scheduleId,
-        b.booking_timestamp AS bookingTimestamp,
-        b.cancel_timestamp AS cancelTimestamp,
-        b.coupon_id AS couponId,
-        b.price AS price,
-        b.state AS state,
-        m.title AS title,
-        s.watch_date AS watchDate,
-        s.start_time AS startTime,
-        s.end_time AS endTime,
-        p.order_name AS seatNumber
-        FROM bookings b
-        JOIN schedules s ON b.schedule_id = s.id
-        JOIN movies m ON s.movie_id = m.id
-        JOIN payment p ON b.id = p.booking_id
-        WHERE b.user_id = #{userId}
-        AND m.title LIKE CONCAT('%', #{title}, '%')
-        GROUP BY b.id
-        ORDER BY b.booking_timestamp DESC
-        LIMIT #{pageSize} OFFSET #{offset};
-    </select>
-
-
     <select id="getCancelList" resultMap="bookingResultMap">
         SELECT
         b.id AS id,
@@ -166,21 +112,21 @@
 
     <!-- Inquiry 테이블 조회 -->
     <select id="getInquiries" resultType="com.movie.domain.Inquiries">
-        SELECT
-            i.id,
-            i.inquiry_type AS inquiryType,
-            LEFT(i.content, 20) AS shortContent,
-            i.status,
-            DATE(i.created_at) AS createdAt
+        select inquiry_type, SUBSTR(content, 1, 20), status, created_at FROM inquiries WHERE user_id = #{userId} ORDER BY created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="getInquiryCount" resultType="long">
+        SELECT COUNT(*)
         FROM inquiries i
         WHERE i.user_id = #{userId}
-        <if test="status != null and status != 'all'">
+        <if test="status != null">
             AND i.status = #{status}
         </if>
         <if test="keyword != null and keyword != ''">
             AND i.content LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        ORDER BY i.created_at DESC
     </select>
+
 
 </mapper>

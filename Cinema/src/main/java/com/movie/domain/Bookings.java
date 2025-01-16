@@ -21,8 +21,7 @@ public class Bookings {
     private Long state;
     private String title; // 영화 제목
     private LocalDate watchDate; // 상영일
-    private LocalTime startTime; // 상영 시작 시간
-    private LocalTime endTime;   // 상영 종료 시간
+    private Integer runningTime;
     private String seatNumber;    // 좌석 번호
 
 }

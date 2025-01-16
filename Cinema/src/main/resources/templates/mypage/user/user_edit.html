@@ -8,7 +8,7 @@
         <span>個人情報修正</span>
     </div>
 
-    <div class="content-box">
+    <div class="content-box-user-edit-form">
         <h2 class="mb-4">個人情報修正</h2>
         <!-- 成功メッセージ -->
         <div class="alert alert-success" role="alert" th:if="${successMessage}" th:text="${successMessage}"></div>
@@ -18,37 +18,38 @@
 
         <form th:action="@{/mypage/update_user}" method="post">
             <!-- 名前 -->
-            <div class="mb-3">
-                <label for="name" class="form-label">名前</label>
-                <input type="text" id="name" name="name" class="form-control" th:value="${user.name}"
-                       th:disabled="${!isEditable}"/>
+            <div class="row mb-3">
+                <label for="name" class="col-md-2 col-form-label">名前</label>
+                <div class="col-md-10">
+                    <input type="text" id="name" name="name" class="form-control" th:value="${user.name}" th:disabled="${!isEditable}" />
+                </div>
             </div>
 
-            <!-- メール -->
-            <div class="mb-3">
-                <label for="email" class="form-label">メール</label>
-                <input type="email" id="email" name="email" class="form-control" th:value="${user.email}"
-                       th:disabled="${!isEditable}"/>
+            <div class="row mb-3">
+                <label for="email" class="col-md-2 col-form-label">メール</label>
+                <div class="col-md-10">
+                    <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" th:disabled="${!isEditable}" />
+                </div>
             </div>
 
-            <!-- 電話番号 -->
-            <div class="mb-3">
-                <label for="phone" class="form-label">電話番号</label>
-                <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}"
-                       th:disabled="${!isEditable}"/>
+            <div class="row mb-3">
+                <label for="phone" class="col-md-2 col-form-label">電話番号</label>
+                <div class="col-md-10">
+                    <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" th:disabled="${!isEditable}" />
+                </div>
             </div>
 
-            <!-- 生年月日 -->
-            <div class="mb-3">
-                <label for="birth" class="form-label">生年月日</label>
-                <input type="date" id="birth" name="birth" class="form-control" th:value="${user.birth}"
-                       th:disabled="${!isEditable}"/>
+            <div class="row mb-3">
+                <label for="birth" class="col-md-2 col-form-label">生年月日</label>
+                <div class="col-md-10">
+                    <input type="date" id="birth" name="birth" class="form-control" th:value="${user.birth}" th:disabled="${!isEditable}" />
+                </div>
             </div>
 
-            <!-- 編集不可メッセージ -->
             <div class="alert alert-info mt-4" th:if="${!isEditable}">
                 ソーシャル連携アカウントは修正できません。
             </div>
+
 
             <!-- パスワード変更ボタン -->
             <div class="row mb-3" th:if="${isEditable}">
@@ -106,7 +107,34 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">保存</button>
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-primary">保存</button>
+                <button type="button" class="btn btn-danger ms-3" onclick="confirmDelete(${user.id})">脱退</button>
+            </div>
+    
         </form>
     </div>
 </div>
+
+<script>
+    function confirmDelete(userId) {
+        if (confirm("本当に退会しますか？")) {
+            // 탈퇴 요청 전송
+            fetch(`/users/${userId}/delete`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("退会が完了しました。");
+                    window.location.href = "/logout"; // 로그아웃 후 메인 페이지로 이동
+                } else {
+                    alert("退会処理中にエラーが発生しました。もう一度お試しください。");
+                }
+            })
+            .catch(error => {
+                console.error("Error during deletion:", error);
+                alert("サーバーエラーが発生しました。");
+            });
+        }
+    }
+</script>
