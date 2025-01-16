@@ -2,10 +2,9 @@ package com.movie.mapper;
 
 import com.movie.domain.Bookings;
 import com.movie.domain.Inquiries;
+import com.movie.domain.User;
 import com.movie.domain.UserCoupon;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -53,5 +52,27 @@ public interface MyPageMapper {
             @Param("status") String status,
             @Param("keyword") String keyword
     );
+
+    // 사용자 삭제
+    @Delete("DELETE FROM users where id = #{id}")
+    public long deleteUser(long id);
+
+    // 사용자 조회
+    @Select("SELECT * FROM users WHERE id = #{id}")
+    User getUserById(long id);
+
+    // 비밀번호 조회
+    @Select("SELECT password FROM users WHERE id = #{id}")
+    String getPasswordById(long id);
+
+    // 회원정보 수정
+    @Update("UPDATE users SET name = #{name}, email = #{email}, phone = #{phone}, birth = #{birth}, updated_at = NOW() WHERE id = #{id}")
+    int updateUser(User user);
+
+    // 비밀번호 업데이트
+    @Update("UPDATE users SET password = #{password}, last_password_change = NOW(), updated_at = NOW() WHERE id = #{id}")
+    int updatePassword(@Param("id") long id, @Param("password") String password);
+
+
 
 }

@@ -4,6 +4,8 @@ import com.movie.domain.*;
 import com.movie.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -108,7 +110,6 @@ public class MyPageController {
 
 
     // 쿠폰 페이지
-
     @GetMapping("/coupon/list")
     public String coupon(SessionUser sessionUser,
                          @RequestParam(required = false, defaultValue = "all") String filter,
@@ -194,7 +195,7 @@ public class MyPageController {
         }
 
         // 비밀번호 확인
-        boolean isPasswordValid = userService.verifyPassword(userId, password);
+        boolean isPasswordValid = myPageService.verifyPassword(userId, password);
         if (!isPasswordValid) {
             // 에러 메시지 및 다시 입력 페이지 설정
             model.addAttribute("error", "パスワードが一致しません。");
@@ -209,11 +210,15 @@ public class MyPageController {
     // 회원정보 수정 페이지
     @GetMapping("profile")
     public String showProfilePage(SessionUser sessionUser, Model model) {
+        if (sessionUser == null) {
+            throw new IllegalStateException("ログインが必要です。");
+        }
+
         long userId = sessionUser.getId();
-        User user = userService.getUserInfo(sessionUser.getId());
+        User user = myPageService.getUserById(sessionUser.getId());
 
         if (user == null) {
-            throw new IllegalArgumentException("사용자 정보를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("ユーザー情報が見つかりません。");
         }
 
         // 마지막 비밀번호 변경일 계산
@@ -236,38 +241,44 @@ public class MyPageController {
         return "mypage/layout/base"; // 회원정보 수정 페이지 렌더링
     }
 
+    // 회원 탈퇴 처리
+    @DeleteMapping("profile/{userId}/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteUser(@PathVariable long userId, SessionUser sessionUser, HttpSession session) {
+        if (sessionUser == null || sessionUser.getId() != userId) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
+        }
+
+        try {
+            userService.deleteUser(userId);
+
+            // 세션 무효화 처리
+            session.invalidate();
+
+            return ResponseEntity.ok("탈퇴가 완료되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("탈퇴 처리 중 오류가 발생했습니다.");
+        }
+    }
+
     // 회원정보 수정 처리
     @PostMapping("update_user")
-    public String updateUser(@ModelAttribute User user, HttpSession session, RedirectAttributes redirectAttributes) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("USER");
-        // 세션 사용자와 요청 사용자 ID 검증
-        if (sessionUser == null || !sessionUser.getId().equals(user.getId())) {
-            throw new IllegalStateException("잘못된 요청입니다.");
+    public String updateUser(User user, @SessionAttribute(name = "sessionUser") SessionUser sessionUser, Model model) {
+        if (sessionUser == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
         }
 
-        // OAuth 사용자 수정 제한
-        if (sessionUser.getSocialProvider() != null && sessionUser.getSocialProvider() != SocialProvider.NONE) {
-            throw new IllegalStateException("OAuth 사용자 정보는 수정할 수 없습니다.");
-        }
-        
-        // 유효성 검사
-        validateUser(user);
-
-        // 사용자 정보 업데이트
+        user.setId(sessionUser.getId()); // 세션의 사용자 ID로 설정
         try {
-            userService.updateUser(user);
+            myPageService.updateUser(user);
+            model.addAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다.");
-            return "redirect:/mypage/profile";
+            model.addAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
 
-        // 세션 정보 갱신
-        sessionUser.setName(user.getName());
-        session.setAttribute("USER", sessionUser);
-
-        // 성공 메시지 설정
-        redirectAttributes.addFlashAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
-        return "redirect:/mypage/profile";
+        return "redirect:/mypage/profile"; // 수정 완료 후 회원정보 수정 페이지로 리다이렉트
     }
 
     // 유효성 검사 메서드
@@ -285,33 +296,40 @@ public class MyPageController {
     public String updatePassword(@RequestParam("currentPassword") String currentPassword,
                                  @RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmPassword") String confirmPassword,
-                                 SessionUser sessionUser,
+                                 @SessionAttribute(name = "sessionUser", required = false) SessionUser sessionUser,
                                  RedirectAttributes redirectAttributes) {
-        long userId = sessionUser.getId();
 
+        // 로그인 상태 확인
         if (sessionUser == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/login";
         }
 
+        long userId = sessionUser.getId();
+
         try {
-            // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
+            // 새 비밀번호와 확인 비밀번호가 일치하지 않는 경우 예외 발생
             if (!newPassword.equals(confirmPassword)) {
                 throw new IllegalArgumentException("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
             }
 
             // 비밀번호 변경 처리
-            userService.changePassword(sessionUser.getId(), currentPassword, newPassword);
+            myPageService.updatePassword(userId, currentPassword, newPassword);
 
             // 성공 메시지 설정
             redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
         } catch (IllegalArgumentException e) {
-            // 에러 메시지 설정
+            // 사용자 입력 오류 처리
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (Exception e) {
+            // 기타 오류 처리
+            redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
 
+        // 회원정보 수정 페이지로 리다이렉트
         return "redirect:/mypage/profile";
     }
+
 
 
 }
