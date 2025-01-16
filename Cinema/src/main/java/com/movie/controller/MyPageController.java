@@ -39,7 +39,7 @@ public class MyPageController {
     @GetMapping("/")
     public String myPage(SessionUser sessionUser, Model model) {
         if (sessionUser == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+            throw new IllegalStateException("ログインが必要です。");
         }
 
         // sessionUser에서 로그인한 사용자 ID 가져오기
@@ -56,7 +56,7 @@ public class MyPageController {
         model.addAttribute("couponCount", couponCount);
 
         // 예매 내역
-        List<Bookings> bookingList = myPageService.indexBookingList(userId);
+        List<Bookings> bookingList = myPageService.getIndexBookingList(userId);
         model.addAttribute("bookingList", bookingList);
 
         // 문의 내역
@@ -72,63 +72,53 @@ public class MyPageController {
     }
 
 
-//    // 예매 내역 페이지
-//    @GetMapping("booking/list")
-//    public String bookingList(SessionUser sessionUser,
-//                              @RequestParam(required = false) String title, // 검색 조건
-//                              @RequestParam(defaultValue = "1") int page,   // 기본 페이지 번호
-//                              @RequestParam(defaultValue = "1") int cancelPage, // 취소 내역 기본 페이지 번호
-//                              @RequestParam(defaultValue = "3") int pageSize, // 페이지당 항목 수
-//                              Model model) {
-//        if (sessionUser == null) {
-//            throw new IllegalStateException("로그인이 필요합니다.");
-//        }
-//
-//        long userId = sessionUser.getId();
-//
-//        // 예매 내역 조회 (영화 제목 여부에 따라 다르게 처리)
-//        PagingDTO<Bookings> bookingList;
-//        if (title != null && !title.trim().isEmpty()) {
-//            bookingList = myPageService.getBookingListByTitle(userId, title, page, pageSize); // 검색된 예매 내역
-//        } else {
-//            bookingList = myPageService.indexBookingList(userId); // 전체 예매 내역
-//        }
-//
+    // 예매 내역 페이지
+    @GetMapping("booking/list")
+    public String bookingList(SessionUser sessionUser,
+                              @RequestParam(value = "title", required = false) String title,
+                              Model model) {
+        if (sessionUser == null) {
+            throw new IllegalStateException("ログインが必要です。");
+        }
+
+        long userId = sessionUser.getId();
+
+        // 예매 내역 조회 (영화 제목 여부에 따라 다르게 처리)
+        List<Bookings> bookingList = myPageService.getBookingListByTitle(userId, title);
+        model.addAttribute("bookingList", bookingList);
+        model.addAttribute("title", title); // 검색 조건 유지
+
 //        // 취소 내역 조회
 //        PagingDTO<Bookings> cancelList = myPageService.getCancelList(userId, cancelPage, pageSize);
-//
-//        // 모델에 데이터 추가
-//        model.addAttribute("bookingList", bookingList);
 //        model.addAttribute("cancelList", cancelList);
-//        model.addAttribute("currentTitle", title); // 검색 조건 유지
-//        // 동적 콘텐츠 경로 추가
-//        model.addAttribute("content", "mypage/booking/booking_list");
-//        model.addAttribute("title", "MY | 예매내역");
-//
-//        return "mypage/layout/base";
-//    }
+
+        model.addAttribute("content", "mypage/booking/booking_list");
+        model.addAttribute("title", "MY | 予約履歴");
+
+        return "mypage/layout/base";
+    }
 
 
     // 쿠폰 페이지
     @GetMapping("/coupon/list")
     public String coupon(SessionUser sessionUser,
-                         @RequestParam(required = false, defaultValue = "all") String filter,
                          Model model) {
 
         if (sessionUser == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+            throw new IllegalStateException("ログインが必要です。");
         }
 
         long userId = sessionUser.getId().longValue();
 
         // 쿠폰 데이터 조회
         int couponCount = myPageService.getCouponCount(userId);
-        List<UserCoupon> couponList = myPageService.getUserCouponList(userId, filter);
-
         model.addAttribute("couponCount", couponCount);
-        model.addAttribute("couponList", couponList);
-        model.addAttribute("filter", filter);
-        // 동적 콘텐츠 경로 추가
+
+//        List<UserCoupon> couponList = myPageService.getUserCouponList(userId, filter);
+
+//        model.addAttribute("couponList", couponList);
+//        model.addAttribute("filter", filter);
+//        // 동적 콘텐츠 경로 추가
         model.addAttribute("content", "mypage/coupon/coupon_list");
         model.addAttribute("title", "MY | 쿠폰");
 
@@ -139,25 +129,20 @@ public class MyPageController {
     // 문의 내역 페이지
     @GetMapping("/inquiry/list")
     public String inquiryList(SessionUser sessionUser,
-                              @RequestParam(defaultValue = "1") int page,
-                              @RequestParam(defaultValue = "10") int pageSize,
-                              @RequestParam(defaultValue = "all") String status,
-                              @RequestParam(required = false) String keyword,
                               Model model) {
         if (sessionUser == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+            throw new IllegalStateException("ログインが必要です。");
         }
 
         int userId = sessionUser.getId();
 
-        PagingDTO<Inquiries> inquiryList = myPageService.getInquiries(userId, status, keyword, page, pageSize);
+        // 문의 내역
+        List<Inquiries> inquiriesList = myPageService.indexInquiry(sessionUser.getId());
+        model.addAttribute("inquiryList", inquiriesList);
 
-        model.addAttribute("inquiryList", inquiryList);
-        model.addAttribute("status", status);
-        model.addAttribute("keyword", keyword);
         // 동적 컨텐츠 경로
         model.addAttribute("content", "mypage/inquiry/inquiry_list");
-        model.addAttribute("title", "MY | 문의내역");
+        model.addAttribute("title", "MY | 問い合わせ");
 
         return "mypage/layout/base";
     }

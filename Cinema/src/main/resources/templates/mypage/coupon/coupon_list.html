@@ -15,9 +15,9 @@
     <!-- クーポン説明 -->
     <div class="row mb-4">
       <div class="col-md-6">
-        <p>映画の予約時に使用できます。</p>
-        <p>クーポンはイベントページで受け取ることができます。</p>
-        <p>クーポンの使用期限が過ぎると自動的に無効状態になります。</p>
+        <p>・　映画の予約時に使用できます。</p>
+        <p>・　クーポンはイベントページで受け取ることができます。</p>
+        <p>・　クーポンの使用期限が過ぎると自動的に無効状態になります。</p>
       </div>
     </div>
 
@@ -41,7 +41,7 @@
 
     <!-- クーポンテーブル -->
     <div class="table-responsive">
-      <table class="table table-striped" id="couponTable">
+      <table class="table table">
         <thead>
         <tr>
           <th scope="col">クーポン名</th>
@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="coupon : ${couponList.content}">
+        <tr th:each="coupon : ${couponList}">
           <td th:text="${coupon.couponTitle}"></td>
           <td th:text="${coupon.couponStartDate} + ' ~ ' + ${coupon.couponEndDate}"></td>
           <td th:text="${coupon.state == 0 ? '使用可能' : (coupon.state == 1 ? '使用済み' : '期限切れ')}"></td>

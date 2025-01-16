@@ -37,23 +37,23 @@ public class MyPageService {
     }
 
     // Index 예매내역 조회
-    public List<Bookings> indexBookingList(Long userId) {
-        return myPageMapper.indexBookingList(userId);
+    public List<Bookings> getIndexBookingList(Long userId) {
+        return myPageMapper.getIndexBookingList(userId);
     }
 
+    // Index 문의내역 조회
     public List<Inquiries> indexInquiry(Integer userId) {
         return myPageMapper.indexInquiry(userId);
     }
 
-    // 영화 제목으로 페이징 예매내역 조회 처리
-    public PagingDTO<Bookings> getBookingListByTitle(long userId, String title, int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        List<Bookings> bookings = myPageMapper.getBookingListByTitle(userId, title, pageSize, offset);
-        long totalCount = myPageMapper.getTotalSearchBookingCount(userId, title);
-        return pagingService.createPaging(bookings, totalCount, page, pageSize);
-    }
-    // 페이징 취소 내역 조회
+    // 예매내역(영화 제목 검색)
+    public List<Bookings> getBookingListByTitle(Long userId, String title) {
+        String movieTitle = (title == null || title.trim().isEmpty()) ? null : title.trim();
 
+        return myPageMapper.getBookingListByTitle(userId, movieTitle);
+    }
+
+    // 페이징 취소 내역 조회
     public PagingDTO<Bookings> getCancelList(long userId, int page, int pageSize) {
         try {
             int offset = (page - 1) * pageSize; // OFFSET 계산
@@ -86,14 +86,6 @@ public class MyPageService {
         } catch (Exception e) {
             throw new RuntimeException("사용자 쿠폰 정보를 조회하는 중 오류가 발생했습니다.", e);
         }
-    }
-
-    // 페이징 문의내역 조회
-    public PagingDTO<Inquiries> getInquiries(long userId, String status, String keyword, int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        List<Inquiries> inquiries = myPageMapper.getInquiries(userId, status, keyword, pageSize, offset);
-        long totalCount = myPageMapper.getInquiryCount(userId, status, keyword);
-        return pagingService.createPaging(inquiries, totalCount, page, pageSize);
     }
 
     // 사용자 삭제

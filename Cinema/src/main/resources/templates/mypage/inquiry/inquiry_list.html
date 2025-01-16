@@ -36,10 +36,9 @@
 
     <!-- Inquiry Table -->
     <div class="table-responsive">
-      <table class="table table-striped">
-        <thead class="table-primary">
+      <table class="table table">
+        <thead>
         <tr>
-          <th scope="col">番号</th>
           <th scope="col">タイプ</th>
           <th scope="col">内容</th>
           <th scope="col">回答状況</th>
@@ -47,14 +46,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="inquiry : ${inquiryList.content}">
-          <td th:text="${inquiry.id}"></td>
-          <td th:text="${inquiry.inquiryType}"></td>
-          <td th:text="${inquiry.shortContent}"></td> <!-- 20자 이내 내용 출력 -->
+        <tr th:each="inquiry : ${inquiryList}">
+          <td th:text="${inquiry.inquiry_type}"></td>
+          <td th:text="${inquiry.content}"></td> <!-- 20자 이내 내용 출력 -->
           <td>
-            <span th:classappend="${inquiry.status == 'PENDING'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status == 'PENDING' ? '未返答' : '回答完了'}"></span>
+            <span th:classappend="${inquiry.status.name() == 'PENDING'} ? 'badge bg-warning text-dark' : 'badge bg-success'" th:text="${inquiry.status.name() == 'PENDING' ? '未答案' : '回答完了'}"></span>
           </td>
-          <td th:text="${inquiry.createdAt}"></td>
+          <td th:text="${#temporals.format(inquiry.created_at, 'yy/MM/dd HH:mm:ss')}"></td>
         </tr>
         <!-- 데이터 없을 경우 -->
         <tr th:if="${#lists.isEmpty(inquiryList)}">

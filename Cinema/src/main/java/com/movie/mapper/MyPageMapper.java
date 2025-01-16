@@ -12,16 +12,6 @@ import java.util.Map;
 @Mapper
 public interface MyPageMapper {
 
-//    // 사용자 ID를 기반으로 예매 내역 조회
-//    List<Bookings> getBookingList(@Param("userId") long userId,
-//                                  @Param("pageSize") int pageSize,
-//                                  @Param("offset") int offset);
-
-    // 사용자 ID와 영화 제목을 기반으로 예매 내역 조회
-    List<Bookings> getBookingListByTitle(@Param("userId") long userId,
-                                         @Param("title") String title,
-                                         @Param("pageSize") int pageSize,
-                                         @Param("offset") int offset);
 
     // 사용자 ID를 기반으로 취소 내역 조회
     List<Bookings> getCancelList(@Param("userId") long userId,
@@ -46,12 +36,6 @@ public interface MyPageMapper {
     // 사용자 쿠폰 리스트 조회
     List<UserCoupon> getUserCouponList(@Param("userId") long userId, @Param("filter") String filter);
 
-    // 사용자 ID를 기반으로 문의 내역 조회
-    List<Inquiries> getInquiries(@Param("userId") long userId,
-                                 @Param("status") String status,
-                                 @Param("keyword") String keyword,
-                                 @Param("pageSize") int pageSize,
-                                 @Param("offset") int offset);
 
     long getInquiryCount(@Param("userId") long userId,
                          @Param("status") String status,
@@ -78,7 +62,7 @@ public interface MyPageMapper {
             @Result(property = "seatNumber", column = "seatNumber"),
             @Result(property = "price", column = "price")
     })
-    List<Bookings> indexBookingList(Long userId);
+    List<Bookings> getIndexBookingList(Long userId);
 
     @Select("select inquiry_type, SUBSTR(content, 1, 20) as content, status, created_at FROM inquiries WHERE user_id = #{userId} ORDER BY created_at DESC")
     @Results({
@@ -88,6 +72,31 @@ public interface MyPageMapper {
             @Result(property = "created_at", column = "created_at")
     })
     List<Inquiries> indexInquiry(Integer userId);
+
+    @Select("SELECT " +
+            "b.booking_timestamp AS bookingTimestamp, " +
+            "m.title AS title, " +
+            "s.watch_date AS watchDate, " +
+            "m.running_time AS runningTime, " +
+            "p.order_name AS seatNumber, " +
+            "b.price AS price " +
+            "FROM bookings b " +
+            "JOIN schedules s ON b.schedule_id = s.id " +
+            "JOIN movies m ON s.movie_id = m.id " +
+            "JOIN payment p ON b.id = p.booking_id " +
+            "WHERE b.user_id = #{userId} " +
+            "AND (#{title} IS NULL OR m.title LIKE CONCAT('%', #{title}, '%')) " +
+            "GROUP BY b.id " +
+            "ORDER BY b.booking_timestamp DESC")
+    @Results({
+            @Result(property = "bookingTimestamp", column = "bookingTimestamp"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "watchDate", column = "watchDate"),
+            @Result(property = "runningTime", column = "runningTime"),
+            @Result(property = "seatNumber", column = "seatNumber"),
+            @Result(property = "price", column = "price")
+    })
+    List<Bookings> getBookingListByTitle(@Param("userId") Long userId, @Param("title") String title);
 
     // 사용자 삭제
     @Delete("DELETE FROM users where id = #{id}")
